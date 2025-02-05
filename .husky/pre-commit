@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run lint-staged
+npx lint-staged
+
+# Type check
+npm run type-check
+
+# Run tests
+npm run test -- --bail --findRelatedTests
+
+# Check for sensitive data
+if git diff --cached | grep -i "password\|secret\|key\|token" > /dev/null; then
+  echo "Warning: Possible sensitive data detected in commit"
+  echo "Please review the changes carefully"
+  exit 1
+fi
