@@ -11,24 +11,28 @@ import { styled } from 'styled-components';
 import { useToast } from '@/context/ToastContext';
 
 // Form input type with tags as string
-type ProjectFormInput = Omit<ProjectFormData, 'tags'> & {
+type ProjectFormInput = {
+  title: string;
+  description: string;
+  imageUrl: string;
   tags: string;
+  featured: boolean;
+  githubUrl: string;
+  liveUrl: string;
 };
 
 const projectValidationSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),
   imageUrl: z.string().url('Must be a valid URL'),
-  tags: z.string().transform((str) => str.split(',').map(tag => tag.trim()).filter(Boolean)),
+  tags: z.string().min(1, 'At least one tag is required'),
   featured: z.boolean(),
   githubUrl: z.string()
     .transform(str => str.trim())
-    .refine(str => str === '' || /^https?:\/\//.test(str), 'Must be a valid URL if provided')
-    .transform(str => str || null),
+    .refine(str => str === '' || /^https?:\/\//.test(str), 'Must be a valid URL if provided'),
   liveUrl: z.string()
     .transform(str => str.trim())
-    .refine(str => str === '' || /^https?:\/\//.test(str), 'Must be a valid URL if provided')
-    .transform(str => str || null),
+    .refine(str => str === '' || /^https?:\/\//.test(str), 'Must be a valid URL if provided'),
 });
 
 const FormContainer = styled.form`
@@ -83,9 +87,15 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, initialData }) => {
     try {
       // Transform the form data to match ProjectFormData
       const transformedData: ProjectFormData = {
-        ...data,
+        title: data.title,
+        description: data.description,
+        imageUrl: data.imageUrl,
         tags: data.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+        featured: data.featured,
+        githubUrl: data.githubUrl.trim() || null,
+        liveUrl: data.liveUrl.trim() || null,
       };
+
       await onSubmit(transformedData);
       showToast('Project saved successfully!', 'success');
     } catch (error) {

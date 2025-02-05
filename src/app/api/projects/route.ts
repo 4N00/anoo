@@ -9,16 +9,8 @@ const projectSchema = z.object({
   imageUrl: z.string().url('Must be a valid URL'),
   tags: z.array(z.string()),
   featured: z.boolean(),
-  githubUrl: z.string()
-    .transform(str => str.trim())
-    .refine(str => str === '' || /^https?:\/\//.test(str), 'Must be a valid URL if provided')
-    .transform(str => str || null)
-    .nullable(),
-  liveUrl: z.string()
-    .transform(str => str.trim())
-    .refine(str => str === '' || /^https?:\/\//.test(str), 'Must be a valid URL if provided')
-    .transform(str => str || null)
-    .nullable(),
+  githubUrl: z.string().nullable(),
+  liveUrl: z.string().nullable(),
 });
 
 export async function GET(): Promise<NextResponse<Project[]>> {
