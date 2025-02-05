@@ -14,6 +14,7 @@ export const ProfileContent = styled.div`
 export const ProfileTitle = styled.h2`
   font-size: ${({ theme }) => theme.typography.fontSize['3xl']};
   font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  font-family: ${({ theme }) => theme.fonts.heading};
   color: ${({ theme }) => theme.colors.text.primary};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;

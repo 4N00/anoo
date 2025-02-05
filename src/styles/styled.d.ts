@@ -87,6 +87,7 @@ declare module 'styled-components' {
     };
     fonts: {
       body: string;
+      h1: string;
       heading: string;
       mono: string;
     };

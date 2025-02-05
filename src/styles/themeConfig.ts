@@ -85,8 +85,9 @@ export const theme: DefaultTheme = {
     }
   },
   fonts: {
-    body: 'var(--font-inter), system-ui, sans-serif',
-    heading: 'var(--font-inter), system-ui, sans-serif',
+    body: 'Inter, system-ui, sans-serif',
+    h1: 'Inter, system-ui, sans-serif',
+    heading: 'Josefin Sans, system-ui, sans-serif',
     mono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'
   },
   spacing: {

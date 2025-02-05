@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
 export const Letter = styled(motion.span)`
-  font-family: var(--font-inter);
+  font-family: ${({ theme }) => theme.fonts.body};
   font-size: clamp(1.5rem, 8vw, 6rem);
   font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
   line-height: ${({ theme }) => theme.typography.lineHeight.none};

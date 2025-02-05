@@ -28,7 +28,7 @@ export const Logo = styled(Link)`
   font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
   color: ${({ theme }) => theme.colors.text.primary};
   text-decoration: none;
-  font-family: var(--font-inter);
+  font-family: ${({ theme }) => theme.fonts.body};
   z-index: ${({ theme }) => theme.zIndex.header + 10};
   letter-spacing: 1px;
 `;
@@ -51,7 +51,7 @@ export const NavLink = styled(Link)`
   text-decoration: none;
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
   font-weight: ${({ theme }) => theme.typography.fontWeight.normal};
-  font-family: var(--font-inter);
+  font-family: ${({ theme }) => theme.fonts.body};
   transition: all 0.3s ease;
   opacity: 0.8;
   position: relative;
@@ -150,7 +150,7 @@ export const MobileNavLink = styled(motion(Link))`
   text-decoration: none;
   font-size: 2.5rem;
   font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  font-family: var(--font-inter);
+  font-family: ${({ theme }) => theme.fonts.body};
   opacity: 0.7;
   transition: all 0.3s ease;
   letter-spacing: 2px;
@@ -174,6 +174,6 @@ export const ContactInfo = styled.div`
   color: ${({ theme }) => theme.colors.background.primary};
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
   opacity: 0.5;
-  font-family: var(--font-inter);
+  font-family: ${({ theme }) => theme.fonts.body};
   letter-spacing: 1px;
 `;

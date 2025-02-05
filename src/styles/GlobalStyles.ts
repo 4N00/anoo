@@ -15,10 +15,6 @@ export const GlobalStyles = createGlobalStyle`
   /* Document */
   :root {
     --max-width: 1200px;
-    --font-inter: ${({ theme }) => theme.fonts.body};
-    
-    /* Prevent adjustments of font size after orientation changes in iOS */
-    -webkit-text-size-adjust: 100%;
     /* Enable smooth scrolling */
     scroll-behavior: smooth;
   }
@@ -33,10 +29,19 @@ export const GlobalStyles = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
   }
 
   /* Typography */
-  h1, h2, h3, h4, h5, h6 {
+  h1 {
+    font-family: ${({ theme }) => theme.fonts.h1};
+    line-height: 1.25;
+    color: ${({ theme }) => theme.colors.text.primary};
+    overflow-wrap: break-word;
+  }
+
+  h2, h3, h4, h5, h6 {
     font-family: ${({ theme }) => theme.fonts.heading};
     line-height: 1.25;
     color: ${({ theme }) => theme.colors.text.primary};
@@ -169,31 +174,8 @@ export const GlobalStyles = createGlobalStyle`
     -webkit-tap-highlight-color: transparent;
   }
 
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body {
-    font-family: 'Inter', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
   code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-  }
-
-  /* Reset link styles */
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  /* Override default visited link color */
-  a:visited {
-    color: inherit;
+    font-family: ${({ theme }) => theme.fonts.mono};
   }
 `;
 
