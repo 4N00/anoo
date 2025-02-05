@@ -1,43 +1,106 @@
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { supabase } from '@/lib/supabase';
-import { Project, ProjectFormData, toProjectDB } from '@/types/project';
+import { Project } from '@/types/project';
 
 const projectUpdateSchema = z.object({
-  title: z.string().min(1, 'Title is required').optional(),
-  description: z.string().min(1, 'Description is required').optional(),
-  imageUrl: z.string().url('Must be a valid URL').optional(),
-  tags: z.array(z.string()).optional(),
-  featured: z.boolean().optional(),
-  category: z.string().min(1, 'Category is required').optional(),
-  githubUrl: z.string().url('Must be a valid URL').nullable().optional(),
-  liveUrl: z.string().url('Must be a valid URL').nullable().optional(),
+  id: z.string().optional(),
+  title: z.string().min(1, 'Title is required'),
+  description: z.string().min(1, 'Description is required'),
+  imageUrl: z.string().url('Must be a valid URL'),
+  tags: z.string(),
+  featured: z.boolean(),
+  githubUrl: z.string().nullable(),
+  liveUrl: z.string().nullable(),
 });
+
+// Create a server-side Supabase client
+const createClient = () => {
+  const cookieStore = cookies();
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll: () => {
+          return Array.from(cookieStore.getAll()).map(cookie => ({
+            name: cookie.name,
+            value: cookie.value,
+          }));
+        },
+        setAll: (cookies: { name: string; value: string; options?: CookieOptions }[]) => {
+          cookies.forEach(cookie => {
+            cookieStore.set(cookie.name, cookie.value, cookie.options);
+          });
+        },
+      },
+    }
+  );
+};
 
 export async function PATCH(
   request: Request,
   { params }: { params: { id: string } }
 ): Promise<NextResponse<Project | { error: string; details?: any }>> {
+  const supabase = createClient();
+  
   try {
+    // Get the current user
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // Check if user is admin
+    const { data: userData, error: roleError } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+
+    if (roleError || !userData || userData.role !== 'ADMIN') {
+      return NextResponse.json(
+        { error: 'Unauthorized - Admin access required' },
+        { status: 403 }
+      );
+    }
+
     const json = await request.json();
-    const validatedData = projectUpdateSchema.parse(json) as Partial<ProjectFormData>;
+    console.log('Received data:', json); // Add logging
+    const validatedData = projectUpdateSchema.parse(json);
+    console.log('Validated data:', validatedData); // Add logging
 
     const { data: project, error } = await supabase
       .from('projects')
       .update({
-        ...toProjectDB(validatedData as ProjectFormData), // Type assertion since we handle partial data
+        title: validatedData.title,
+        description: validatedData.description,
+        image_url: validatedData.imageUrl,
+        tags: validatedData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+        featured: validatedData.featured,
+        github_url: validatedData.githubUrl,
+        live_url: validatedData.liveUrl,
         updated_at: new Date().toISOString(),
       })
       .eq('id', params.id)
+      .eq('author_id', user.id)
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) {
+      console.error('Database error:', error); // Add logging
+      throw error;
+    }
     if (!project) throw new Error('Project not found');
 
     return NextResponse.json(project);
   } catch (error) {
     if (error instanceof z.ZodError) {
+      console.error('Validation error:', error.errors); // Add logging
       return NextResponse.json(
         { error: 'Invalid project data', details: error.errors },
         { status: 400 }
@@ -56,11 +119,37 @@ export async function DELETE(
   _request: Request,
   { params }: { params: { id: string } }
 ): Promise<NextResponse<null | { error: string }>> {
+  const supabase = createClient();
+
   try {
+    // Get the current user
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // Check if user is admin
+    const { data: userData, error: roleError } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+
+    if (roleError || !userData || userData.role !== 'ADMIN') {
+      return NextResponse.json(
+        { error: 'Unauthorized - Admin access required' },
+        { status: 403 }
+      );
+    }
+
     const { error } = await supabase
       .from('projects')
       .delete()
-      .eq('id', params.id);
+      .eq('id', params.id)
+      .eq('author_id', user.id);
 
     if (error) throw error;
 

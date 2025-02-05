@@ -124,22 +124,32 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSave, onClose }) =
 
   const handleFormSubmit = async (data: ProjectFormInput) => {
     try {
+      console.log('Submitting data:', data); // Add logging
+      const formattedData = {
+        ...(project ? { id: project.id } : {}),
+        title: data.title,
+        description: data.description,
+        imageUrl: data.imageUrl,
+        tags: data.tags,
+        featured: data.featured,
+        githubUrl: data.githubUrl,
+        liveUrl: data.liveUrl,
+      };
+      console.log('Formatted data:', formattedData); // Add logging
+
       const response = await fetch(project ? `/api/projects/${project.id}` : '/api/projects', {
         method: project ? 'PATCH' : 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...project,
-          title: data.title,
-          description: data.description,
-          imageUrl: data.imageUrl,
-          tags: data.tags.split(',').map(tag => tag.trim()).filter(Boolean),
-          featured: data.featured,
-          githubUrl: data.githubUrl.trim() || null,
-          liveUrl: data.liveUrl.trim() || null,
-        }),
+        body: JSON.stringify(formattedData),
       });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Server error:', errorData); // Add logging
+        throw new Error(errorData.error || 'Failed to save project');
+      }
 
       if (!response.ok) {
         throw new Error('Failed to save project');
