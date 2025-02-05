@@ -117,6 +117,34 @@ export const MenuButton = styled.button<MenuButtonProps>`
   }
 `;
 
+export const CloseButton = styled.button`
+  position: absolute;
+  top: ${({ theme }) => theme.spacing.md};
+  right: ${({ theme }) => theme.spacing.md};
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: ${({ theme }) => theme.spacing.sm};
+  color: ${({ theme }) => theme.colors.background.primary};
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  z-index: ${({ theme }) => theme.zIndex.modal + 1};
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+`;
+
 export const MobileMenuContainer = styled(motion.div)`
   position: fixed;
   top: 0;
