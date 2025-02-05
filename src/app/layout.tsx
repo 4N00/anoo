@@ -7,6 +7,7 @@ import { ThemeProvider } from '../styles/theme';
 import { AuthProvider } from '../context/AuthContext';
 import { ToastProvider } from '../context/ToastContext';
 import Navbar from '../components/Navbar';
+import PageFooter from '../components/PageFooter';
 import { motion } from 'framer-motion';
 import { styled } from 'styled-components';
 
@@ -70,6 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       {children}
                     </motion.div>
                   </MainContent>
+                  <PageFooter />
                 </ProjectsProvider>
               </AuthProvider>
             </ToastProvider>
