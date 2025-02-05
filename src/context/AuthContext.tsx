@@ -29,52 +29,52 @@ export const useAuth = () => {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading] = useState(false);
 
   useEffect(() => {
     let mounted = true;
 
-    const initAuth = async () => {
-      try {
-        setIsLoading(true);
-        const { data: { session: initialSession } } = await supabase.auth.getSession();
-        
-        if (mounted) {
-          setSession(initialSession);
-          if (initialSession) {
-            const adminStatus = await checkIsAdmin();
-            setIsAdmin(adminStatus);
+    // Only run auth initialization on the client side
+    if (typeof window !== 'undefined') {
+      const initAuth = async () => {
+        try {
+          const {
+            data: { session: initialSession },
+          } = await supabase.auth.getSession();
+
+          if (mounted) {
+            setSession(initialSession);
+            if (initialSession) {
+              const adminStatus = await checkIsAdmin();
+              setIsAdmin(adminStatus);
+            }
           }
-        }
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Auth error:', error);
-        if (mounted) {
-          setSession(null);
-          setIsAdmin(false);
-        }
-      } finally {
-        if (mounted) {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    initAuth();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, newSession) => {
-        if (mounted) {
-          setSession(newSession);
-          if (newSession) {
-            const adminStatus = await checkIsAdmin();
-            setIsAdmin(adminStatus);
-          } else {
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('Auth error:', error);
+          if (mounted) {
+            setSession(null);
             setIsAdmin(false);
           }
         }
+      };
+
+      initAuth();
+    }
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
+      if (mounted) {
+        setSession(newSession);
+        if (newSession) {
+          const adminStatus = await checkIsAdmin();
+          setIsAdmin(adminStatus);
+        } else {
+          setIsAdmin(false);
+        }
       }
-    );
+    });
 
     return () => {
       mounted = false;
@@ -83,12 +83,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ 
-      session, 
-      isAdmin, 
-      isLoading,
-      user: session?.user ?? null 
-    }}>
+    <AuthContext.Provider
+      value={{
+        session,
+        isAdmin,
+        isLoading,
+        user: session?.user ?? null,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
