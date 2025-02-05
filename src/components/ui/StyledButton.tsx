@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface ButtonProps {
-  $variant?: 'primary' | 'secondary' | 'outline';
+  $variant?: 'primary' | 'secondary' | 'outline' | 'error';
   $fullWidth?: boolean;
 }
 
@@ -39,6 +39,16 @@ export const StyledButton = styled.button<ButtonProps>`
             background-color: ${theme.colors.primary.main}10;
           }
         `;
+      case 'error':
+        return `
+          background-color: ${theme.colors.error.main};
+          color: ${theme.colors.error.contrast};
+          border: none;
+
+          &:hover:not(:disabled) {
+            background-color: ${theme.colors.error.dark};
+          }
+        `;
       default:
         return `
           background-color: ${theme.colors.primary.main};
@@ -59,7 +69,14 @@ export const StyledButton = styled.button<ButtonProps>`
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary.main}40;
+    box-shadow: 0 0 0 2px ${({ theme, $variant = 'primary' }) => {
+      switch ($variant) {
+        case 'error':
+          return `${theme.colors.error.main}40`;
+        default:
+          return `${theme.colors.primary.main}40`;
+      }
+    }};
   }
 `;
 

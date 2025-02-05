@@ -1,165 +1,90 @@
 'use client';
 
 import React, { useState } from 'react';
-import PageFooter from '../components/PageFooter';
 import { styled } from 'styled-components';
-import { motion } from 'framer-motion';
-import { useProjects } from '../hooks/useProjects';
-import ProjectForm from '../components/admin/ProjectForm';
-import { ProjectFormData } from '@/types/project';
-import StyledButton from '@/components/ui/StyledButton';
-import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
+import ProjectForm from '@/components/admin/ProjectForm';
+import ProjectList from '@/components/admin/ProjectList';
+import { ProjectFormData, ProjectUI } from '@/types/project';
+import { useProjects } from '@/hooks/useProjects';
+import { useToast } from '@/context/ToastContext';
 
-const AdminContainer = styled.div`
-  min-height: 100vh;
-  padding: 2rem;
-  background-color: ${({ theme }) => theme.colors.background.primary};
-`;
-
-const AdminContent = styled(motion.div)`
+const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: ${({ theme }) => theme.spacing.xl};
 `;
 
-const AdminTitle = styled.h1`
-  font-size: ${({ theme }) => theme.typography.fontSize['3xl']};
-  color: ${({ theme }) => theme.colors.text.primary};
-  margin-bottom: 2rem;
-`;
-
-const AdminSection = styled.section`
-  background: ${({ theme }) => theme.colors.background.secondary};
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: ${({ theme }) => theme.shadows.md};
-`;
-
-const ProjectList = styled.div`
-  display: grid;
-  gap: 1rem;
-  margin-top: 2rem;
-`;
-
-const ProjectItem = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  background: ${({ theme }) => theme.colors.background.light};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  transition: background-color ${({ theme }) => theme.transitions.fast};
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.background.main};
-  }
-`;
-
-const ProjectTitle = styled.h3`
-  font-size: ${({ theme }) => theme.typography.fontSize.lg};
+const Title = styled.h1`
+  font-size: ${({ theme }) => theme.typography.fontSize['2xl']};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
   color: ${({ theme }) => theme.colors.text.primary};
 `;
 
-const FormSection = styled(AdminSection)`
-  margin-top: 2rem;
+const Section = styled.section`
+  margin-bottom: ${({ theme }) => theme.spacing['2xl']};
 `;
 
 const SectionTitle = styled.h2`
-  font-size: ${({ theme }) => theme.typography.fontSize['2xl']};
+  font-size: ${({ theme }) => theme.typography.fontSize.xl};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.semibold};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
   color: ${({ theme }) => theme.colors.text.primary};
-  margin-bottom: 1rem;
 `;
 
-const Admin: React.FC = () => {
-  const { projects, createProject } = useProjects();
-  const [showForm, setShowForm] = useState(false);
-  const { isAdmin, isLoading } = useAuth();
-  const router = useRouter();
+const Admin = () => {
+  const { projects, createProject, updateProject } = useProjects();
+  const [editingProject, setEditingProject] = useState<ProjectUI | null>(null);
+  const { showToast } = useToast();
 
-  React.useEffect(() => {
-    if (!isLoading && !isAdmin) {
-      router.replace('/login');
-    }
-  }, [isAdmin, isLoading, router]);
-
-  if (isLoading) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '100vh',
-        fontSize: '1.5rem',
-        color: '#666'
-      }}>
-        Loading...
-      </div>
-    );
-  }
-
-  if (!isAdmin) {
-    return null;
-  }
-
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        duration: 0.3
+  const handleSubmit = async (data: ProjectFormData) => {
+    try {
+      if (editingProject) {
+        await updateProject(editingProject.id, data);
+        showToast('Project updated successfully!', 'success');
+      } else {
+        await createProject(data);
+        showToast('Project created successfully!', 'success');
       }
+      setEditingProject(null);
+    } catch (error) {
+      console.error('Error saving project:', error);
+      showToast(
+        error instanceof Error ? error.message : 'Failed to save project',
+        'error'
+      );
+      throw error; // Re-throw to be handled by the form
     }
   };
 
-  const handleCreateProject = async (data: ProjectFormData) => {
-    try {
-      await createProject(data);
-      setShowForm(false);
-    } catch (error) {
-      console.error('Error creating project:', error);
-    }
+  const handleEdit = (project: ProjectUI) => {
+    setEditingProject(project);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <AdminContainer>
-      <AdminContent
-        variants={container}
-        initial="hidden"
-        animate="show"
-      >
-        <AdminTitle>Admin Dashboard</AdminTitle>
-        
-        <AdminSection>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <SectionTitle>Projects</SectionTitle>
-            <StyledButton
-              onClick={() => setShowForm(!showForm)}
-              $variant="primary"
-            >
-              {showForm ? 'Cancel' : 'Add New Project'}
-            </StyledButton>
-          </div>
+    <Container>
+      <Title>Admin Dashboard</Title>
 
-          {showForm && (
-            <FormSection>
-              <SectionTitle>Create New Project</SectionTitle>
-              <ProjectForm onSubmit={handleCreateProject} />
-            </FormSection>
-          )}
+      <Section>
+        <SectionTitle>
+          {editingProject ? 'Edit Project' : 'Create New Project'}
+        </SectionTitle>
+        <ProjectForm
+          onSubmit={handleSubmit}
+          initialData={editingProject || undefined}
+        />
+      </Section>
 
-          <ProjectList>
-            {projects.map(project => (
-              <ProjectItem key={project.id}>
-                <ProjectTitle>{project.title || 'Untitled Project'}</ProjectTitle>
-              </ProjectItem>
-            ))}
-          </ProjectList>
-        </AdminSection>
-      </AdminContent>
-      <PageFooter />
-    </AdminContainer>
+      <Section>
+        <SectionTitle>Manage Projects</SectionTitle>
+        <ProjectList
+          projects={projects}
+          onEdit={handleEdit}
+          onProjectsChange={() => {}} // No need to manually refresh since we have real-time updates
+        />
+      </Section>
+    </Container>
   );
 };
 
