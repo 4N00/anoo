@@ -26,7 +26,45 @@ export default [
         ecmaFeatures: {
           jsx: true,
         },
-        lib: ['dom', 'dom.iterable', 'esnext'],
+      },
+      globals: {
+        // Browser globals
+        window: 'readonly',
+        document: 'readonly',
+        fetch: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        // Node.js globals
+        process: 'readonly',
+        console: 'readonly',
+        module: 'readonly',
+        // React
+        React: 'readonly',
+        // Test globals
+        describe: 'readonly',
+        it: 'readonly',
+        expect: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        cy: 'readonly',
+        Cypress: 'readonly',
+        // TypeScript globals
+        NodeJS: 'readonly',
+        // DOM types
+        HTMLElement: 'readonly',
+        HTMLDivElement: 'readonly',
+        HTMLInputElement: 'readonly',
+        HTMLButtonElement: 'readonly',
+        HTMLAnchorElement: 'readonly',
+        HTMLTextAreaElement: 'readonly',
+        HTMLHeadingElement: 'readonly',
+        KeyboardEvent: 'readonly',
+        MouseEvent: 'readonly',
+        IntersectionObserver: 'readonly',
+        // Web API
+        URL: 'readonly',
+        Request: 'readonly',
+        Response: 'readonly',
       },
     },
     settings: {
@@ -35,15 +73,24 @@ export default [
       },
     },
     rules: {
-      'no-console': ['warn', { allow: ['error', 'warn', 'info'] }],
+      'no-console': ['warn', { 
+        allow: ['error', 'warn', 'info'] 
+      }],
+      '@typescript-eslint/no-unused-vars': ['error', { 
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+      }],
+      'no-unused-vars': 'off', // Using @typescript-eslint/no-unused-vars instead
+      'react/react-in-jsx-scope': 'off', // Not needed in Next.js
     },
   },
   {
-    files: ['jest.config.js', 'jest.setup.js'],
+    files: ['jest.config.js', 'jest.setup.js', 'cypress/**/*'],
     rules: {
       'no-undef': 'off',
       '@typescript-eslint/no-var-requires': 'off',
       'import/no-commonjs': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
     },
   },
   {

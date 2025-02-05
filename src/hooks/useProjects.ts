@@ -17,6 +17,7 @@ interface UseProjectsHookReturn {
   createProject: (data: ProjectFormData) => Promise<void>;
   updateProject: (id: string, data: Partial<ProjectFormData>) => Promise<void>;
   deleteProject: (id: string) => Promise<void>;
+  fetchMoreProjects: (offset: number) => Promise<ProjectUI[]>;
 }
 
 export const useProjects = (): UseProjectsHookReturn => {
@@ -43,6 +44,25 @@ export const useProjects = (): UseProjectsHookReturn => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchMoreProjects = async (offset: number): Promise<ProjectUI[]> => {
+    try {
+      const { data, error: supabaseError } = await supabase
+        .from('projects')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .range(offset, offset + 5);
+
+      if (supabaseError) throw supabaseError;
+
+      return (data || []).map(toProjectUI);
+    } catch (err) {
+      setError({
+        message: err instanceof Error ? err.message : 'An error occurred',
+      });
+      return [];
     }
   };
 
@@ -75,7 +95,7 @@ export const useProjects = (): UseProjectsHookReturn => {
       const { error: supabaseError } = await supabase
         .from('projects')
         .update({
-          ...toProjectDB(data as ProjectFormData), // Type assertion since we know partial data will be handled correctly
+          ...toProjectDB(data as ProjectFormData),
           updated_at: new Date().toISOString(),
         })
         .eq('id', id);
@@ -142,5 +162,6 @@ export const useProjects = (): UseProjectsHookReturn => {
     createProject,
     updateProject,
     deleteProject,
+    fetchMoreProjects,
   };
 };

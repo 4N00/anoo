@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import ProjectCard from '../ProjectCard/ProjectCard';
 import { ProjectContainer } from '../ProjectCard/styles';
@@ -25,17 +25,26 @@ interface ProjectSectionProps {
   featured?: boolean;
 }
 
-const ProjectSection: React.FC<ProjectSectionProps> = ({ projects, title, featured = false }) => {
-  return (
-    <motion.section initial="initial" animate="animate" variants={containerVariants}>
-      {title && <h2>{title}</h2>}
-      <ProjectContainer featured={featured}>
-        {projects.map((project, index) => (
-          <ProjectCard key={project.id} project={project} index={index} />
-        ))}
-      </ProjectContainer>
-    </motion.section>
-  );
-};
+const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(
+  ({ projects, title, featured = false }, ref) => {
+    return (
+      <motion.section
+        ref={ref}
+        initial="initial"
+        animate="animate"
+        variants={containerVariants}
+      >
+        {title && <h2>{title}</h2>}
+        <ProjectContainer featured={featured}>
+          {projects.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
+          ))}
+        </ProjectContainer>
+      </motion.section>
+    );
+  }
+);
+
+ProjectSection.displayName = 'ProjectSection';
 
 export default ProjectSection;

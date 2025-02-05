@@ -1,96 +1,90 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
-import HeroSection from '../HeroSection';
-import ProjectSection from '../ProjectSection';
-import PageFooter from '../PageFooter';
-import { MainContainer, Separator, ProjectGrid } from '@/styles/HomeStyles';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import HeroSection from '@/components/HeroSection';
+import ProjectSection from '@/components/ProjectSection';
+import { useProjects } from '@/hooks/useProjects';
 import { ProjectUI } from '@/types/project';
-
-const colors = ['#FFFFFF', '#F2FCE2', '#FEF7CD', '#E5DEFF', '#FFDEE2'] as const;
+import { MainContainer } from '@/styles/HomeStyles';
+import { debounce } from '@/utils/helpers';
 
 interface HomeClientProps {
   initialProjects: ProjectUI[];
 }
 
 const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
-  const mainRef = useRef<HTMLDivElement>(null);
-  const sections = useRef<HTMLElement[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const projectsRef = useRef<HTMLElement>(null);
+  const [projects, setProjects] = useState<ProjectUI[]>(initialProjects);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const { fetchMoreProjects } = useProjects();
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start', 'end'],
+  });
+
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+    const handleScroll = debounce(async () => {
+      if (!hasMore || isLoading) return;
 
-    const handleScroll = () => {
+      const element = document.documentElement;
+      const scrolledToBottom =
+        window.innerHeight + window.pageYOffset >= element.scrollHeight - 1000;
+
+      if (scrolledToBottom) {
+        setIsLoading(true);
+        try {
+          const newProjects = await fetchMoreProjects(projects.length);
+          if (newProjects.length === 0) {
+            setHasMore(false);
+          } else {
+            setProjects((prev) => [...prev, ...newProjects]);
+          }
+        } catch (error) {
+          console.error('Error fetching more projects:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    }, 500);
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [projects.length, hasMore, isLoading, fetchMoreProjects]);
+
+  useEffect(() => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    const id = setTimeout(() => {
+      const hash = window.location.hash;
+      if (hash === '#projects' && projectsRef.current) {
+        projectsRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+
+    setTimeoutId(id);
+
+    return () => {
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
-
-      timeoutId = setTimeout(() => {
-        const windowHeight = window.innerHeight;
-        let mostVisibleSection = 0;
-        let maxVisibleArea = 0;
-
-        sections.current.forEach((section, index) => {
-          const rect = section.getBoundingClientRect();
-          const visibleHeight = Math.min(
-            windowHeight,
-            Math.max(0, Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0))
-          );
-
-          const visiblePercentage = visibleHeight / section.offsetHeight;
-
-          if (visiblePercentage > maxVisibleArea) {
-            maxVisibleArea = visiblePercentage;
-            mostVisibleSection = index;
-          }
-        });
-
-        if (typeof document !== 'undefined') {
-          document.body.style.backgroundColor = colors[mostVisibleSection] || colors[0];
-        }
-      }, 50);
     };
-
-    if (mainRef.current) {
-      sections.current = Array.from(mainRef.current.getElementsByTagName('section'));
-      window.addEventListener('scroll', handleScroll);
-      handleScroll();
-    }
-
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Filter projects based on featured flag
-  const featuredProjects = initialProjects.filter((p) => p.featured);
-  const nonFeaturedProjects = initialProjects.filter((p) => !p.featured);
-
-  // Split non-featured projects into groups
-  const chunkSize = Math.ceil(nonFeaturedProjects.length / 4);
-  const projectsSetOne = nonFeaturedProjects.slice(0, chunkSize);
-  const projectsSetTwo = nonFeaturedProjects.slice(chunkSize, chunkSize * 2);
-  const projectsSetThree = nonFeaturedProjects.slice(chunkSize * 2, chunkSize * 3);
-  const projectsSetFour = nonFeaturedProjects.slice(chunkSize * 3);
-
   return (
-    <MainContainer ref={mainRef}>
-      <HeroSection />
-      <Separator />
-      {featuredProjects.length > 0 && (
-        <ProjectSection title="FEATURED" featured projects={featuredProjects} />
-      )}
-      {(projectsSetOne.length > 0 || projectsSetTwo.length > 0) && (
-        <ProjectGrid>
-          {projectsSetOne.length > 0 && <ProjectSection projects={projectsSetOne} />}
-          {projectsSetTwo.length > 0 && <ProjectSection projects={projectsSetTwo} />}
-        </ProjectGrid>
-      )}
-      {(projectsSetThree.length > 0 || projectsSetFour.length > 0) && (
-        <ProjectGrid>
-          {projectsSetThree.length > 0 && <ProjectSection projects={projectsSetThree} />}
-          {projectsSetFour.length > 0 && <ProjectSection projects={projectsSetFour} />}
-        </ProjectGrid>
-      )}
-      <PageFooter />
+    <MainContainer ref={containerRef}>
+      <motion.div style={{ opacity }}>
+        <HeroSection />
+      </motion.div>
+      <ProjectSection ref={projectsRef} projects={projects} />
     </MainContainer>
   );
 };
