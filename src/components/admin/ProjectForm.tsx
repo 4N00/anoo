@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -70,18 +70,44 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, initialData }) => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<ProjectFormInput>({
     resolver: zodResolver(projectValidationSchema),
     defaultValues: {
-      title: initialData?.title || '',
-      description: initialData?.description || '',
-      imageUrl: initialData?.imageUrl || '',
-      tags: initialData?.tags ? initialData.tags.join(', ') : '',
-      featured: initialData?.featured || false,
-      githubUrl: initialData?.githubUrl || '',
-      liveUrl: initialData?.liveUrl || '',
+      title: '',
+      description: '',
+      imageUrl: '',
+      tags: '',
+      featured: false,
+      githubUrl: '',
+      liveUrl: '',
     },
   });
+
+  // Reset form when initialData changes
+  useEffect(() => {
+    if (initialData) {
+      reset({
+        title: initialData.title || '',
+        description: initialData.description || '',
+        imageUrl: initialData.imageUrl || '',
+        tags: initialData.tags ? initialData.tags.join(', ') : '',
+        featured: initialData.featured || false,
+        githubUrl: initialData.githubUrl || '',
+        liveUrl: initialData.liveUrl || '',
+      });
+    } else {
+      reset({
+        title: '',
+        description: '',
+        imageUrl: '',
+        tags: '',
+        featured: false,
+        githubUrl: '',
+        liveUrl: '',
+      });
+    }
+  }, [initialData, reset]);
 
   const handleFormSubmit = async (data: ProjectFormInput) => {
     try {
@@ -97,7 +123,11 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, initialData }) => {
       };
 
       await onSubmit(transformedData);
-      showToast('Project saved successfully!', 'success');
+      
+      // Only reset if it's a new project (no initialData)
+      if (!initialData) {
+        reset();
+      }
     } catch (error) {
       console.error('Form submission error:', error);
       showToast(
