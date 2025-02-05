@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { supabase, isAdmin } from '@/lib/supabase';
 import StyledButton from '@/components/ui/StyledButton';
 import FormInput from '@/components/ui/FormInput';
 import { Container, LoginCard, Title, Form, ErrorMessage } from './styles';
@@ -12,8 +11,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,29 +30,15 @@ export default function LoginPage() {
         throw new Error('No session created');
       }
 
-      // Then check if user is admin
-      const { data: profile, error: profileError } = await supabase
-        .from('users')
-        .select('role')
-        .eq('id', authData.session.user.id)
-        .single();
+      // Check if user is admin
+      const adminStatus = await isAdmin();
 
-      if (profileError) {
-        console.error('Profile fetch error:', profileError);
-        throw new Error('Failed to fetch user profile');
-      }
-
-      if (!profile) {
-        throw new Error('User profile not found');
-      }
-
-      if (profile.role !== 'ADMIN') {
+      if (!adminStatus) {
         throw new Error('Admin access required');
       }
 
-      // Navigate to admin page and force a refresh
-      router.push('/admin');
-      router.refresh();
+      // Let the middleware handle the redirect
+      window.location.href = '/admin';
     } catch (error) {
       console.error('Login error:', error);
       setError(
@@ -63,7 +46,6 @@ export default function LoginPage() {
           ? error.message
           : 'An error occurred during login'
       );
-    } finally {
       setIsLoading(false);
     }
   };

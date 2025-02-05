@@ -1,38 +1,38 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import Admin from "../../pages/Admin";
 import { useAuth } from '@/context/AuthContext';
+import { styled } from 'styled-components';
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: ${({ theme }) => theme.typography.fontSize.xl};
+  color: ${({ theme }) => theme.colors.text.secondary};
+  background: ${({ theme }) => theme.colors.background.primary};
+`;
 
 export default function AdminPage() {
-  const { isAdmin, isLoading } = useAuth();
-  const router = useRouter();
+  const { isAdmin, isLoading, session } = useAuth();
 
-  useEffect(() => {
-    if (!isLoading && !isAdmin) {
-      router.replace('/login');
-    }
-  }, [isAdmin, isLoading, router]);
-
+  // Let the middleware handle redirects
   if (isLoading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '100vh',
-        fontSize: '1.5rem',
-        color: '#666'
-      }}>
+      <LoadingContainer>
         Loading...
-      </div>
+      </LoadingContainer>
     );
   }
 
-  if (!isAdmin) {
+  // Don't render anything if not authenticated or not admin
+  // The middleware will handle the redirect
+  if (!session || !isAdmin) {
     return null;
   }
 
+  // Only render the admin component if we're authenticated and an admin
   return <Admin />;
 }

@@ -1,8 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { supabase, isAdmin as checkIsAdmin } from '@/lib/supabase';
 import { Session } from '@supabase/supabase-js';
 
 interface AuthContextType {
@@ -29,55 +28,56 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (session) {
-        checkAdminStatus(session);
-      } else {
-        setIsLoading(false);
-      }
-    });
+    let mounted = true;
 
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setSession(session);
-      if (session) {
-        await checkAdminStatus(session);
-      } else {
-        setIsAdmin(false);
-        setIsLoading(false);
+    const initAuth = async () => {
+      try {
+        setIsLoading(true);
+        const { data: { session: initialSession } } = await supabase.auth.getSession();
+        
+        if (mounted) {
+          setSession(initialSession);
+          if (initialSession) {
+            const adminStatus = await checkIsAdmin();
+            setIsAdmin(adminStatus);
+          }
+        }
+      } catch (error) {
+        console.error('Auth error:', error);
+        if (mounted) {
+          setSession(null);
+          setIsAdmin(false);
+        }
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
-    });
+    };
+
+    initAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (_event, newSession) => {
+        if (mounted) {
+          setSession(newSession);
+          if (newSession) {
+            const adminStatus = await checkIsAdmin();
+            setIsAdmin(adminStatus);
+          } else {
+            setIsAdmin(false);
+          }
+        }
+      }
+    );
 
     return () => {
+      mounted = false;
       subscription.unsubscribe();
     };
   }, []);
-
-  const checkAdminStatus = async (session: Session) => {
-    try {
-      const { data: profile, error } = await supabase
-        .from('users')
-        .select('role')
-        .eq('id', session.user.id)
-        .single();
-
-      if (error) throw error;
-
-      setIsAdmin(profile?.role === 'ADMIN');
-    } catch (error) {
-      console.error('Error checking admin status:', error);
-      setIsAdmin(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <AuthContext.Provider value={{ session, isAdmin, isLoading }}>

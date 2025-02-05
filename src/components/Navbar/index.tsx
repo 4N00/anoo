@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useAuth } from '@/context/AuthContext';
+import { supabase } from '@/lib/supabase';
 import {
   Nav,
   Container,
@@ -116,8 +118,19 @@ const contactInfoVariants = {
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const { isAdmin } = useAuth();
+  const router = useRouter();
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      router.push('/');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
 
   return (
     <Nav>
@@ -139,6 +152,25 @@ const Navbar = () => {
           >
             Contact
           </NavLink>
+          {isAdmin && (
+            <>
+              <NavLink 
+                href="/admin"
+                aria-current={pathname === '/admin' ? 'page' : undefined}
+              >
+                Admin
+              </NavLink>
+              <NavLink 
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLogout();
+                }}
+              >
+                Logout
+              </NavLink>
+            </>
+          )}
         </NavLinks>
         <MenuButton onClick={toggleMenu} aria-label="Toggle menu">
           <MenuIcon isOpen={isOpen} />
@@ -174,6 +206,28 @@ const Navbar = () => {
             >
               Contact
             </MobileNavLink>
+            {isAdmin && (
+              <>
+                <MobileNavLink
+                  href="/admin"
+                  onClick={toggleMenu}
+                  variants={mobileNavLinkVariants}
+                >
+                  Admin
+                </MobileNavLink>
+                <MobileNavLink
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLogout();
+                    toggleMenu();
+                  }}
+                  variants={mobileNavLinkVariants}
+                >
+                  Logout
+                </MobileNavLink>
+              </>
+            )}
             <ContactInfo
               as={motion.div}
               variants={contactInfoVariants}
