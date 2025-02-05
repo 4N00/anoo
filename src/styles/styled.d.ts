@@ -26,6 +26,7 @@ declare module 'styled-components' {
         primary: string;
         secondary: string;
         muted: string;
+        gray: string;
       };
       error: {
         main: string;
@@ -130,7 +131,7 @@ declare module 'styled-components' {
     };
     zIndex: {
       hide: number;
-      auto: string | number;
+      auto: string;
       base: number;
       header: number;
       dropdown: number;

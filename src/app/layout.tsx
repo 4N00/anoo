@@ -7,6 +7,7 @@ import { ThemeProvider } from "../styles/theme";
 import { AuthProvider } from "../context/AuthContext";
 import { ToastProvider } from "../context/ToastContext";
 import Navbar from "../components/Navbar";
+import PageTransition from "@/components/PageTransition";
 import { styled } from "styled-components";
 
 const inter = Inter({ subsets: ['latin'] });
@@ -32,7 +33,9 @@ export default function RootLayout({
                 <ProjectsProvider>
                   <Navbar />
                   <MainContent>
-                    {children}
+                    <PageTransition>
+                      {children}
+                    </PageTransition>
                   </MainContent>
                 </ProjectsProvider>
               </AuthProvider>

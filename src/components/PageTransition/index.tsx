@@ -1,25 +1,53 @@
-import { motion } from 'framer-motion';
-import { ReactNode } from 'react';
+'use client';
+
+import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
+import { TransitionWrapper } from './styles';
 
 interface PageTransitionProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
-const PageTransition = ({ children }: PageTransitionProps) => {
+const pageVariants = {
+  initial: {
+    opacity: 0,
+    y: 20,
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.4,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: -20,
+    transition: {
+      duration: 0.3,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
+  },
+};
+
+const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
+  const pathname = usePathname();
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{
-        type: "spring",
-        stiffness: 100, // Doubled from 50
-        damping: 40,   // Doubled from 20
-        mass: 0.5      // Halved from 1 to make it faster
-      }}
-    >
-      {children}
-    </motion.div>
+    <AnimatePresence mode="wait">
+      <TransitionWrapper
+        key={pathname}
+        as={motion.div}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        variants={pageVariants}
+      >
+        {children}
+      </TransitionWrapper>
+    </AnimatePresence>
   );
 };
 

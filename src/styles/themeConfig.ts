@@ -24,7 +24,8 @@ export const theme: DefaultTheme = {
     text: {
       primary: '#000000',
       secondary: '#666666',
-      muted: '#999999'
+      muted: '#999999',
+      gray: '#4B5563'
     },
     error: {
       main: '#ff0000',
