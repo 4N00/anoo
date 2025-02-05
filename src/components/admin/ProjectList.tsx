@@ -5,7 +5,6 @@ import { styled } from 'styled-components';
 import { ProjectUI } from '@/types/project';
 import { StyledButton } from '../ui/StyledButton';
 import { useToast } from '@/context/ToastContext';
-import { useProjects } from '@/hooks/useProjects';
 
 const ListContainer = styled.div`
   display: flex;
@@ -58,13 +57,12 @@ const ButtonGroup = styled.div`
 interface ProjectListProps {
   projects: ProjectUI[];
   onEdit: (project: ProjectUI) => void;
-  onProjectsChange: () => void;
+  onDelete: (projectId: string) => void;
 }
 
-const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit }) => {
+const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit, onDelete }) => {
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const { showToast } = useToast();
-  const { deleteProject } = useProjects();
 
   const handleDelete = async (project: ProjectUI) => {
     if (!window.confirm(`Are you sure you want to delete "${project.title}"?`)) {
@@ -73,7 +71,15 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit }) => {
 
     setIsDeleting(project.id);
     try {
-      await deleteProject(project.id);
+      const response = await fetch(`/api/projects/${project.id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete project');
+      }
+
+      onDelete(project.id);
       showToast('Project deleted successfully', 'success');
     } catch (error) {
       console.error('Error deleting project:', error);

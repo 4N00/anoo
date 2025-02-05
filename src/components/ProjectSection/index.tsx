@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useProjects } from '@/hooks/useProjects';
 import ProjectCard from '../ProjectCard/ProjectCard';
 import { ProjectContainer } from '../ProjectCard/styles';
+import { ProjectUI } from '@/types/project';
 
 const containerVariants = {
   initial: {
@@ -19,41 +19,33 @@ const containerVariants = {
   },
 };
 
-const ProjectSection: React.FC = () => {
-  const { projects } = useProjects();
+interface ProjectSectionProps {
+  projects: ProjectUI[];
+  title?: string;
+  featured?: boolean;
+}
 
-  const featuredProjects = projects.filter(project => project.featured);
-  const regularProjects = projects.filter(project => !project.featured);
-
+const ProjectSection: React.FC<ProjectSectionProps> = ({ 
+  projects,
+  title,
+  featured = false 
+}) => {
   return (
     <motion.div
       initial="initial"
       animate="animate"
       variants={containerVariants}
     >
-      {featuredProjects.length > 0 && (
-        <ProjectContainer featured>
-          {featuredProjects.map((project, index) => (
-            <ProjectCard 
-              key={project.id} 
-              project={project}
-              index={index}
-            />
-          ))}
-        </ProjectContainer>
-      )}
-
-      {regularProjects.length > 0 && (
-        <ProjectContainer>
-          {regularProjects.map((project, index) => (
-            <ProjectCard 
-              key={project.id} 
-              project={project}
-              index={featuredProjects.length + index}
-            />
-          ))}
-        </ProjectContainer>
-      )}
+      {title && <h2>{title}</h2>}
+      <ProjectContainer featured={featured}>
+        {projects.map((project, index) => (
+          <ProjectCard 
+            key={project.id} 
+            project={project}
+            index={index}
+          />
+        ))}
+      </ProjectContainer>
     </motion.div>
   );
 };

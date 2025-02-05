@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ProjectFormData } from '@/types/project';
+import { ProjectUI } from '@/types/project';
 import FormInput from '../ui/FormInput';
 import { StyledButton } from '../ui/StyledButton';
 import { styled } from 'styled-components';
@@ -39,6 +39,12 @@ const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: ${({ theme }) => theme.colors.background.secondary};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  box-shadow: ${({ theme }) => theme.shadows.md};
 `;
 
 const InputGroup = styled.div`
@@ -59,12 +65,19 @@ const CheckboxContainer = styled.div`
   gap: 0.5rem;
 `;
 
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+`;
+
 interface ProjectFormProps {
-  onSubmit: (data: ProjectFormData) => Promise<void>;
-  initialData?: Partial<ProjectFormData>;
+  project: ProjectUI | null;
+  onSave: (project: ProjectUI) => void;
+  onClose: () => void;
 }
 
-const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, initialData }) => {
+const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSave, onClose }) => {
   const { showToast } = useToast();
   const {
     register,
@@ -84,17 +97,17 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, initialData }) => {
     },
   });
 
-  // Reset form when initialData changes
+  // Reset form when project changes
   useEffect(() => {
-    if (initialData) {
+    if (project) {
       reset({
-        title: initialData.title || '',
-        description: initialData.description || '',
-        imageUrl: initialData.imageUrl || '',
-        tags: initialData.tags ? initialData.tags.join(', ') : '',
-        featured: initialData.featured || false,
-        githubUrl: initialData.githubUrl || '',
-        liveUrl: initialData.liveUrl || '',
+        title: project.title,
+        description: project.description,
+        imageUrl: project.imageUrl,
+        tags: project.tags.join(', '),
+        featured: project.featured,
+        githubUrl: project.githubUrl || '',
+        liveUrl: project.liveUrl || '',
       });
     } else {
       reset({
@@ -107,27 +120,34 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, initialData }) => {
         liveUrl: '',
       });
     }
-  }, [initialData, reset]);
+  }, [project, reset]);
 
   const handleFormSubmit = async (data: ProjectFormInput) => {
     try {
-      // Transform the form data to match ProjectFormData
-      const transformedData: ProjectFormData = {
-        title: data.title,
-        description: data.description,
-        imageUrl: data.imageUrl,
-        tags: data.tags.split(',').map(tag => tag.trim()).filter(Boolean),
-        featured: data.featured,
-        githubUrl: data.githubUrl.trim() || null,
-        liveUrl: data.liveUrl.trim() || null,
-      };
+      const response = await fetch(project ? `/api/projects/${project.id}` : '/api/projects', {
+        method: project ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...project,
+          title: data.title,
+          description: data.description,
+          imageUrl: data.imageUrl,
+          tags: data.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+          featured: data.featured,
+          githubUrl: data.githubUrl.trim() || null,
+          liveUrl: data.liveUrl.trim() || null,
+        }),
+      });
 
-      await onSubmit(transformedData);
-      
-      // Only reset if it's a new project (no initialData)
-      if (!initialData) {
-        reset();
+      if (!response.ok) {
+        throw new Error('Failed to save project');
       }
+
+      const savedProject = await response.json();
+      onSave(savedProject);
+      showToast('Project saved successfully', 'success');
     } catch (error) {
       console.error('Form submission error:', error);
       showToast(
@@ -198,9 +218,14 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, initialData }) => {
         />
       </InputGroup>
 
-      <StyledButton type="submit" disabled={isSubmitting} $variant="primary">
-        {isSubmitting ? 'Saving...' : 'Save Project'}
-      </StyledButton>
+      <ButtonGroup>
+        <StyledButton type="submit" disabled={isSubmitting} $variant="primary">
+          {isSubmitting ? 'Saving...' : 'Save Project'}
+        </StyledButton>
+        <StyledButton type="button" onClick={onClose} $variant="secondary">
+          Cancel
+        </StyledButton>
+      </ButtonGroup>
     </FormContainer>
   );
 };

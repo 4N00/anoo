@@ -1,20 +1,20 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import HeroSection from '../components/HeroSection';
-import ProjectSection from '../components/ProjectSection';
-import PageFooter from '../components/PageFooter';
-import { MainContainer, Separator, ProjectGrid } from '../styles/HomeStyles';
+import HeroSection from '../HeroSection';
+import ProjectSection from '../ProjectSection';
+import PageFooter from '../PageFooter';
+import { MainContainer, Separator, ProjectGrid } from '@/styles/HomeStyles';
 import { ProjectUI } from '@/types/project';
 
 const COLORS = ['#FFFFFF', '#F2FCE2', '#FEF7CD', '#E5DEFF', '#FFDEE2'] as const;
 type BackgroundColor = typeof COLORS[number];
 
-interface IndexProps {
+interface HomeClientProps {
   initialProjects: ProjectUI[];
 }
 
-const Index: React.FC<IndexProps> = ({ initialProjects }) => {
+const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
   const mainRef = useRef<HTMLDivElement>(null);
   const sections = useRef<HTMLElement[]>([]);
 
@@ -108,4 +108,4 @@ const Index: React.FC<IndexProps> = ({ initialProjects }) => {
   );
 };
 
-export default Index;
+export default HomeClient;

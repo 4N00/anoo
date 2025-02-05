@@ -3,10 +3,10 @@
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { ProjectUI } from '@/types/project';
-import ProjectList from '@/components/admin/ProjectList';
-import ProjectForm from '@/components/admin/ProjectForm';
+import ProjectList from './ProjectList';
+import ProjectForm from './ProjectForm';
 
-const AdminContainer = styled.div`
+const AdminPageContainer = styled.div`
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
@@ -38,11 +38,11 @@ const AddButton = styled.button`
   }
 `;
 
-interface AdminProps {
+interface AdminPageClientProps {
   initialProjects: ProjectUI[];
 }
 
-const Admin: React.FC<AdminProps> = ({ initialProjects }) => {
+const AdminPageClient: React.FC<AdminPageClientProps> = ({ initialProjects }) => {
   const [projects, setProjects] = useState(initialProjects);
   const [showForm, setShowForm] = useState(false);
   const [editingProject, setEditingProject] = useState<ProjectUI | null>(null);
@@ -78,7 +78,7 @@ const Admin: React.FC<AdminProps> = ({ initialProjects }) => {
   };
 
   return (
-    <AdminContainer>
+    <AdminPageContainer>
       <Header>
         <Title>Project Management</Title>
         <AddButton onClick={handleAddProject}>Add Project</AddButton>
@@ -97,8 +97,8 @@ const Admin: React.FC<AdminProps> = ({ initialProjects }) => {
           onClose={handleCloseForm}
         />
       )}
-    </AdminContainer>
+    </AdminPageContainer>
   );
 };
 
-export default Admin;
+export default AdminPageClient;

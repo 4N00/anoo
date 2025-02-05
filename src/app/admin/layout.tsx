@@ -1,49 +1,43 @@
-'use client';
+import React from 'react';
+import { headers } from 'next/headers';
+import { createServerClient } from '@supabase/ssr';
+import AdminClient from '@/components/admin/AdminClient';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
-import { styled } from 'styled-components';
-
-const LoadingContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  font-size: ${({ theme }) => theme.typography.fontSize.xl};
-  color: ${({ theme }) => theme.colors.text.secondary};
-  background: ${({ theme }) => theme.colors.background.primary};
-`;
-
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { isAdmin, isLoading, session } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    // Only redirect if we're done loading and the user is definitely not an admin
-    if (!isLoading && (!session || !isAdmin)) {
-      // Use window.location for a hard redirect
-      window.location.href = '/login';
+  const headersList = headers();
+  
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get() {
+          return headersList.get('cookie');
+        },
+      },
     }
-  }, [isAdmin, isLoading, session]);
+  );
 
-  if (isLoading) {
-    return (
-      <LoadingContainer>
-        Loading...
-      </LoadingContainer>
-    );
-  }
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  // Don't render anything if not authenticated or not admin
-  if (!session || !isAdmin) {
-    return null;
-  }
+  // Get user profile to check admin status
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', session?.user?.id)
+    .single();
 
-  // Only render the admin content if we're authenticated and an admin
-  return children;
+  const isAdmin = profile?.role === 'admin';
+
+  return (
+    <AdminClient isAdmin={isAdmin}>
+      {children}
+    </AdminClient>
+  );
 }
