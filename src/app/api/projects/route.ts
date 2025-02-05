@@ -1,182 +1,66 @@
 import { NextResponse } from 'next/server';
-import { prisma, prismaOperation, handlePrismaError } from '@/lib/prisma';
-import { requireAdmin, isAuthError, isAdminError } from '@/lib/supabase';
-import { projectValidation } from '@/utils/validation';
 import { z } from 'zod';
+import prisma from '@/lib/prisma';
 
-// GET /api/projects - Get all projects
-export async function GET(request: Request) {
+const projectSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  description: z.string().min(1, 'Description is required'),
+  imageUrl: z.string().url('Must be a valid URL'),
+  tags: z.array(z.string()),
+  featured: z.boolean(),
+  category: z.string().min(1, 'Category is required'),
+  githubUrl: z.string().url('Must be a valid URL').nullable(),
+  liveUrl: z.string().url('Must be a valid URL').nullable(),
+});
+
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const featured = searchParams.get('featured') === 'true';
-
-    const projects = await prismaOperation(() =>
-      prisma.project.findMany({
-        where: featured ? { featured: true } : undefined,
-        orderBy: { createdAt: 'desc' },
-      })
-    );
+    const projects = await prisma.project.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    }).catch(() => []);  // Return empty array if database is not available
 
     return NextResponse.json(projects);
   } catch (error) {
     console.error('Error fetching projects:', error);
-    const { status, message } = handlePrismaError(error);
-    return NextResponse.json({ error: message }, { status });
+    return NextResponse.json([], { status: 200 });  // Return empty array with 200 status
   }
 }
 
-// POST /api/projects - Create a new project (protected, admin only)
 export async function POST(request: Request) {
   try {
-    // Verify admin access
-    await requireAdmin();
+    const json = await request.json();
+    const validatedData = projectSchema.parse(json);
 
-    // Parse and validate request body
-    const body = await request.json();
-    const validatedData = await projectValidation.create.parseAsync(body);
-
-    // Create project
-    const project = await prismaOperation(() =>
-      prisma.project.create({
-        data: validatedData,
-      })
-    );
-
-    return NextResponse.json(project, { status: 201 });
-  } catch (error) {
-    console.error('Error creating project:', error);
-
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Validation error', details: error.errors },
-        { status: 400 }
-      );
-    }
-
-    if (isAuthError(error)) {
-      return NextResponse.json(
-        { error: 'Unauthorized access' },
-        { status: 401 }
-      );
-    }
-
-    if (isAdminError(error)) {
-      return NextResponse.json(
-        { error: 'Admin access required' },
-        { status: 403 }
-      );
-    }
-
-    const { status, message } = handlePrismaError(error);
-    return NextResponse.json({ error: message }, { status });
-  }
-}
-
-// PATCH /api/projects - Update a project (protected, admin only)
-export async function PATCH(request: Request) {
-  try {
-    // Verify admin access
-    await requireAdmin();
-
-    // Parse and validate request body
-    const body = await request.json();
-    const { id, ...updateData } = body;
-
-    if (!id) {
-      return NextResponse.json(
-        { error: 'Project ID is required' },
-        { status: 400 }
-      );
-    }
-
-    const validatedData = await projectValidation.update.parseAsync(updateData);
-
-    // Update project with optimistic concurrency control
-    const project = await prismaOperation(() =>
-      prisma.project.update({
-        where: { id },
+    try {
+      const project = await prisma.project.create({
         data: {
           ...validatedData,
-          version: {
-            increment: 1,
-          },
+          authorId: 'system', // Default system user ID
         },
-      })
-    );
+      });
 
-    return NextResponse.json(project);
+      return NextResponse.json(project);
+    } catch (dbError) {
+      console.error('Database error:', dbError);
+      return NextResponse.json(
+        { error: 'Failed to create project in database' },
+        { status: 503 }
+      );
+    }
   } catch (error) {
-    console.error('Error updating project:', error);
-
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Validation error', details: error.errors },
+        { error: 'Invalid project data', details: error.errors },
         { status: 400 }
       );
     }
 
-    if (isAuthError(error)) {
-      return NextResponse.json(
-        { error: 'Unauthorized access' },
-        { status: 401 }
-      );
-    }
-
-    if (isAdminError(error)) {
-      return NextResponse.json(
-        { error: 'Admin access required' },
-        { status: 403 }
-      );
-    }
-
-    const { status, message } = handlePrismaError(error);
-    return NextResponse.json({ error: message }, { status });
-  }
-}
-
-// DELETE /api/projects - Delete a project (protected, admin only)
-export async function DELETE(request: Request) {
-  try {
-    // Verify admin access
-    await requireAdmin();
-
-    // Get project ID from URL
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
-
-    if (!id) {
-      return NextResponse.json(
-        { error: 'Project ID is required' },
-        { status: 400 }
-      );
-    }
-
-    // Delete project
-    await prismaOperation(() =>
-      prisma.project.delete({
-        where: { id },
-      })
+    console.error('Error creating project:', error);
+    return NextResponse.json(
+      { error: 'Failed to create project' },
+      { status: 500 }
     );
-
-    return new NextResponse(null, { status: 204 });
-  } catch (error) {
-    console.error('Error deleting project:', error);
-
-    if (isAuthError(error)) {
-      return NextResponse.json(
-        { error: 'Unauthorized access' },
-        { status: 401 }
-      );
-    }
-
-    if (isAdminError(error)) {
-      return NextResponse.json(
-        { error: 'Admin access required' },
-        { status: 403 }
-      );
-    }
-
-    const { status, message } = handlePrismaError(error);
-    return NextResponse.json({ error: message }, { status });
   }
 }

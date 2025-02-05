@@ -1,29 +1,19 @@
+'use client';
+
 import React from 'react';
-import { motion } from 'framer-motion';
-import {
-  ProfileContainer,
-  ProfileContent,
-  ProfileTitle,
-  ProfileDescription,
-  ProfileImage
-} from './styles';
+import { ProfileContainer, ProfileContent, ProfileTitle, ProfileText } from './styles';
 
-interface ProfileSectionProps {
-  variants?: any;
-}
-
-const ProfileSection: React.FC<ProfileSectionProps> = ({ variants }) => {
+const ProfileSection: React.FC = () => {
   return (
-    <ProfileContainer variants={variants}>
+    <ProfileContainer>
       <ProfileContent>
         <ProfileTitle>About Me</ProfileTitle>
-        <ProfileDescription>
-          I'm a creative developer and designer passionate about building digital experiences
-          that combine aesthetic beauty with functional excellence. With expertise in both
-          front-end development and design, I create solutions that not only look great but
-          also provide exceptional user experiences.
-        </ProfileDescription>
-        <ProfileImage src="/profile.jpg" alt="Profile" />
+        <ProfileText>
+          I'm a creative developer and designer with a passion for building digital experiences
+          that combine innovative technology with thoughtful design. With expertise in both
+          frontend development and UI/UX design, I create solutions that are not only
+          visually appealing but also highly functional and user-friendly.
+        </ProfileText>
       </ProfileContent>
     </ProfileContainer>
   );

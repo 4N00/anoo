@@ -1,6 +1,10 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyles = createGlobalStyle`
+
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&display=swap');
+
   /* CSS Reset and Base Styles */
   *, *::before, *::after {
     box-sizing: border-box;
@@ -163,6 +167,33 @@ export const GlobalStyles = createGlobalStyle`
   /* Remove tap highlight on mobile */
   * {
     -webkit-tap-highlight-color: transparent;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  }
+
+  /* Reset link styles */
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Override default visited link color */
+  a:visited {
+    color: inherit;
   }
 `;
 

@@ -1,27 +1,13 @@
-import React from 'react';
+'use client';
+
+import React from "react";
 import PageFooter from "../components/PageFooter";
 import ProfileSection from "../components/about/ProfileSection";
 import LanguagesSection from "../components/about/LanguagesSection";
 import SkillsSection from "../components/about/SkillsSection";
 import { PageContainer, ContentWrapper } from "../styles/AboutStyles";
 
-const About: React.FC = () => {
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
-  };
-
+const About = () => {
   const skills = [
     { name: "HTML", level: 90 },
     { name: "CSS", level: 85 },
@@ -48,14 +34,10 @@ const About: React.FC = () => {
 
   return (
     <PageContainer>
-      <ContentWrapper
-        variants={container}
-        initial="hidden"
-        animate="show"
-      >
-        <ProfileSection variants={item} />
-        <LanguagesSection variants={item} languages={languages} />
-        <SkillsSection variants={item} skills={skills} />
+      <ContentWrapper>
+        <ProfileSection />
+        <LanguagesSection languages={languages} />
+        <SkillsSection skills={skills} />
       </ContentWrapper>
       <PageFooter />
     </PageContainer>

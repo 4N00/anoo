@@ -1,61 +1,76 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  min-height: calc(100vh - 64px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: ${({ theme }) => theme.spacing['2xl']};
-  background-color: ${({ theme }) => theme.colors.background.secondary};
+  min-height: 100vh;
+  padding: 8rem 2rem 8rem;
+  background: white;
+
+  @media (max-width: 768px) {
+    padding: 6rem 1rem 6rem;
+  }
 `;
 
 export const Content = styled.div`
-  max-width: 800px;
-  width: 100%;
-  background-color: ${({ theme }) => theme.colors.background.primary};
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
-  padding: ${({ theme }) => theme.spacing.xl};
-  box-shadow: ${({ theme }) => theme.shadows.md};
+  max-width: 1400px;
+  margin: 0 auto;
 `;
 
 export const Header = styled.div`
-  text-align: center;
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
+  margin-bottom: 4rem;
+
+  @media (max-width: 768px) {
+    margin-bottom: 3rem;
+  }
 `;
 
 export const Title = styled.h1`
-  font-size: ${({ theme }) => theme.typography.fontSize['3xl']};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.text.primary};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
+  font-family: 'Inter', sans-serif;
+  font-size: 84px;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  
+  @media (max-width: 768px) {
+    font-size: 48px;
+    margin-bottom: 1.5rem;
+  }
 `;
 
 export const Subtitle = styled.p`
-  font-size: ${({ theme }) => theme.typography.fontSize.lg};
-  color: ${({ theme }) => theme.colors.text.secondary};
-  line-height: ${({ theme }) => theme.typography.lineHeight.relaxed};
-  max-width: 600px;
-  margin: 0 auto;
+  font-size: 1.125rem;
+  color: #A1A1A1;
+  max-width: 580px;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.lg};
+  gap: 3rem;
+  max-width: 800px;
+
+  @media (max-width: 768px) {
+    gap: 2rem;
+  }
 `;
 
 export const InputGroup = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: ${({ theme }) => theme.spacing.lg};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+  gap: 2rem;
+  
+  @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 `;
 
 export const ButtonGroup = styled.div`
   display: flex;
-  justify-content: center;
-  margin-top: ${({ theme }) => theme.spacing.lg};
+  gap: 0.5rem;
 `;

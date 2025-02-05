@@ -1,186 +1,124 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import type {
-  Project,
-  ProjectListItem,
-  ProjectError,
-  CreateProjectInput,
-  UpdateProjectInput,
-  UseProjectsReturn,
-  UseProjectMutationReturn,
-  ProjectDetails
-} from '@/types/project';
+'use client';
 
-interface UseProjectsOptions {
-  featured?: boolean;
+import { useState, useEffect } from 'react';
+import { Project, ProjectFormData, ProjectError } from '@/types/project';
+
+interface UseProjectsHookReturn {
+  projects: Project[];
+  isLoading: boolean;
+  error: ProjectError | null;
+  createProject: (data: ProjectFormData) => Promise<void>;
+  updateProject: (id: string, data: Partial<ProjectFormData>) => Promise<void>;
+  deleteProject: (id: string) => Promise<void>;
 }
 
-// Re-export the Project type
-export type { Project };
-
-type UseProjectsHookReturn = Omit<UseProjectsReturn, 'loading'> & 
-  Omit<UseProjectMutationReturn, 'loading'> & 
-  { isLoading: boolean };
-
-export function useProjects(options: UseProjectsOptions = {}): UseProjectsHookReturn {
-  const [projects, setProjects] = useState<ProjectListItem[]>([]);
+export const useProjects = (): UseProjectsHookReturn => {
+  const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ProjectError | null>(null);
-  const [filters] = useState({ featured: options.featured });
-  const [pagination] = useState({ page: 1, limit: 10, total: 0, hasMore: false });
 
   const fetchProjects = async () => {
     setIsLoading(true);
     try {
-      const { data } = await supabase
-        .from('projects')
-        .select('*')
-        .eq('featured', filters.featured || false);
-      
-      const formattedProjects: ProjectListItem[] = (data ?? []).map(item => ({
-        id: item.id,
-        title: item.title,
-        description: item.description,
-        imageUrl: item.image_url,
-        tags: item.tags,
-        featured: item.featured,
-        createdAt: item.created_at
-      }));
-      
-      setProjects(formattedProjects);
+      const response = await fetch('/api/projects');
+      if (!response.ok) {
+        throw new Error('Failed to fetch projects');
+      }
+      const data = await response.json();
+      setProjects(data);
     } catch (err) {
-      setError({ message: err instanceof Error ? err.message : 'Failed to fetch projects' });
+      setError({
+        message: err instanceof Error ? err.message : 'An error occurred',
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const createProject = async (data: CreateProjectInput): Promise<ProjectDetails> => {
+  const createProject = async (data: ProjectFormData) => {
+    setIsLoading(true);
     try {
-      const { data: newProject, error: createError } = await supabase
-        .from('projects')
-        .insert([{
-          title: data.title,
-          description: data.description,
-          image_url: data.imageUrl,
-          tags: data.tags,
-          featured: data.featured,
-          github_url: data.githubUrl,
-          live_url: data.liveUrl
-        }])
-        .select()
-        .single();
+      const response = await fetch('/api/projects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
-      if (createError) throw createError;
-      if (!newProject) throw new Error('Failed to create project');
+      if (!response.ok) {
+        throw new Error('Failed to create project');
+      }
 
-      const formattedProject: ProjectDetails = {
-        id: newProject.id,
-        title: newProject.title,
-        description: newProject.description,
-        imageUrl: newProject.image_url,
-        tags: newProject.tags,
-        featured: newProject.featured,
-        githubUrl: newProject.github_url,
-        liveUrl: newProject.live_url,
-        createdAt: newProject.created_at,
-        updatedAt: newProject.updated_at,
-        authorId: newProject.author_id,
-        version: newProject.version,
-        author: {
-          id: newProject.author_id,
-          email: '' // This would come from a join query in a real app
-        }
-      };
-
-      setProjects(prev => [...prev, formattedProject]);
-      return formattedProject;
+      await fetchProjects();
     } catch (err) {
-      throw err instanceof Error ? err : new Error('Failed to create project');
+      setError({
+        message: err instanceof Error ? err.message : 'An error occurred',
+      });
+      throw err;
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const updateProject = async (id: string, data: UpdateProjectInput): Promise<ProjectDetails> => {
+  const updateProject = async (id: string, data: Partial<ProjectFormData>) => {
+    setIsLoading(true);
     try {
-      const { data: updatedProject, error: updateError } = await supabase
-        .from('projects')
-        .update({
-          title: data.title,
-          description: data.description,
-          image_url: data.imageUrl,
-          tags: data.tags,
-          featured: data.featured,
-          github_url: data.githubUrl,
-          live_url: data.liveUrl
-        })
-        .eq('id', id)
-        .select()
-        .single();
+      const response = await fetch(`/api/projects/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
-      if (updateError) throw updateError;
-      if (!updatedProject) throw new Error('Failed to update project');
+      if (!response.ok) {
+        throw new Error('Failed to update project');
+      }
 
-      const formattedProject: ProjectDetails = {
-        id: updatedProject.id,
-        title: updatedProject.title,
-        description: updatedProject.description,
-        imageUrl: updatedProject.image_url,
-        tags: updatedProject.tags,
-        featured: updatedProject.featured,
-        githubUrl: updatedProject.github_url,
-        liveUrl: updatedProject.live_url,
-        createdAt: updatedProject.created_at,
-        updatedAt: updatedProject.updated_at,
-        authorId: updatedProject.author_id,
-        version: updatedProject.version,
-        author: {
-          id: updatedProject.author_id,
-          email: '' // This would come from a join query in a real app
-        }
-      };
-
-      setProjects(prev => prev.map(p => p.id === id ? formattedProject : p));
-      return formattedProject;
+      await fetchProjects();
     } catch (err) {
-      throw err instanceof Error ? err : new Error('Failed to update project');
+      setError({
+        message: err instanceof Error ? err.message : 'An error occurred',
+      });
+      throw err;
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const deleteProject = async (id: string): Promise<void> => {
+  const deleteProject = async (id: string) => {
+    setIsLoading(true);
     try {
-      const { error: deleteError } = await supabase.from('projects').delete().eq('id', id);
-      if (deleteError) throw deleteError;
-      setProjects(prev => prev.filter(p => p.id !== id));
+      const response = await fetch(`/api/projects/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete project');
+      }
+
+      await fetchProjects();
     } catch (err) {
-      throw err instanceof Error ? err : new Error('Failed to delete project');
+      setError({
+        message: err instanceof Error ? err.message : 'An error occurred',
+      });
+      throw err;
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  const setFilters = () => {
-    // Not implemented yet
-  };
-
-  const setPage = () => {
-    // Not implemented yet
-  };
-
-  const refetch = () => fetchProjects();
 
   useEffect(() => {
-    void fetchProjects();
-  }, [filters.featured]);
+    fetchProjects();
+  }, []);
 
   return {
     projects,
     isLoading,
     error,
-    filters,
-    pagination,
-    setFilters,
-    setPage,
-    refetch,
     createProject,
     updateProject,
-    deleteProject
+    deleteProject,
   };
-}
+};

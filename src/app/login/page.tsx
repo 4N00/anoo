@@ -1,50 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import Button from '@/components/ui/Button';
-import Input from '@/components/ui/Input';
-
-const Container = styled.div`
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  background: ${({ theme }) => theme.colors.background.secondary};
-`;
-
-const LoginCard = styled.div`
-  background: ${({ theme }) => theme.colors.background.primary};
-  padding: 2rem;
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
-  box-shadow: ${({ theme }) => theme.shadows.lg};
-  width: 100%;
-  max-width: 400px;
-`;
-
-const Title = styled.h1`
-  color: ${({ theme }) => theme.colors.text.primary};
-  font-size: ${({ theme }) => theme.typography.fontSize['2xl']};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  text-align: center;
-  margin-bottom: 2rem;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-`;
-
-const ErrorMessage = styled.div`
-  color: ${({ theme }) => theme.colors.error.main};
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  text-align: center;
-  margin-top: 1rem;
-`;
+import StyledButton from '@/components/ui/StyledButton';
+import FormInput from '@/components/ui/FormInput';
+import { Container, LoginCard, Title, Form, ErrorMessage } from './styles';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -53,29 +14,6 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const from = searchParams.get('from') || '/admin';
-
-  useEffect(() => {
-    // Check if user is already logged in
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        // Check if user is admin
-        const { data: profile } = await supabase
-          .from('User')
-          .select('role')
-          .eq('id', session.user.id)
-          .single();
-
-        if (profile?.role === 'ADMIN') {
-          router.replace(from);
-        }
-      }
-    };
-
-    checkSession();
-  }, [router, from]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,7 +43,7 @@ export default function LoginPage() {
         throw new Error('Admin access required');
       }
 
-      router.replace(from);
+      router.replace('/admin');
     } catch (error) {
       console.error('Login error:', error);
       setError(
@@ -123,9 +61,8 @@ export default function LoginPage() {
       <LoginCard>
         <Title>Admin Login</Title>
         <Form onSubmit={handleSubmit}>
-          <Input
+          <FormInput
             type="email"
-            label="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
@@ -133,9 +70,8 @@ export default function LoginPage() {
             autoComplete="email"
             disabled={isLoading}
           />
-          <Input
+          <FormInput
             type="password"
-            label="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"
@@ -143,14 +79,14 @@ export default function LoginPage() {
             autoComplete="current-password"
             disabled={isLoading}
           />
-          <Button
+          <StyledButton
             type="submit"
-            variant="primary"
-            fullWidth
-            isLoading={isLoading}
+            $variant="primary"
+            $fullWidth
+            disabled={isLoading}
           >
-            Log In
-          </Button>
+            {isLoading ? 'Logging in...' : 'Log In'}
+          </StyledButton>
           {error && <ErrorMessage>{error}</ErrorMessage>}
         </Form>
       </LoginCard>

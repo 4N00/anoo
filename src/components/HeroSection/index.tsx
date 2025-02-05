@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { HeroContainer, HeroContent, HeroTitle, HeroSubtitle } from './styles';
 

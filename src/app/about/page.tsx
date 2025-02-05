@@ -1,7 +1,47 @@
 'use client';
 
-import About from "../../pages/About";
+import React from "react";
+import PageFooter from "../../components/PageFooter";
+import ProfileSection from "../../components/about/ProfileSection";
+import LanguagesSection from "../../components/about/LanguagesSection";
+import SkillsSection from "../../components/about/SkillsSection";
+import { PageContainer, ContentWrapper } from "../../styles/AboutStyles";
 
-export default function AboutPage() {
-  return <About />;
-}
+const About = () => {
+  const skills = [
+    { name: "HTML", level: 90 },
+    { name: "CSS", level: 85 },
+    { name: "Sass/Scss", level: 80 },
+    { name: "Animation (CSS/JS)", level: 75 },
+    { name: "C#", level: 70 },
+    { name: "JavaScript", level: 85 },
+    { name: "React", level: 85 },
+    { name: "UI/UX", level: 90 },
+    { name: "Adobe Photoshop", level: 85 },
+    { name: "Adobe Illustrator", level: 90 },
+    { name: "Adobe XD", level: 75 },
+    { name: "Wordpress", level: 80 },
+    { name: "Headless CMS", level: 70 },
+    { name: "Unity", level: 85 },
+    { name: "Three.js", level: 65 },
+    { name: "Humor", level: 95 },
+  ];
+
+  const languages = [
+    { name: "Dutch", level: 100 },
+    { name: "English", level: 85 },
+  ];
+
+  return (
+    <PageContainer>
+      <ContentWrapper>
+        <ProfileSection />
+        <LanguagesSection languages={languages} />
+        <SkillsSection skills={skills} />
+      </ContentWrapper>
+      <PageFooter />
+    </PageContainer>
+  );
+};
+
+export default About;

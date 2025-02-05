@@ -1,46 +1,32 @@
-import React from 'react';
-import {
-  SectionContainer,
-  SectionHeader,
-  SectionTitle,
-  SectionNumber,
-  ProjectsContainer,
-  ProjectItem
-} from './styles';
+'use client';
 
-interface Project {
-  id: string;
-  title?: string;
-  category: string;
-  // Add other project properties as needed
-}
+import React from 'react';
+import { Project } from '@/types/project';
+import ProjectCard from '../ProjectCard/ProjectCard';
+import { SectionContainer, SectionTitle, ProjectsGrid } from './styles';
 
 interface ProjectSectionProps {
-  sectionNumber: string;
   title?: string;
   featured?: boolean;
   projects: Project[];
 }
 
 const ProjectSection: React.FC<ProjectSectionProps> = ({
-  sectionNumber,
   title,
   featured = false,
-  projects
+  projects,
 }) => {
   return (
     <SectionContainer>
-      <SectionHeader>
-        <SectionNumber>{sectionNumber}</SectionNumber>
-        {title && <SectionTitle>{title}</SectionTitle>}
-      </SectionHeader>
-      <ProjectsContainer>
+      {title && <SectionTitle>{title}</SectionTitle>}
+      <ProjectsGrid featured={featured}>
         {projects.map((project) => (
-          <ProjectItem key={project.id} featured={featured}>
-            {project.title}
-          </ProjectItem>
+          <ProjectCard
+            key={project.id}
+            {...project}
+          />
         ))}
-      </ProjectsContainer>
+      </ProjectsGrid>
     </SectionContainer>
   );
 };

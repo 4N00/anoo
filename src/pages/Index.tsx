@@ -1,21 +1,22 @@
-import React, { useEffect, useRef, CSSProperties } from 'react';
+'use client';
+
+import { useEffect, useRef } from 'react';
 import HeroSection from '../components/HeroSection';
 import ProjectSection from '../components/ProjectSection';
 import PageFooter from '../components/PageFooter';
 import { useProjects } from '../context/ProjectsContext';
 import { MainContainer, Separator, ProjectGrid } from '../styles/HomeStyles';
 
-const SECTION_COLORS = ['#FFFFFF', '#F2FCE2', '#FEF7CD', '#E5DEFF', '#FFDEE2'] as const;
-type SectionColor = (typeof SECTION_COLORS)[number];
+const COLORS = ['#FFFFFF', '#F2FCE2', '#FEF7CD', '#E5DEFF', '#FFDEE2'] as const;
+type BackgroundColor = typeof COLORS[number];
 
-const Index: React.FC = () => {
+const Index = () => {
   const mainRef = useRef<HTMLDivElement>(null);
   const sections = useRef<HTMLElement[]>([]);
   const { projects } = useProjects();
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY;
       const windowHeight = window.innerHeight;
       let mostVisibleSection = 0;
       let maxVisibleArea = 0;
@@ -35,11 +36,8 @@ const Index: React.FC = () => {
       });
 
       if (mainRef.current) {
-        const colorIndex = Math.min(mostVisibleSection, SECTION_COLORS.length - 1);
-        const style: CSSProperties = {
-          backgroundColor: SECTION_COLORS[colorIndex]
-        };
-        Object.assign(mainRef.current.style, style);
+        const color: BackgroundColor = COLORS[mostVisibleSection] || COLORS[0];
+        mainRef.current.style.backgroundColor = color;
       }
     };
 
@@ -64,7 +62,6 @@ const Index: React.FC = () => {
       <Separator />
       {featuredProjects.length > 0 && (
         <ProjectSection
-          sectionNumber="F/01"
           title="FEATURED"
           featured
           projects={featuredProjects}
@@ -74,13 +71,11 @@ const Index: React.FC = () => {
         <ProjectGrid>
           {projectsSetOne.length > 0 && (
             <ProjectSection
-              sectionNumber="P/01"
               projects={projectsSetOne}
             />
           )}
           {projectsSetTwo.length > 0 && (
             <ProjectSection
-              sectionNumber="P/02"
               projects={projectsSetTwo}
             />
           )}
@@ -90,13 +85,11 @@ const Index: React.FC = () => {
         <ProjectGrid>
           {projectsSetThree.length > 0 && (
             <ProjectSection
-              sectionNumber="P/03"
               projects={projectsSetThree}
             />
           )}
           {projectsSetFour.length > 0 && (
             <ProjectSection
-              sectionNumber="P/04"
               projects={projectsSetFour}
             />
           )}

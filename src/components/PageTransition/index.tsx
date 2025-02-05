@@ -1,36 +1,25 @@
-import React from 'react';
-import { TransitionContainer } from './styles';
+import { motion } from 'framer-motion';
+import { ReactNode } from 'react';
 
 interface PageTransitionProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
-  const pageVariants = {
-    initial: {
-      opacity: 0,
-      y: 20,
-    },
-    animate: {
-      opacity: 1,
-      y: 0,
-    },
-    exit: {
-      opacity: 0,
-      y: -20,
-    },
-  };
-
+const PageTransition = ({ children }: PageTransitionProps) => {
   return (
-    <TransitionContainer
-      variants={pageVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      transition={{ duration: 0.3 }}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{
+        type: "spring",
+        stiffness: 100, // Doubled from 50
+        damping: 40,   // Doubled from 20
+        mass: 0.5      // Halved from 1 to make it faster
+      }}
     >
       {children}
-    </TransitionContainer>
+    </motion.div>
   );
 };
 
