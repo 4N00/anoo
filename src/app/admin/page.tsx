@@ -1,44 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Admin from "../../pages/Admin";
-import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/context/AuthContext';
 
 export default function AdminPage() {
-  const [isLoading, setIsLoading] = useState(true);
+  const { isAdmin, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // Check if user is authenticated
-        const { data: { session }, error: authError } = await supabase.auth.getSession();
-        
-        if (authError || !session) {
-          throw new Error('Not authenticated');
-        }
-
-        // Check if user is admin
-        const { data: profile, error: profileError } = await supabase
-          .from('users')
-          .select('role')
-          .eq('id', session.user.id)
-          .single();
-
-        if (profileError || !profile || profile.role !== 'ADMIN') {
-          throw new Error('Admin access required');
-        }
-
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Auth check error:', error);
-        router.replace('/login');
-      }
-    };
-
-    checkAuth();
-  }, [router]);
+    if (!isLoading && !isAdmin) {
+      router.replace('/login');
+    }
+  }, [isAdmin, isLoading, router]);
 
   if (isLoading) {
     return (
@@ -53,6 +28,10 @@ export default function AdminPage() {
         Loading...
       </div>
     );
+  }
+
+  if (!isAdmin) {
+    return null;
   }
 
   return <Admin />;

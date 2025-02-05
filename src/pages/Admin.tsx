@@ -8,6 +8,8 @@ import { useProjects } from '../hooks/useProjects';
 import ProjectForm from '../components/admin/ProjectForm';
 import { ProjectFormData } from '@/types/project';
 import StyledButton from '@/components/ui/StyledButton';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 const AdminContainer = styled.div`
   min-height: 100vh;
@@ -73,6 +75,33 @@ const SectionTitle = styled.h2`
 const Admin: React.FC = () => {
   const { projects, createProject } = useProjects();
   const [showForm, setShowForm] = useState(false);
+  const { isAdmin, isLoading } = useAuth();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (!isLoading && !isAdmin) {
+      router.replace('/login');
+    }
+  }, [isAdmin, isLoading, router]);
+
+  if (isLoading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '100vh',
+        fontSize: '1.5rem',
+        color: '#666'
+      }}>
+        Loading...
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return null;
+  }
 
   const container = {
     hidden: { opacity: 0 },
