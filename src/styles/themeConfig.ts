@@ -49,6 +49,10 @@ export const theme: DefaultTheme = {
       light: '#3291ff',
       dark: '#0050af',
       contrast: '#ffffff'
+    },
+    card: {
+      background: '#ffffff',
+      hover: '#f7f7f7'
     }
   },
   typography: {

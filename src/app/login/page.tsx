@@ -35,7 +35,7 @@ export default function LoginPage() {
 
       // Then check if user is admin
       const { data: profile, error: profileError } = await supabase
-        .from('users')  // Changed from 'User' to 'users'
+        .from('users')
         .select('role')
         .eq('id', authData.session.user.id)
         .single();
@@ -53,7 +53,9 @@ export default function LoginPage() {
         throw new Error('Admin access required');
       }
 
-      router.replace('/admin');
+      // Navigate to admin page and force a refresh
+      router.push('/admin');
+      router.refresh();
     } catch (error) {
       console.error('Login error:', error);
       setError(

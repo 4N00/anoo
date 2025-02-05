@@ -51,6 +51,10 @@ declare module 'styled-components' {
         dark: string;
         contrast: string;
       };
+      card: {
+        background: string;
+        hover: string;
+      };
     };
     typography: {
       fontSize: {
