@@ -1,7 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyles = createGlobalStyle`
-
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
   @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&display=swap');
 
@@ -15,7 +14,6 @@ export const GlobalStyles = createGlobalStyle`
   /* Document */
   :root {
     --max-width: 1200px;
-    /* Enable smooth scrolling */
     scroll-behavior: smooth;
   }
 
@@ -31,6 +29,7 @@ export const GlobalStyles = createGlobalStyle`
     text-rendering: optimizeLegibility;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
+    transition: background-color 1.5s ease;
   }
 
   /* Typography */
@@ -49,14 +48,26 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   /* Links */
-  a {
-    color: ${({ theme }) => theme.colors.primary.main};
-    text-decoration: none;
-    transition: color ${({ theme }) => theme.transitions.fast};
+  a, a:link, a:visited, a:hover, a:active {
+    color: ${({ theme }) => theme.colors.text.primary} !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+  }
 
-    &:hover {
-      color: ${({ theme }) => theme.colors.primary.dark};
-    }
+  a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 0;
+    background-color: currentColor;
+    transition: width 0.2s ease-in-out;
+  }
+
+  a:hover::after {
+    width: 100%;
   }
 
   /* Images */

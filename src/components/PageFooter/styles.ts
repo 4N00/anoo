@@ -30,11 +30,30 @@ export const FooterLinks = styled.div`
 export const FooterLink = styled.a`
   font-family: ${({ theme }) => theme.fonts.body};
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  color: ${({ theme }) => theme.colors.text.primary};
-  text-decoration: none;
-  transition: color ${({ theme }) => theme.transitions.fast};
+  color: ${({ theme }) => theme.colors.text.primary} !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+
+  &:visited {
+    color: ${({ theme }) => theme.colors.text.primary} !important;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 0;
+    background-color: currentColor;
+    transition: width 0.2s ease-in-out;
+  }
 
   &:hover {
-    color: ${({ theme }) => theme.colors.primary.main};
+    color: ${({ theme }) => theme.colors.text.primary} !important;
+    &::after {
+      width: 100%;
+    }
   }
 `;

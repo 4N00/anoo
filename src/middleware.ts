@@ -1,26 +1,21 @@
-import { createServerClient } from '@supabase/ssr'
-import { NextResponse, type NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr';
+import { NextResponse, type NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
   console.log('Middleware executing for path:', request.nextUrl.pathname);
-  
+
   // Don't run on login page to prevent redirect loops
   if (request.nextUrl.pathname === '/login') {
     return NextResponse.next();
   }
 
-  let response = NextResponse.next({
+  const response = NextResponse.next({
     request: {
       headers: request.headers,
     },
-  })
+  });
 
-  // Create an array of cookies from the request
   const cookieStore = request.cookies;
-  const cookiesList = cookieStore.getAll().map(cookie => ({
-    name: cookie.name,
-    value: cookie.value,
-  }));
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -45,18 +40,21 @@ export async function middleware(request: NextRequest) {
         },
       },
     }
-  )
+  );
 
   // Handle admin routes
   if (request.nextUrl.pathname.startsWith('/admin')) {
     console.log('Checking auth for admin route');
-    
+
     try {
-      const { data: { user }, error: userError } = await supabase.auth.getUser()
-      
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
       if (userError || !user) {
         console.log('No authenticated user found, redirecting to login');
-        return NextResponse.redirect(new URL('/login', request.url))
+        return NextResponse.redirect(new URL('/login', request.url));
       }
 
       console.log('User found, checking admin status for user:', user.id);
@@ -65,11 +63,11 @@ export async function middleware(request: NextRequest) {
         .from('users')
         .select('role')
         .eq('id', user.id)
-        .single()
+        .single();
 
       if (roleError) {
         console.error('Error fetching user role:', roleError);
-        return NextResponse.redirect(new URL('/login', request.url))
+        return NextResponse.redirect(new URL('/login', request.url));
       }
 
       console.log('User data:', userData);
@@ -77,19 +75,19 @@ export async function middleware(request: NextRequest) {
       if (!userData || userData.role !== 'ADMIN') {
         console.log('User is not an admin, redirecting to login');
         // Sign out the user if they're not an admin
-        await supabase.auth.signOut()
-        return NextResponse.redirect(new URL('/login', request.url))
+        await supabase.auth.signOut();
+        return NextResponse.redirect(new URL('/login', request.url));
       }
 
       console.log('Admin access granted');
       return response;
     } catch (error) {
       console.error('Error in middleware:', error);
-      return NextResponse.redirect(new URL('/login', request.url))
+      return NextResponse.redirect(new URL('/login', request.url));
     }
   }
 
-  return response
+  return response;
 }
 
 export const config = {
@@ -104,4 +102,4 @@ export const config = {
      */
     '/((?!_next/static|_next/image|favicon.ico|public|api/public).*)',
   ],
-}
+};

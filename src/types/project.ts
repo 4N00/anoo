@@ -30,6 +30,9 @@ export interface ProjectUI {
   version: number;
 }
 
+// Alias for backward compatibility
+export type ProjectListItem = ProjectUI;
+
 export interface ProjectFormData {
   title: string;
   description: string;
@@ -56,7 +59,9 @@ export const toProjectUI = (project: Project): ProjectUI => ({
 });
 
 // Convert UI format to database format
-export const toProjectDB = (data: ProjectFormData): Omit<Project, 'id' | 'created_at' | 'updated_at' | 'version'> => ({
+export const toProjectDB = (
+  data: ProjectFormData
+): Omit<Project, 'id' | 'created_at' | 'updated_at' | 'version'> => ({
   title: data.title,
   description: data.description,
   image_url: data.imageUrl,

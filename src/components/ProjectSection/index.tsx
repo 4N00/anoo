@@ -25,28 +25,16 @@ interface ProjectSectionProps {
   featured?: boolean;
 }
 
-const ProjectSection: React.FC<ProjectSectionProps> = ({ 
-  projects,
-  title,
-  featured = false 
-}) => {
+const ProjectSection: React.FC<ProjectSectionProps> = ({ projects, title, featured = false }) => {
   return (
-    <motion.div
-      initial="initial"
-      animate="animate"
-      variants={containerVariants}
-    >
+    <motion.section initial="initial" animate="animate" variants={containerVariants}>
       {title && <h2>{title}</h2>}
       <ProjectContainer featured={featured}>
         {projects.map((project, index) => (
-          <ProjectCard 
-            key={project.id} 
-            project={project}
-            index={index}
-          />
+          <ProjectCard key={project.id} project={project} index={index} />
         ))}
       </ProjectContainer>
-    </motion.div>
+    </motion.section>
   );
 };
 

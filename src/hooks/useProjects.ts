@@ -1,7 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Project, ProjectUI, ProjectFormData, ProjectError, toProjectUI, toProjectDB } from '@/types/project';
+import {
+  ProjectUI,
+  ProjectFormData,
+  ProjectError,
+  toProjectUI,
+  toProjectDB,
+} from '@/types/project';
 import { supabase } from '@/lib/supabase';
 
 interface UseProjectsHookReturn {
@@ -43,14 +49,12 @@ export const useProjects = (): UseProjectsHookReturn => {
   const createProject = async (data: ProjectFormData) => {
     setIsLoading(true);
     try {
-      const { error: supabaseError } = await supabase
-        .from('projects')
-        .insert([
-          {
-            ...toProjectDB(data),
-            version: 1,
-          },
-        ]);
+      const { error: supabaseError } = await supabase.from('projects').insert([
+        {
+          ...toProjectDB(data),
+          version: 1,
+        },
+      ]);
 
       if (supabaseError) throw supabaseError;
 
@@ -92,10 +96,7 @@ export const useProjects = (): UseProjectsHookReturn => {
   const deleteProject = async (id: string) => {
     setIsLoading(true);
     try {
-      const { error: supabaseError } = await supabase
-        .from('projects')
-        .delete()
-        .eq('id', id);
+      const { error: supabaseError } = await supabase.from('projects').delete().eq('id', id);
 
       if (supabaseError) throw supabaseError;
 

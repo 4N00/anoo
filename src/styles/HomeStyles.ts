@@ -22,7 +22,7 @@ export const Header = styled.div<HeaderProps>`
   margin-bottom: ${({ theme }) => theme.spacing.xl};
   padding: 0 ${({ theme }) => theme.spacing.xl};
   width: 100%;
-  max-width: ${props => props.featured ? '1400px' : '100%'};
+  max-width: ${(props) => (props.featured ? '1400px' : '100%')};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     padding: 0 ${({ theme }) => theme.spacing.md};
@@ -66,11 +66,20 @@ export const ProjectGrid = styled.div`
   }
 `;
 
+export const Background = styled.div<{ $color: string }>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: ${(props) => props.$color};
+  transition: background-color 0.8s ease-in-out;
+  z-index: -1;
+`;
+
 export const MainContainer = styled.div`
-  min-height: 100vh;
   color: ${({ theme }) => theme.colors.text.primary};
-  background-color: ${({ theme }) => theme.colors.background.primary};
-  transition: background-color ${({ theme }) => theme.transitions.slow};
+  position: relative;
 `;
 
 interface ProjectContainerProps {
@@ -82,14 +91,14 @@ export const ProjectContainer = styled.div<ProjectContainerProps>`
   gap: ${({ theme }) => theme.spacing['2xl']};
   grid-template-columns: 1fr;
   padding: 0 ${({ theme }) => theme.spacing.md};
-  
+
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-template-columns: ${props => props.featured ? '1fr' : '1fr 1fr'};
-    padding: ${props => props.featured ? `0 ${props.theme.spacing.xl}` : '0'};
+    grid-template-columns: ${(props) => (props.featured ? '1fr' : '1fr 1fr')};
+    padding: ${(props) => (props.featured ? `0 ${props.theme.spacing.xl}` : '0')};
   }
-  
-  max-height: ${props => props.featured ? '800px' : 'none'};
-  overflow: ${props => props.featured ? 'hidden' : 'visible'};
+
+  max-height: ${(props) => (props.featured ? '800px' : 'none')};
+  overflow: ${(props) => (props.featured ? 'hidden' : 'visible')};
 `;
 
 export const ProjectCardWrapper = styled.div`
@@ -102,7 +111,7 @@ export const ProjectImage = styled.img`
   aspect-ratio: 4/3;
   object-fit: cover;
   transition: transform ${({ theme }) => theme.transitions.fast};
-  
+
   &:hover {
     transform: scale(1.02);
   }
