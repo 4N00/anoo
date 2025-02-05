@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
 export const Section = styled.section`
-  padding: 4rem 0;
+  padding: ${({ theme }) => theme.spacing['3xl']} 0;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
 
-  @media (max-width: 768px) {
-    padding: 2rem 0;
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: ${({ theme }) => theme.spacing.xl} 0;
   }
 `;
 
@@ -19,56 +19,58 @@ export const Header = styled.div<HeaderProps>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  padding: 0 2rem;
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
+  padding: 0 ${({ theme }) => theme.spacing.xl};
   width: 100%;
   max-width: ${props => props.featured ? '1400px' : '100%'};
 
-  @media (max-width: 768px) {
-    padding: 0 1rem;
-    margin-bottom: 1.5rem;
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 0 ${({ theme }) => theme.spacing.md};
+    margin-bottom: ${({ theme }) => theme.spacing.lg};
   }
 `;
 
 export const HeaderText = styled.span`
-  font-size: 0.875rem;
+  font-family: ${({ theme }) => theme.fonts.body};
+  font-size: ${({ theme }) => theme.typography.fontSize.sm};
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: ${({ theme }) => theme.typography.letterSpacing.wider};
+  color: ${({ theme }) => theme.colors.text.primary};
 
-  @media (max-width: 768px) {
-    font-size: 0.75rem;
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: ${({ theme }) => theme.typography.fontSize.xs};
   }
 `;
 
 export const Separator = styled.hr`
-  margin: 2rem auto;
+  margin: ${({ theme }) => theme.spacing.xl} auto;
   max-width: 1400px;
   border: none;
-  border-top: 1px solid #E5E7EB;
+  border-top: 1px solid ${({ theme }) => theme.colors.background.secondary};
 
-  @media (max-width: 768px) {
-    margin: 1.5rem auto;
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    margin: ${({ theme }) => theme.spacing.lg} auto;
   }
 `;
 
 export const ProjectGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: ${({ theme }) => theme.spacing.xl};
   max-width: 1400px;
   margin: 0 auto;
 
-  @media (min-width: 768px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+    padding: 0 ${({ theme }) => theme.spacing.xl};
   }
 `;
 
 export const MainContainer = styled.div`
   min-height: 100vh;
-  color: #000000;
-  background-color: #FFFFFF;
-  transition: background-color 1s ease;
+  color: ${({ theme }) => theme.colors.text.primary};
+  background-color: ${({ theme }) => theme.colors.background.primary};
+  transition: background-color ${({ theme }) => theme.transitions.slow};
 `;
 
 interface ProjectContainerProps {
@@ -77,13 +79,13 @@ interface ProjectContainerProps {
 
 export const ProjectContainer = styled.div<ProjectContainerProps>`
   display: grid;
-  gap: 3rem;
+  gap: ${({ theme }) => theme.spacing['2xl']};
   grid-template-columns: 1fr;
-  padding: 0 1rem;
+  padding: 0 ${({ theme }) => theme.spacing.md};
   
-  @media (min-width: 768px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     grid-template-columns: ${props => props.featured ? '1fr' : '1fr 1fr'};
-    padding: ${props => props.featured ? '0 2rem' : '0'};
+    padding: ${props => props.featured ? `0 ${props.theme.spacing.xl}` : '0'};
   }
   
   max-height: ${props => props.featured ? '800px' : 'none'};
@@ -99,7 +101,7 @@ export const ProjectImage = styled.img`
   width: 100%;
   aspect-ratio: 4/3;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform ${({ theme }) => theme.transitions.fast};
   
   &:hover {
     transform: scale(1.02);
@@ -107,7 +109,7 @@ export const ProjectImage = styled.img`
 `;
 
 export const ProjectInfo = styled.div`
-  margin-top: 1rem;
+  margin-top: ${({ theme }) => theme.spacing.md};
 `;
 
 export const ProjectHeader = styled.div`
@@ -115,34 +117,39 @@ export const ProjectHeader = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: ${({ theme }) => theme.spacing.xs};
 `;
 
 export const ProjectTitle = styled.h3`
-  font-size: 1rem;
-  font-weight: normal;
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: ${({ theme }) => theme.typography.fontSize.md};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.normal};
   text-transform: uppercase;
+  color: ${({ theme }) => theme.colors.text.primary};
 
-  @media (max-width: 768px) {
-    font-size: 0.875rem;
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: ${({ theme }) => theme.typography.fontSize.sm};
   }
 `;
 
 export const ProjectCategory = styled.span`
-  font-size: 0.875rem;
+  font-family: ${({ theme }) => theme.fonts.body};
+  font-size: ${({ theme }) => theme.typography.fontSize.sm};
+  color: ${({ theme }) => theme.colors.text.secondary};
 
-  @media (max-width: 768px) {
-    font-size: 0.75rem;
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: ${({ theme }) => theme.typography.fontSize.xs};
   }
 `;
 
 export const ProjectDescription = styled.p`
-  font-size: 0.875rem;
-  color: #4B5563;
-  margin-top: 0.5rem;
-  line-height: 1.5;
+  font-family: ${({ theme }) => theme.fonts.body};
+  font-size: ${({ theme }) => theme.typography.fontSize.sm};
+  color: ${({ theme }) => theme.colors.text.secondary};
+  margin-top: ${({ theme }) => theme.spacing.xs};
+  line-height: ${({ theme }) => theme.typography.lineHeight.relaxed};
 
-  @media (max-width: 768px) {
-    font-size: 0.75rem;
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: ${({ theme }) => theme.typography.fontSize.xs};
   }
 `;
