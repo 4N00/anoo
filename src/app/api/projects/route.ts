@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import prisma from '@/lib/prisma';
+import { supabase } from '@/lib/supabase';
+import { Project, ProjectFormData, toProjectDB } from '@/types/project';
 
 const projectSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -13,33 +14,41 @@ const projectSchema = z.object({
   liveUrl: z.string().url('Must be a valid URL').nullable(),
 });
 
-export async function GET() {
+export async function GET(): Promise<NextResponse<Project[]>> {
   try {
-    const projects = await prisma.project.findMany({
-      orderBy: {
-        createdAt: 'desc',
-      },
-    }).catch(() => []);  // Return empty array if database is not available
+    const { data: projects, error } = await supabase
+      .from('projects')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-    return NextResponse.json(projects);
+    if (error) throw error;
+
+    return NextResponse.json(projects || []);
   } catch (error) {
     console.error('Error fetching projects:', error);
-    return NextResponse.json([], { status: 200 });  // Return empty array with 200 status
+    return NextResponse.json([], { status: 200 }); // Return empty array with 200 status
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: Request): Promise<NextResponse<Project | { error: string; details?: any }>> {
   try {
     const json = await request.json();
-    const validatedData = projectSchema.parse(json);
+    const validatedData = projectSchema.parse(json) as ProjectFormData;
 
     try {
-      const project = await prisma.project.create({
-        data: {
-          ...validatedData,
-          authorId: 'system', // Default system user ID
-        },
-      });
+      const { data: project, error } = await supabase
+        .from('projects')
+        .insert([
+          {
+            ...toProjectDB(validatedData),
+            version: 1,
+          },
+        ])
+        .select()
+        .single();
+
+      if (error) throw error;
+      if (!project) throw new Error('Failed to create project');
 
       return NextResponse.json(project);
     } catch (dbError) {

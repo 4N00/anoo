@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Project } from '@/types/project';
+import { ProjectUI } from '@/types/project';
 import {
   CardContainer,
   ImageContainer,
@@ -15,7 +15,7 @@ import {
   Link
 } from './styles';
 
-export type ProjectCardProps = Project;
+export type ProjectCardProps = ProjectUI;
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
   title,

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Project } from '@/types/project';
+import { Project, ProjectUI, toProjectUI } from '@/types/project';
 import ProjectCard from '../ProjectCard/ProjectCard';
 import { SectionContainer, SectionTitle, ProjectsGrid } from './styles';
 
@@ -16,11 +16,14 @@ const ProjectSection: React.FC<ProjectSectionProps> = ({
   featured = false,
   projects,
 }) => {
+  // Convert database projects to UI format
+  const uiProjects: ProjectUI[] = projects.map(toProjectUI);
+
   return (
     <SectionContainer>
       {title && <SectionTitle>{title}</SectionTitle>}
       <ProjectsGrid featured={featured}>
-        {projects.map((project) => (
+        {uiProjects.map((project) => (
           <ProjectCard
             key={project.id}
             {...project}
