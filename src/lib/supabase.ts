@@ -33,7 +33,7 @@ export async function requireAdmin() {
   const session = await requireAuth();
 
   const { data: profile, error } = await supabase
-    .from('User')
+    .from('users')  // Changed from 'User' to 'users'
     .select('role')
     .eq('id', session.user.id)
     .single();
@@ -64,7 +64,7 @@ export async function getUserProfile() {
   }
 
   const { data: profile } = await supabase
-    .from('User')
+    .from('users')  // Changed from 'User' to 'users'
     .select('*')
     .eq('id', session.user.id)
     .single();

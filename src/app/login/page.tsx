@@ -21,25 +21,35 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+      // First, try to sign in
+      const { data: authData, error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (signInError) throw signInError;
 
-      if (!data.session) {
+      if (!authData.session) {
         throw new Error('No session created');
       }
 
-      // Check if user is admin
-      const { data: profile } = await supabase
-        .from('User')
+      // Then check if user is admin
+      const { data: profile, error: profileError } = await supabase
+        .from('users')  // Changed from 'User' to 'users'
         .select('role')
-        .eq('id', data.session.user.id)
+        .eq('id', authData.session.user.id)
         .single();
 
-      if (!profile || profile.role !== 'ADMIN') {
+      if (profileError) {
+        console.error('Profile fetch error:', profileError);
+        throw new Error('Failed to fetch user profile');
+      }
+
+      if (!profile) {
+        throw new Error('User profile not found');
+      }
+
+      if (profile.role !== 'ADMIN') {
         throw new Error('Admin access required');
       }
 
