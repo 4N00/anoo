@@ -1,16 +1,27 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase, isAdmin } from '@/lib/supabase';
 import StyledButton from '@/components/ui/StyledButton';
 import FormInput from '@/components/ui/FormInput';
 import { Container, LoginCard, Title, Form, ErrorMessage } from './styles';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { isAdmin: isAdminUser, session } = useAuth();
+  const router = useRouter();
+
+  // Redirect to admin if already logged in as admin
+  useEffect(() => {
+    if (session && isAdminUser) {
+      window.location.href = '/admin';
+    }
+  }, [session, isAdminUser]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +48,7 @@ export default function LoginPage() {
         throw new Error('Admin access required');
       }
 
-      // Let the middleware handle the redirect
+      // Use window.location for a hard redirect
       window.location.href = '/admin';
     } catch (error) {
       console.error('Login error:', error);
@@ -49,6 +60,22 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   };
+
+  // Show loading state while checking auth
+  if (isLoading) {
+    return (
+      <Container>
+        <LoginCard>
+          <Title>Loading...</Title>
+        </LoginCard>
+      </Container>
+    );
+  }
+
+  // Don't show login form if already authenticated as admin
+  if (session && isAdminUser) {
+    return null;
+  }
 
   return (
     <Container>

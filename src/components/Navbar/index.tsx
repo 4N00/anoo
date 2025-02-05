@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
-import { supabase } from '@/lib/supabase';
+import { signOut } from '@/lib/supabase';
 import {
   Nav,
   Container,
@@ -119,17 +119,12 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const { isAdmin } = useAuth();
-  const router = useRouter();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const handleLogout = async () => {
-    try {
-      await supabase.auth.signOut();
-      router.push('/');
-    } catch (error) {
-      console.error('Error logging out:', error);
-    }
+    await signOut();
+    setIsOpen(false);
   };
 
   return (
@@ -220,7 +215,6 @@ const Navbar = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     handleLogout();
-                    toggleMenu();
                   }}
                   variants={mobileNavLinkVariants}
                 >
