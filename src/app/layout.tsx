@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ProjectsProvider } from "../context/ProjectsContext";
 import { ThemeProvider } from "../styles/theme";
 import { AuthProvider } from "../context/AuthContext";
+import { ToastProvider } from "../context/ToastContext";
 import Navbar from "../components/Navbar";
 import { styled } from "styled-components";
 
@@ -26,14 +27,16 @@ export default function RootLayout({
       <body className={inter.className}>
         <QueryClientProvider client={queryClient}>
           <ThemeProvider>
-            <AuthProvider>
-              <ProjectsProvider>
-                <Navbar />
-                <MainContent>
-                  {children}
-                </MainContent>
-              </ProjectsProvider>
-            </AuthProvider>
+            <ToastProvider>
+              <AuthProvider>
+                <ProjectsProvider>
+                  <Navbar />
+                  <MainContent>
+                    {children}
+                  </MainContent>
+                </ProjectsProvider>
+              </AuthProvider>
+            </ToastProvider>
           </ThemeProvider>
         </QueryClientProvider>
       </body>

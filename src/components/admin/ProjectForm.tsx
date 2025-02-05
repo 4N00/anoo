@@ -8,6 +8,7 @@ import { ProjectFormData } from '@/types/project';
 import FormInput from '../ui/FormInput';
 import { StyledButton } from '../ui/StyledButton';
 import { styled } from 'styled-components';
+import { useToast } from '@/context/ToastContext';
 
 // Form input type with tags as string
 type ProjectFormInput = Omit<ProjectFormData, 'tags'> & {
@@ -54,17 +55,13 @@ const CheckboxContainer = styled.div`
   gap: 0.5rem;
 `;
 
-const ErrorText = styled.span`
-  color: ${({ theme }) => theme.colors.error.main};
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-`;
-
 interface ProjectFormProps {
   onSubmit: (data: ProjectFormData) => Promise<void>;
   initialData?: Partial<ProjectFormData>;
 }
 
 const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, initialData }) => {
+  const { showToast } = useToast();
   const {
     register,
     handleSubmit,
@@ -90,8 +87,13 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, initialData }) => {
         tags: data.tags.split(',').map(tag => tag.trim()).filter(Boolean),
       };
       await onSubmit(transformedData);
+      showToast('Project saved successfully!', 'success');
     } catch (error) {
       console.error('Form submission error:', error);
+      showToast(
+        error instanceof Error ? error.message : 'Failed to save project',
+        'error'
+      );
     }
   };
 
