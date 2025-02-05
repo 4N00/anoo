@@ -36,6 +36,7 @@ export const Content = styled.div`
 export const Title = styled.h3`
   font-size: ${({ theme }) => theme.typography.fontSize.xl};
   font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  font-family: ${({ theme }) => theme.fonts.heading};
   color: ${({ theme }) => theme.colors.text.primary};
   margin-bottom: ${({ theme }) => theme.spacing.sm};
 `;
