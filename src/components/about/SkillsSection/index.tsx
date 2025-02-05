@@ -10,8 +10,8 @@ import {
   SkillNameText,
   ProgressContainer,
   ProgressBar,
-  SkillLevel,
-} from '@/styles/AboutStyles';
+  SkillLevel
+} from "@/styles/AboutStyles";
 
 interface Skill {
   name: string;
@@ -25,7 +25,7 @@ interface SkillsSectionProps {
 
 const defaultVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
+  visible: { opacity: 1, y: 0 }
 };
 
 const SkillsSection: React.FC<SkillsSectionProps> = ({ variants = defaultVariants, skills }) => {
@@ -39,7 +39,7 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({ variants = defaultVariant
   }, []);
 
   return (
-    <SectionContainer
+    <SectionContainer 
       variants={variants}
       initial="hidden"
       animate="visible"
@@ -48,10 +48,10 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({ variants = defaultVariant
       <Title>Skills</Title>
       <div>
         {chunkedSkills.map((skillGroup, groupIndex) => (
-          <GroupContainer key={groupIndex}>
+          <GroupContainer key={groupIndex} data-testid="skill-group">
             <Grid>
               {skillGroup.map((skill) => (
-                <SkillContainer key={skill.name}>
+                <SkillContainer key={skill.name} data-testid="skill-item">
                   <SkillName>
                     <SkillNameText>{skill.name}</SkillNameText>
                   </SkillName>
@@ -62,13 +62,16 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({ variants = defaultVariant
                     transition={{ delay: 0.2 }}
                   >
                     <ProgressBar
+                      data-testid={`progress-${skill.name}`}
                       initial={{ width: 0 }}
                       whileInView={{ width: `${skill.level}%` }}
                       viewport={{ once: true }}
                       transition={{ duration: 1, delay: 0.4 }}
                     />
                   </ProgressContainer>
-                  <SkillLevel>{(skill.level / 10).toFixed(2)} / 10</SkillLevel>
+                  <SkillLevel>
+                    {(skill.level / 10).toFixed(2)} / 10
+                  </SkillLevel>
                 </SkillContainer>
               ))}
             </Grid>
