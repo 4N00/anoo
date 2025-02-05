@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { signOut } from '@/lib/supabase';
-import Link from 'next/link';
 import {
   Nav,
   Container,
@@ -14,25 +13,10 @@ import {
   NavLink,
   MenuButton,
   MobileMenuContainer,
-  MobileNavLinkBase,
+  MobileNavLink,
   ContactInfo,
   CloseButton,
 } from './styles';
-
-interface MobileNavLinkProps {
-  href: string;
-  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
-  children: React.ReactNode;
-  variants?: any;
-}
-
-const MobileNavLink = ({ href, onClick, children, ...props }: MobileNavLinkProps) => (
-  <Link href={href} passHref legacyBehavior>
-    <MobileNavLinkBase onClick={onClick} {...props}>
-      {children}
-    </MobileNavLinkBase>
-  </Link>
-);
 
 const MenuIcon = ({ isOpen }: { isOpen: boolean }) => (
   <svg

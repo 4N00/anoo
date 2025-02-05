@@ -11,12 +11,7 @@ interface AuthContextType {
   user: User | null;
 }
 
-const AuthContext = createContext<AuthContextType>({
-  session: null,
-  isAdmin: false,
-  isLoading: true,
-  user: null,
-});
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -29,58 +24,73 @@ export const useAuth = () => {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     let mounted = true;
 
-    // Only run auth initialization on the client side
-    if (typeof window !== 'undefined') {
-      const initAuth = async () => {
-        try {
-          const {
-            data: { session: initialSession },
-          } = await supabase.auth.getSession();
+    const initializeAuth = async () => {
+      try {
+        const {
+          data: { session: initialSession },
+        } = await supabase.auth.getSession();
+        if (!mounted) return;
 
-          if (mounted) {
-            setSession(initialSession);
-            if (initialSession) {
-              const adminStatus = await checkIsAdmin();
-              setIsAdmin(adminStatus);
-            }
-          }
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error('Auth error:', error);
-          if (mounted) {
-            setSession(null);
-            setIsAdmin(false);
-          }
+        setSession(initialSession);
+        if (initialSession) {
+          const adminStatus = await checkIsAdmin();
+          if (!mounted) return;
+          setIsAdmin(adminStatus);
         }
-      };
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+          setIsInitialized(true);
+        }
+      }
+    };
 
-      initAuth();
-    }
-
+    // Set up auth state listener
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
-      if (mounted) {
+      if (!mounted) return;
+
+      try {
+        setIsLoading(true);
         setSession(newSession);
+
         if (newSession) {
           const adminStatus = await checkIsAdmin();
+          if (!mounted) return;
           setIsAdmin(adminStatus);
         } else {
           setIsAdmin(false);
         }
+      } catch (error) {
+        console.error('Error handling auth change:', error);
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     });
+
+    initializeAuth();
 
     return () => {
       mounted = false;
       subscription.unsubscribe();
     };
   }, []);
+
+  // Don't render until auth is initialized
+  if (!isInitialized) {
+    return null;
+  }
 
   return (
     <AuthContext.Provider
