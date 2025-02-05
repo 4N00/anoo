@@ -9,10 +9,10 @@ import FormInput from '../ui/FormInput';
 import { StyledButton } from '../ui/StyledButton';
 import { styled } from 'styled-components';
 
-// Form-specific type with tags as string for input
-interface ProjectFormInput extends Omit<ProjectFormData, 'tags'> {
+// Form input type with tags as string
+type ProjectFormInput = Omit<ProjectFormData, 'tags'> & {
   tags: string;
-}
+};
 
 const projectValidationSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -20,9 +20,14 @@ const projectValidationSchema = z.object({
   imageUrl: z.string().url('Must be a valid URL'),
   tags: z.string().transform((str) => str.split(',').map(tag => tag.trim()).filter(Boolean)),
   featured: z.boolean(),
-  category: z.string().min(1, 'Category is required'),
-  githubUrl: z.string().url('Must be a valid URL').nullable(),
-  liveUrl: z.string().url('Must be a valid URL').nullable(),
+  githubUrl: z.string()
+    .transform(str => str.trim())
+    .refine(str => str === '' || /^https?:\/\//.test(str), 'Must be a valid URL if provided')
+    .transform(str => str || null),
+  liveUrl: z.string()
+    .transform(str => str.trim())
+    .refine(str => str === '' || /^https?:\/\//.test(str), 'Must be a valid URL if provided')
+    .transform(str => str || null),
 });
 
 const FormContainer = styled.form`
@@ -72,7 +77,6 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, initialData }) => {
       imageUrl: initialData?.imageUrl || '',
       tags: initialData?.tags ? initialData.tags.join(', ') : '',
       featured: initialData?.featured || false,
-      category: initialData?.category || '',
       githubUrl: initialData?.githubUrl || '',
       liveUrl: initialData?.liveUrl || '',
     },
@@ -121,15 +125,6 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, initialData }) => {
       </InputGroup>
 
       <InputGroup>
-        <Label>Category</Label>
-        <FormInput
-          {...register('category')}
-          placeholder="Category (e.g., F/01, P/01)"
-          error={errors.category?.message}
-        />
-      </InputGroup>
-
-      <InputGroup>
         <Label>Tags</Label>
         <FormInput
           {...register('tags')}
@@ -147,7 +142,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, initialData }) => {
         <Label>GitHub URL (optional)</Label>
         <FormInput
           {...register('githubUrl')}
-          placeholder="GitHub URL"
+          placeholder="GitHub URL (leave empty if none)"
           error={errors.githubUrl?.message}
         />
       </InputGroup>
@@ -156,7 +151,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ onSubmit, initialData }) => {
         <Label>Live URL (optional)</Label>
         <FormInput
           {...register('liveUrl')}
-          placeholder="Live URL"
+          placeholder="Live URL (leave empty if none)"
           error={errors.liveUrl?.message}
         />
       </InputGroup>

@@ -5,7 +5,6 @@ export interface Project {
   image_url: string;
   tags: string[];
   featured: boolean;
-  category: string;
   github_url: string | null;
   live_url: string | null;
   created_at: string;
@@ -24,7 +23,6 @@ export interface ProjectUI {
   imageUrl: string;
   tags: string[];
   featured: boolean;
-  category: string;
   githubUrl: string | null;
   liveUrl: string | null;
   createdAt: Date;
@@ -38,7 +36,6 @@ export interface ProjectFormData {
   imageUrl: string;
   tags: string[];
   featured: boolean;
-  category: string;
   githubUrl?: string | null;
   liveUrl?: string | null;
 }
@@ -51,7 +48,6 @@ export const toProjectUI = (project: Project): ProjectUI => ({
   imageUrl: project.image_url,
   tags: project.tags,
   featured: project.featured,
-  category: project.category,
   githubUrl: project.github_url,
   liveUrl: project.live_url,
   createdAt: new Date(project.created_at),
@@ -66,7 +62,6 @@ export const toProjectDB = (data: ProjectFormData): Omit<Project, 'id' | 'create
   image_url: data.imageUrl,
   tags: data.tags,
   featured: data.featured,
-  category: data.category,
   github_url: data.githubUrl || null,
   live_url: data.liveUrl || null,
 });

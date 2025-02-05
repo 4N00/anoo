@@ -50,11 +50,16 @@ const Index = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const featuredProjects = projects.filter(p => p.category === "F/01");
-  const projectsSetOne = projects.filter(p => p.category === "P/01");
-  const projectsSetTwo = projects.filter(p => p.category === "P/02");
-  const projectsSetThree = projects.filter(p => p.category === "P/03");
-  const projectsSetFour = projects.filter(p => p.category === "P/04");
+  // Filter projects based on featured flag
+  const featuredProjects = projects.filter(p => p.featured);
+  const nonFeaturedProjects = projects.filter(p => !p.featured);
+
+  // Split non-featured projects into groups
+  const chunkSize = Math.ceil(nonFeaturedProjects.length / 4);
+  const projectsSetOne = nonFeaturedProjects.slice(0, chunkSize);
+  const projectsSetTwo = nonFeaturedProjects.slice(chunkSize, chunkSize * 2);
+  const projectsSetThree = nonFeaturedProjects.slice(chunkSize * 2, chunkSize * 3);
+  const projectsSetFour = nonFeaturedProjects.slice(chunkSize * 3);
 
   return (
     <MainContainer ref={mainRef}>
