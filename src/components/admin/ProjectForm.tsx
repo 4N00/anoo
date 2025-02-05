@@ -125,7 +125,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSave, onClose }) =
   const handleFormSubmit = async (data: ProjectFormInput) => {
     try {
       const response = await fetch(project ? `/api/projects/${project.id}` : '/api/projects', {
-        method: project ? 'PUT' : 'POST',
+        method: project ? 'PATCH' : 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
