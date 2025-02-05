@@ -177,7 +177,8 @@ export const MobileMenuContainer = styled(motion.div)`
   }
 `;
 
-export const MobileNavLink = styled(motion(Link))`
+// Combine motion.a with Next.js Link
+export const MobileNavLink = styled(motion.a).attrs({ as: Link })`
   color: ${({ theme }) => theme.colors.background.primary};
   text-decoration: none;
   font-size: 2.5rem;
