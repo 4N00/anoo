@@ -7,9 +7,9 @@ export const Nav = styled.nav`
   width: 100%;
   top: 0;
   left: 0;
-  z-index: 50;
+  z-index: ${({ theme }) => theme.zIndex.header};
   background: ${({ theme }) => theme.colors.background.primary};
-  padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.xl}`};
+  padding: ${({ theme }) => theme.spacing.sm};
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 `;
 
@@ -17,28 +17,32 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1400px;
+  width: 100%;
+  max-width: min(1400px, calc(100% - ${({ theme }) => theme.spacing.md} * 2));
   margin: 0 auto;
   padding: 0 ${({ theme }) => theme.spacing.md};
 `;
 
 export const Logo = styled(Link)`
   font-size: ${({ theme }) => theme.typography.fontSize.lg};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.normal};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
   color: ${({ theme }) => theme.colors.text.primary};
   text-decoration: none;
-  font-family: 'Josefin Sans', sans-serif;
-  z-index: 60;
+  font-family: var(--font-inter);
+  z-index: ${({ theme }) => theme.zIndex.header + 10};
   letter-spacing: 1px;
 `;
 
 export const NavLinks = styled.div`
-  display: flex;
-  gap: 2rem;
-  margin-left: auto;
+  display: none;
   
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    display: none;
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    display: flex;
+    gap: clamp(${({ theme }) => theme.spacing.md}, 2vw, ${({ theme }) => theme.spacing.xl});
+    margin-left: auto;
+    align-items: center;
+    flex-wrap: nowrap;
+    overflow: hidden;
   }
 `;
 
@@ -47,7 +51,7 @@ export const NavLink = styled(Link)`
   text-decoration: none;
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
   font-weight: ${({ theme }) => theme.typography.fontWeight.normal};
-  font-family: 'Josefin Sans', sans-serif;
+  font-family: var(--font-inter);
   transition: all 0.3s ease;
   opacity: 0.8;
   position: relative;
@@ -79,12 +83,12 @@ export const NavLink = styled(Link)`
 `;
 
 export const MenuButton = styled.button`
-  display: none;
+  display: flex;
   background: none;
   border: none;
   cursor: pointer;
   padding: ${({ theme }) => theme.spacing.sm};
-  z-index: 60;
+  z-index: ${({ theme }) => theme.zIndex.header + 10};
   color: ${({ theme }) => theme.colors.text.primary};
   width: 40px;
   height: 40px;
@@ -92,14 +96,14 @@ export const MenuButton = styled.button`
   justify-content: center;
   transition: all 0.3s ease;
   border-radius: 50%;
-  margin-left: ${({ theme }) => theme.spacing.md};
+  margin-left: auto;
   
   &:hover {
     background-color: rgba(0, 0, 0, 0.05);
   }
   
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    display: flex;
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    display: none;
   }
 
   svg {
@@ -122,7 +126,7 @@ export const MobileMenuContainer = styled(motion.div)`
   align-items: center;
   gap: ${({ theme }) => theme.spacing.xl};
   padding: ${({ theme }) => theme.spacing.xl};
-  z-index: 50;
+  z-index: ${({ theme }) => theme.zIndex.modal};
   overflow: hidden;
 
   &:before {
@@ -145,9 +149,9 @@ export const MobileNavLink = styled(motion(Link))`
   color: ${({ theme }) => theme.colors.background.primary};
   text-decoration: none;
   font-size: 2.5rem;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.normal};
-  font-family: 'Josefin Sans', sans-serif;
-  opacity: 0.5;
+  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
+  font-family: var(--font-inter);
+  opacity: 0.7;
   transition: all 0.3s ease;
   letter-spacing: 2px;
   position: relative;
@@ -170,6 +174,6 @@ export const ContactInfo = styled.div`
   color: ${({ theme }) => theme.colors.background.primary};
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
   opacity: 0.5;
-  font-family: 'Josefin Sans', sans-serif;
+  font-family: var(--font-inter);
   letter-spacing: 1px;
 `;

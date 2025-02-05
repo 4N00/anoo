@@ -62,6 +62,8 @@ declare module 'styled-components' {
         '2xl': string;
         '3xl': string;
         '4xl': string;
+        hero: string;
+        heroSubtitle: string;
       };
       fontWeight: {
         normal: number;
@@ -74,6 +76,13 @@ declare module 'styled-components' {
         tight: number;
         normal: number;
         relaxed: number;
+      };
+      letterSpacing: {
+        tighter: string;
+        tight: string;
+        normal: string;
+        wide: string;
+        wider: string;
       };
     };
     fonts: {

@@ -60,7 +60,9 @@ export const theme: DefaultTheme = {
       xl: '1.25rem',
       '2xl': '1.5rem',
       '3xl': '2rem',
-      '4xl': '2.5rem'
+      '4xl': '2.5rem',
+      hero: 'clamp(1.5rem, 10vw, 12rem)',
+      heroSubtitle: 'clamp(1.5rem, 2vw, 2rem)'
     },
     fontWeight: {
       normal: 400,
@@ -73,6 +75,13 @@ export const theme: DefaultTheme = {
       tight: 1.25,
       normal: 1.5,
       relaxed: 1.75
+    },
+    letterSpacing: {
+      tighter: '-0.05em',
+      tight: '-0.025em',
+      normal: '0',
+      wide: '0.025em',
+      wider: '0.05em'
     }
   },
   fonts: {

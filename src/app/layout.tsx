@@ -1,7 +1,6 @@
 'use client';
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { TooltipProvider } from "../components/ui/tooltip";
 import { ProjectsProvider } from "../context/ProjectsContext";
 import { ThemeProvider } from "../styles/theme";
 import Navbar from "../components/Navbar";
@@ -24,12 +23,10 @@ export default function RootLayout({
         <QueryClientProvider client={queryClient}>
           <ThemeProvider>
             <ProjectsProvider>
-              <TooltipProvider>
-                <Navbar />
-                <MainContent>
-                  {children}
-                </MainContent>
-              </TooltipProvider>
+              <Navbar />
+              <MainContent>
+                {children}
+              </MainContent>
             </ProjectsProvider>
           </ThemeProvider>
         </QueryClientProvider>
