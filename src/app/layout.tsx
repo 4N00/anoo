@@ -7,15 +7,17 @@ import { ThemeProvider } from "../styles/theme";
 import { AuthProvider } from "../context/AuthContext";
 import { ToastProvider } from "../context/ToastContext";
 import Navbar from "../components/Navbar";
-import PageTransition from "@/components/PageTransition";
+import { motion } from "framer-motion";
 import { styled } from "styled-components";
 
 const inter = Inter({ subsets: ['latin'] });
 
 const queryClient = new QueryClient();
 
-const MainContent = styled.main`
-  padding-top: 64px;
+const MainContent = styled.div`
+  position: relative;
+  min-height: 100vh;
+  padding-top: 64px; /* Navbar height */
 `;
 
 export default function RootLayout({
@@ -33,9 +35,21 @@ export default function RootLayout({
                 <ProjectsProvider>
                   <Navbar />
                   <MainContent>
-                    <PageTransition>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{
+                        duration: 0.2,
+                        ease: "linear",
+                      }}
+                      style={{
+                        width: '100%',
+                        minHeight: '100vh',
+                        willChange: 'opacity',
+                      }}
+                    >
                       {children}
-                    </PageTransition>
+                    </motion.div>
                   </MainContent>
                 </ProjectsProvider>
               </AuthProvider>
