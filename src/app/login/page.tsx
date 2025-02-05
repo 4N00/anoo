@@ -1,27 +1,20 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { supabase, isAdmin } from '@/lib/supabase';
+import React, { useState } from 'react';
+import { supabase } from '@/lib/supabase';
 import StyledButton from '@/components/ui/StyledButton';
 import FormInput from '@/components/ui/FormInput';
 import { Container, LoginCard, Title, Form, ErrorMessage } from './styles';
-import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/context/ToastContext';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { isAdmin: isAdminUser, session } = useAuth();
   const router = useRouter();
-
-  // Redirect to admin if already logged in as admin
-  useEffect(() => {
-    if (session && isAdminUser) {
-      window.location.href = '/admin';
-    }
-  }, [session, isAdminUser]);
+  const { showToast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,53 +22,66 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
+      console.log('Attempting to sign in...');
+      
       // First, try to sign in
       const { data: authData, error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (signInError) throw signInError;
-
-      if (!authData.session) {
-        throw new Error('No session created');
+      if (signInError) {
+        console.error('Sign in error:', signInError);
+        throw new Error('Invalid email or password');
       }
 
-      // Check if user is admin
-      const adminStatus = await isAdmin();
+      if (!authData.session) {
+        console.error('No session created after sign in');
+        throw new Error('Authentication failed');
+      }
 
-      if (!adminStatus) {
+      console.log('Successfully signed in, checking user role...');
+
+      // Check if user has admin role
+      const { data: userData, error: roleError } = await supabase
+        .from('users')
+        .select('role')
+        .eq('id', authData.session.user.id)
+        .single();
+
+      if (roleError) {
+        console.error('Error fetching user role:', roleError);
+        await supabase.auth.signOut();
+        throw new Error('Error verifying admin status');
+      }
+
+      console.log('User data:', userData);
+
+      if (!userData || userData.role !== 'ADMIN') {
+        // Sign out if not admin
+        await supabase.auth.signOut();
         throw new Error('Admin access required');
       }
 
-      // Use window.location for a hard redirect
-      window.location.href = '/admin';
+      console.log('Admin access confirmed, redirecting...');
+      showToast('Successfully logged in', 'success');
+      
+      // Use replace to prevent back navigation
+      router.replace('/admin');
     } catch (error) {
       console.error('Login error:', error);
-      setError(
-        error instanceof Error
-          ? error.message
-          : 'An error occurred during login'
-      );
+      let errorMessage = 'An error occurred during login';
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      
+      setError(errorMessage);
+      showToast(errorMessage, 'error');
+    } finally {
       setIsLoading(false);
     }
   };
-
-  // Show loading state while checking auth
-  if (isLoading) {
-    return (
-      <Container>
-        <LoginCard>
-          <Title>Loading...</Title>
-        </LoginCard>
-      </Container>
-    );
-  }
-
-  // Don't show login form if already authenticated as admin
-  if (session && isAdminUser) {
-    return null;
-  }
 
   return (
     <Container>
