@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, MouseEvent } from 'react';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
@@ -23,7 +23,7 @@ const MenuIcon = ({ isOpen }: { isOpen: boolean }) => (
     height="24"
     viewBox="0 0 24 24"
     fill="none"
-    stroke="currentColor"
+    stroke={isOpen ? '#fff' : 'currentColor'}
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
@@ -118,7 +118,7 @@ const contactInfoVariants = {
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  const { isAdmin } = useAuth();
+  const { isAdmin, user } = useAuth();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -127,14 +127,16 @@ const Navbar = () => {
     setIsOpen(false);
   };
 
+  const handleLogoutClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    handleLogout();
+  };
+
   return (
     <Nav>
       <Container>
         <Logo href="/">ANOO</Logo>
         <NavLinks>
-          <NavLink href="/" aria-current={pathname === '/' ? 'page' : undefined}>
-            Home
-          </NavLink>
           <NavLink 
             href="/about"
             aria-current={pathname === '/about' ? 'page' : undefined}
@@ -147,7 +149,7 @@ const Navbar = () => {
           >
             Contact
           </NavLink>
-          {isAdmin && (
+          {isAdmin ? (
             <>
               <NavLink 
                 href="/admin"
@@ -157,17 +159,21 @@ const Navbar = () => {
               </NavLink>
               <NavLink 
                 href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleLogout();
-                }}
+                onClick={handleLogoutClick}
               >
                 Logout
               </NavLink>
             </>
-          )}
+          ) : !user ? (
+            <NavLink 
+              href="/login"
+              aria-current={pathname === '/login' ? 'page' : undefined}
+            >
+              Login
+            </NavLink>
+          ) : null}
         </NavLinks>
-        <MenuButton onClick={toggleMenu} aria-label="Toggle menu">
+        <MenuButton onClick={toggleMenu} aria-label="Toggle menu" $isOpen={isOpen}>
           <MenuIcon isOpen={isOpen} />
         </MenuButton>
       </Container>
@@ -201,7 +207,7 @@ const Navbar = () => {
             >
               Contact
             </MobileNavLink>
-            {isAdmin && (
+            {isAdmin ? (
               <>
                 <MobileNavLink
                   href="/admin"
@@ -212,7 +218,7 @@ const Navbar = () => {
                 </MobileNavLink>
                 <MobileNavLink
                   href="#"
-                  onClick={(e) => {
+                  onClick={(e: MouseEvent<HTMLAnchorElement>) => {
                     e.preventDefault();
                     handleLogout();
                   }}
@@ -221,7 +227,15 @@ const Navbar = () => {
                   Logout
                 </MobileNavLink>
               </>
-            )}
+            ) : !user ? (
+              <MobileNavLink
+                href="/login"
+                onClick={toggleMenu}
+                variants={mobileNavLinkVariants}
+              >
+                Login
+              </MobileNavLink>
+            ) : null}
             <ContactInfo
               as={motion.div}
               variants={contactInfoVariants}

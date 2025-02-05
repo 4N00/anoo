@@ -82,14 +82,18 @@ export const NavLink = styled(Link)`
   }
 `;
 
-export const MenuButton = styled.button`
+interface MenuButtonProps {
+  $isOpen: boolean;
+}
+
+export const MenuButton = styled.button<MenuButtonProps>`
   display: flex;
   background: none;
   border: none;
   cursor: pointer;
   padding: ${({ theme }) => theme.spacing.sm};
   z-index: ${({ theme }) => theme.zIndex.header + 10};
-  color: ${({ theme }) => theme.colors.text.primary};
+  color: ${({ theme, $isOpen }) => $isOpen ? theme.colors.background.primary : theme.colors.text.primary};
   width: 40px;
   height: 40px;
   align-items: center;
@@ -99,7 +103,7 @@ export const MenuButton = styled.button`
   margin-left: auto;
   
   &:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: ${({ $isOpen }) => $isOpen ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'};
   }
   
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {

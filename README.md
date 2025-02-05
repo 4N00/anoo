@@ -1,6 +1,7 @@
 # Anoo Portfolio
 
-A modern portfolio website built with Next.js, TypeScript, and Styled Components.
+A modern portfolio website built with Next.js, TypeScript, and Styled
+Components.
 
 ## Features
 
@@ -15,14 +16,29 @@ A modern portfolio website built with Next.js, TypeScript, and Styled Components
 - ⚡ Hybrid rendering (SSG + SSR)
 - 🌙 Dark mode support (coming soon)
 
+## Demo Admin Access
+
+For showcase purposes only, you can access the admin panel with these
+credentials:
+
+```
+Email: admin@admin.com
+Password: admin
+```
+
+⚠️ Note: These credentials are for demonstration purposes only.
+
 ## Architecture
 
 ### Hybrid Rendering
 
-The application uses a hybrid rendering approach for optimal performance and security:
+The application uses a hybrid rendering approach for optimal performance and
+security:
 
 - **Static Site Generation (SSG)**
-  - Public-facing pages (home, about, contact) are statically generated at build time
+
+  - Public-facing pages (home, about, contact) are statically generated at build
+    time
   - Static data is revalidated every hour
   - Enhanced with client-side interactivity where needed
   - Optimized for performance and SEO
@@ -32,6 +48,25 @@ The application uses a hybrid rendering approach for optimal performance and sec
   - Protected by server-side authentication checks
   - Automatic redirects for unauthorized access
   - Real-time data updates with optimistic UI
+
+### Testing Strategy
+
+The project employs a comprehensive testing approach:
+
+- **End-to-End Testing (Cypress)**
+
+  - Tests complete user flows and critical paths
+  - Covers authentication and authorization
+  - Tests responsive design across different viewports
+  - Verifies API integration and data persistence
+  - Ensures proper error handling
+
+- **Unit Testing (Jest)**
+  - Tests individual components in isolation
+  - Verifies component logic and state management
+  - Tests hooks and utility functions
+  - Ensures proper rendering and props handling
+  - Mocks external dependencies for reliable tests
 
 ## Getting Started
 
@@ -45,22 +80,26 @@ The application uses a hybrid rendering approach for optimal performance and sec
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/4N00/anoo.git
 cd anoo
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Copy the environment variables:
+
 ```bash
 cp .env.example .env
 ```
 
 4. Update the environment variables in `.env` with your own values:
+
 ```env
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
@@ -75,17 +114,20 @@ NEXTAUTH_SECRET=your_nextauth_secret
 ```
 
 5. Set up the database schema:
+
 ```bash
 npm run prisma:generate
 npm run prisma:migrate
 ```
 
 6. Run the development server:
+
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the
+result.
 
 ## Scripts
 
@@ -93,8 +135,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - `npm run build` - Build for production
 - `npm run start` - Start production server
 - `npm run lint` - Run ESLint
-- `npm run test` - Run Jest tests
-- `npm run e2e` - Run Cypress tests
+- `npm run test` - Run Jest unit tests
+- `npm run test:watch` - Run Jest tests in watch mode
+- `npm run e2e` - Run Cypress E2E tests
+- `npm run e2e:open` - Open Cypress test runner
 - `npm run docker:dev` - Run development environment in Docker
 - `npm run prisma:generate` - Generate Prisma client
 - `npm run prisma:migrate` - Run database migrations
@@ -130,4 +174,5 @@ src/
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
+for details.

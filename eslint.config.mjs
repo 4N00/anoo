@@ -26,6 +26,7 @@ export default [
         ecmaFeatures: {
           jsx: true,
         },
+        lib: ['dom', 'dom.iterable', 'esnext'],
       },
     },
     settings: {
@@ -34,7 +35,7 @@ export default [
       },
     },
     rules: {
-      // ... other rules ...
+      'no-console': ['warn', { allow: ['error', 'warn', 'info'] }],
     },
   },
   {

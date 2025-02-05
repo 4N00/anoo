@@ -2,18 +2,20 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase, isAdmin as checkIsAdmin } from '@/lib/supabase';
-import { Session } from '@supabase/supabase-js';
+import { Session, User } from '@supabase/supabase-js';
 
 interface AuthContextType {
   session: Session | null;
   isAdmin: boolean;
   isLoading: boolean;
+  user: User | null;
 }
 
 const AuthContext = createContext<AuthContextType>({
   session: null,
   isAdmin: false,
   isLoading: true,
+  user: null,
 });
 
 export const useAuth = () => {
@@ -45,6 +47,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         }
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Auth error:', error);
         if (mounted) {
           setSession(null);
@@ -80,7 +83,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ session, isAdmin, isLoading }}>
+    <AuthContext.Provider value={{ 
+      session, 
+      isAdmin, 
+      isLoading,
+      user: session?.user ?? null 
+    }}>
       {children}
     </AuthContext.Provider>
   );
