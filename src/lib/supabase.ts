@@ -1,4 +1,8 @@
 import { createBrowserClient } from '@supabase/ssr';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { Database } from '@/types/supabase';
+
+/* eslint-disable no-console, no-undef */
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -8,11 +12,28 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 // Create Supabase client
-export const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
+let supabase: SupabaseClient<Database>;
+
+try {
+  // eslint-disable-next-line no-console
+  console.log('Initializing Supabase client...');
+  supabase = createBrowserClient<Database>(supabaseUrl, supabaseAnonKey);
+  // eslint-disable-next-line no-console
+  console.log('Supabase client initialized successfully');
+} catch (error) {
+  // eslint-disable-next-line no-console
+  console.error('Failed to initialize Supabase client:', error);
+  throw error;
+}
+
+export { supabase };
 
 // Helper function to get current session
 export async function getCurrentSession() {
-  const { data: { session }, error } = await supabase.auth.getSession();
+  const {
+    data: { session },
+    error,
+  } = await supabase.auth.getSession();
   if (error) throw error;
   return session;
 }
@@ -24,7 +45,7 @@ export async function isAdmin() {
 
   try {
     console.log('Checking admin status for user:', session.user.id);
-    
+
     const { data: user, error } = await supabase
       .from('users')
       .select('role')
