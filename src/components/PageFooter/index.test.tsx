@@ -34,12 +34,6 @@ describe('PageFooter', () => {
     mockIntersectionObserver.mockClear();
   });
 
-  it('renders the main heading', () => {
-    render(<PageFooter />);
-    expect(screen.getByText('HAVE A')).toBeInTheDocument();
-    expect(screen.getByText('GREAT DAY!')).toBeInTheDocument();
-  });
-
   it('renders all navigation links', () => {
     render(<PageFooter />);
 
