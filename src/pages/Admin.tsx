@@ -5,6 +5,7 @@ import { styled } from 'styled-components';
 import { ProjectUI } from '@/types/project';
 import ProjectList from '@/components/admin/ProjectList';
 import ProjectForm from '@/components/admin/ProjectForm';
+import { useToast } from '@/context/ToastContext';
 
 const AdminContainer = styled.div`
   padding: 2rem;
@@ -46,6 +47,7 @@ const Admin: React.FC<AdminProps> = ({ initialProjects }) => {
   const [projects, setProjects] = useState(initialProjects);
   const [showForm, setShowForm] = useState(false);
   const [editingProject, setEditingProject] = useState<ProjectUI | null>(null);
+  const { showToast } = useToast();
 
   const handleAddProject = () => {
     setEditingProject(null);
@@ -64,17 +66,64 @@ const Admin: React.FC<AdminProps> = ({ initialProjects }) => {
 
   const handleProjectSaved = (savedProject: ProjectUI) => {
     if (editingProject) {
-      setProjects(projects.map(p => 
-        p.id === savedProject.id ? savedProject : p
-      ));
+      setProjects((projects) => projects.map((p) => (p.id === savedProject.id ? savedProject : p)));
     } else {
-      setProjects([savedProject, ...projects]);
+      setProjects((projects) => [savedProject, ...projects]);
     }
     handleCloseForm();
   };
 
   const handleProjectDeleted = (projectId: string) => {
-    setProjects(projects.filter(p => p.id !== projectId));
+    setProjects((projects) => projects.filter((p) => p.id !== projectId));
+  };
+
+  const handleProjectReorder = async (startIndex: number, endIndex: number) => {
+    // Get only the non-featured projects since we're reordering those
+    const regularProjects = projects.filter((p) => !p.featured);
+
+    // Create a new array with the reordered regular projects
+    const reorderedRegularProjects = Array.from(regularProjects);
+    const [removed] = reorderedRegularProjects.splice(startIndex, 1);
+    if (!removed) return;
+
+    reorderedRegularProjects.splice(endIndex, 0, removed);
+
+    // Combine featured and reordered regular projects
+    const featuredProjects = projects.filter((p) => p.featured);
+    const newProjects = [...featuredProjects, ...reorderedRegularProjects];
+
+    // Update the local state immediately for a smooth UI experience
+    setProjects(newProjects);
+
+    try {
+      // Update the display order in the database using the reordered array
+      const updates = reorderedRegularProjects.map((project, index) => ({
+        id: project.id,
+        display_order: index + featuredProjects.length, // Add offset for featured projects
+      }));
+
+      const response = await fetch('/api/projects/reorder', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ updates }),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        console.error('Server error:', responseData);
+        throw new Error(responseData.error || 'Failed to update project order');
+      }
+
+      showToast('Project order updated successfully', 'success');
+    } catch (error) {
+      console.error('Error updating project order:', error);
+      showToast(error instanceof Error ? error.message : 'Failed to update project order', 'error');
+      // Revert to the original order if the update fails
+      setProjects(projects);
+    }
   };
 
   return (
@@ -84,10 +133,11 @@ const Admin: React.FC<AdminProps> = ({ initialProjects }) => {
         <AddButton onClick={handleAddProject}>Add Project</AddButton>
       </Header>
 
-      <ProjectList 
+      <ProjectList
         projects={projects}
         onEdit={handleEditProject}
         onDelete={handleProjectDeleted}
+        onReorder={handleProjectReorder}
       />
 
       {showForm && (

@@ -1,10 +1,4 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[];
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
   public: {
@@ -14,39 +8,42 @@ export type Database = {
           id: string;
           title: string;
           description: string;
-          imageUrl: string;
-          githubUrl: string | null;
-          liveUrl: string | null;
+          image_url: string;
+          github_url: string | null;
+          live_url: string | null;
           tags: string[];
           featured: boolean;
-          createdAt: string;
-          updatedAt: string;
+          display_order: number;
+          created_at: string;
+          updated_at: string;
           version: number;
         };
         Insert: {
           id?: string;
           title: string;
           description: string;
-          imageUrl: string;
-          githubUrl?: string | null;
-          liveUrl?: string | null;
+          image_url: string;
+          github_url?: string | null;
+          live_url?: string | null;
           tags: string[];
           featured?: boolean;
-          createdAt?: string;
-          updatedAt?: string;
+          display_order?: number;
+          created_at?: string;
+          updated_at?: string;
           version?: number;
         };
         Update: {
           id?: string;
           title?: string;
           description?: string;
-          imageUrl?: string;
-          githubUrl?: string | null;
-          liveUrl?: string | null;
+          image_url?: string;
+          github_url?: string | null;
+          live_url?: string | null;
           tags?: string[];
           featured?: boolean;
-          createdAt?: string;
-          updatedAt?: string;
+          display_order?: number;
+          created_at?: string;
+          updated_at?: string;
           version?: number;
         };
       };
@@ -87,7 +84,8 @@ export type Database = {
 };
 
 // Helper types for better DX
-export type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row'];
+export type Tables<T extends keyof Database['public']['Tables']> =
+  Database['public']['Tables'][T]['Row'];
 export type Enums<T extends keyof Database['public']['Enums']> = Database['public']['Enums'][T];
 
 // Specific table types

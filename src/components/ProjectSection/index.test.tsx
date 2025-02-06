@@ -4,6 +4,7 @@ import { render } from '../../test-utils/test-utils';
 import '@testing-library/jest-dom';
 import ProjectSection from './index';
 import { ProjectUI } from '@/types/project';
+import styled from 'styled-components';
 
 // Declare Jest globals
 declare const jest: any;
@@ -29,41 +30,40 @@ jest.mock('../ProjectCard/ProjectCard', () => {
 
 // Mock the styled components
 jest.mock('../ProjectCard/styles', () => ({
-  ProjectContainer: ({
-    children,
-    $featured,
-    ...props
-  }: React.PropsWithChildren<any> & { $featured?: boolean }) => (
-    <div data-testid="project-container" {...props}>
-      {children}
-    </div>
-  ),
+  ProjectContainer: styled.div<{ $featured?: boolean }>`
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: ${({ $featured }) => ($featured ? '4rem' : '2rem')};
+  `,
 }));
 
 describe('ProjectSection', () => {
   const mockProjects: ProjectUI[] = [
     {
       id: '1',
-      title: 'Project 1',
-      description: 'Description 1',
-      imageUrl: '/image1.jpg',
-      tags: ['React'],
-      liveUrl: 'https://live1.com',
-      githubUrl: 'https://github.com/1',
+      title: 'Featured Project',
+      description: 'A featured project description',
+      imageUrl: '/featured-image.jpg',
+      tags: ['React', 'TypeScript'],
+      liveUrl: 'https://example.com',
+      githubUrl: 'https://github.com/example',
       featured: true,
+      displayOrder: 0,
       createdAt: new Date(),
       updatedAt: new Date(),
       version: 1,
     },
     {
       id: '2',
-      title: 'Project 2',
-      description: 'Description 2',
-      imageUrl: '/image2.jpg',
-      tags: ['TypeScript'],
-      liveUrl: 'https://live2.com',
-      githubUrl: 'https://github.com/2',
+      title: 'Regular Project',
+      description: 'A regular project description',
+      imageUrl: '/regular-image.jpg',
+      tags: ['Next.js', 'Supabase'],
+      liveUrl: 'https://example.com',
+      githubUrl: 'https://github.com/example',
       featured: false,
+      displayOrder: 1,
       createdAt: new Date(),
       updatedAt: new Date(),
       version: 1,

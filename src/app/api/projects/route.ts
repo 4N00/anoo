@@ -23,13 +23,13 @@ const createClient = () => {
     {
       cookies: {
         getAll: () => {
-          return Array.from(cookieStore.getAll()).map(cookie => ({
+          return Array.from(cookieStore.getAll()).map((cookie) => ({
             name: cookie.name,
             value: cookie.value,
           }));
         },
         setAll: (cookies: { name: string; value: string; options?: CookieOptions }[]) => {
-          cookies.forEach(cookie => {
+          cookies.forEach((cookie) => {
             cookieStore.set(cookie.name, cookie.value, cookie.options);
           });
         },
@@ -44,7 +44,7 @@ export async function GET(): Promise<NextResponse<Project[]>> {
     const { data: projects, error } = await supabase
       .from('projects')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('display_order', { ascending: true });
 
     if (error) throw error;
 
@@ -55,16 +55,18 @@ export async function GET(): Promise<NextResponse<Project[]>> {
   }
 }
 
-export async function POST(request: Request): Promise<NextResponse<Project | { error: string; details?: any }>> {
+export async function POST(
+  request: Request
+): Promise<NextResponse<Project | { error: string; details?: any }>> {
   const supabase = createClient();
   try {
     // Get the current user
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
     if (userError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check if user is admin
@@ -75,10 +77,7 @@ export async function POST(request: Request): Promise<NextResponse<Project | { e
       .single();
 
     if (roleError || !userData || userData.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Unauthorized - Admin access required' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
     const json = await request.json();
@@ -88,17 +87,22 @@ export async function POST(request: Request): Promise<NextResponse<Project | { e
 
     const { data: project, error } = await supabase
       .from('projects')
-      .insert([{
-        title: validatedData.title,
-        description: validatedData.description,
-        image_url: validatedData.imageUrl,
-        tags: validatedData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
-        featured: validatedData.featured,
-        github_url: validatedData.githubUrl,
-        live_url: validatedData.liveUrl,
-        author_id: user.id,
-        version: 1,
-      }])
+      .insert([
+        {
+          title: validatedData.title,
+          description: validatedData.description,
+          image_url: validatedData.imageUrl,
+          tags: validatedData.tags
+            .split(',')
+            .map((tag) => tag.trim())
+            .filter(Boolean),
+          featured: validatedData.featured,
+          github_url: validatedData.githubUrl,
+          live_url: validatedData.liveUrl,
+          author_id: user.id,
+          version: 1,
+        },
+      ])
       .select()
       .single();
 
@@ -119,9 +123,6 @@ export async function POST(request: Request): Promise<NextResponse<Project | { e
     }
 
     console.error('Error creating project:', error);
-    return NextResponse.json(
-      { error: 'Failed to create project' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to create project' }, { status: 500 });
   }
 }

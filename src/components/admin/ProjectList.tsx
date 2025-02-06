@@ -2,6 +2,16 @@
 
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  type DropResult,
+  type DroppableProvided,
+  type DraggableProvided,
+  type DraggableStateSnapshot,
+} from '@hello-pangea/dnd';
+import { GripVertical } from 'lucide-react';
 import { ProjectUI } from '@/types/project';
 import { StyledButton } from '../ui/StyledButton';
 import { useToast } from '@/context/ToastContext';
@@ -9,18 +19,75 @@ import { useToast } from '@/context/ToastContext';
 const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
   margin-top: 2rem;
 `;
 
-const ProjectItem = styled.div`
+const FeaturedSection = styled.div`
+  width: 100%;
+  margin-bottom: 2rem;
+`;
+
+const FeaturedTitle = styled.h2`
+  font-size: ${({ theme }) => theme.typography.fontSize.xl};
+  color: ${({ theme }) => theme.colors.text.primary};
+  margin-bottom: 1rem;
+`;
+
+const ProjectsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem;
+  background-color: ${({ theme }) => theme.colors.background.primary};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+`;
+
+const ProjectItem = styled.div<{ $isDragging?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-  background-color: ${({ theme }) => theme.colors.background.secondary};
+  background-color: ${({ theme, $isDragging }) =>
+    $isDragging ? theme.colors.background.primary : theme.colors.background.secondary};
   border-radius: ${({ theme }) => theme.borderRadius.md};
+  box-shadow: ${({ theme, $isDragging }) => ($isDragging ? theme.shadows.lg : theme.shadows.sm)};
+  transition:
+    background-color 0.2s,
+    box-shadow 0.2s;
+  position: relative;
+  border: 2px solid
+    ${({ theme, $isDragging }) => ($isDragging ? theme.colors.primary.main : 'transparent')};
+`;
+
+const OrderNumber = styled.div`
+  position: absolute;
+  top: -0.75rem;
+  left: -0.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: ${({ theme }) => theme.colors.primary.main};
+  color: ${({ theme }) => theme.colors.primary.contrast};
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: ${({ theme }) => theme.typography.fontSize.sm};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
   box-shadow: ${({ theme }) => theme.shadows.sm};
+`;
+
+const DragHandle = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  color: ${({ theme }) => theme.colors.text.secondary};
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
 `;
 
 const ProjectInfo = styled.div`
@@ -39,6 +106,7 @@ const ProjectTags = styled.div`
   display: flex;
   gap: 0.5rem;
   margin-top: 0.5rem;
+  flex-wrap: wrap;
 `;
 
 const Tag = styled.span`
@@ -58,9 +126,10 @@ interface ProjectListProps {
   projects: ProjectUI[];
   onEdit: (project: ProjectUI) => void;
   onDelete: (projectId: string) => void;
+  onReorder?: (startIndex: number, endIndex: number) => void;
 }
 
-const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit, onDelete }) => {
+const ProjectList = ({ projects, onEdit, onDelete, onReorder }: ProjectListProps) => {
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const { showToast } = useToast();
 
@@ -83,33 +152,53 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit, onDelete })
       showToast('Project deleted successfully', 'success');
     } catch (error) {
       console.error('Error deleting project:', error);
-      showToast(
-        error instanceof Error ? error.message : 'Failed to delete project',
-        'error'
-      );
+      showToast(error instanceof Error ? error.message : 'Failed to delete project', 'error');
     } finally {
       setIsDeleting(null);
     }
   };
 
-  return (
-    <ListContainer>
-      {projects.map(project => (
-        <ProjectItem key={project.id}>
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination || !onReorder) return;
+
+    const sourceIndex = result.source.index;
+    const destinationIndex = result.destination.index;
+
+    if (sourceIndex === destinationIndex) return;
+
+    onReorder(sourceIndex, destinationIndex);
+  };
+
+  const featuredProjects = projects.filter((p) => p.featured);
+  const regularProjects = projects.filter((p) => !p.featured);
+
+  const renderProject = (project: ProjectUI, index: number, isDraggable = true) => (
+    <Draggable
+      key={project.id}
+      draggableId={project.id}
+      index={index}
+      isDragDisabled={!isDraggable}
+    >
+      {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
+        <ProjectItem
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          $isDragging={snapshot.isDragging}
+        >
+          <OrderNumber>{index + 1}</OrderNumber>
+          <DragHandle {...provided.dragHandleProps}>
+            <GripVertical size={20} />
+          </DragHandle>
           <ProjectInfo>
             <ProjectTitle>{project.title}</ProjectTitle>
             <ProjectTags>
-              {project.tags.map((tag, index) => (
-                <Tag key={index}>{tag}</Tag>
+              {project.tags.map((tag, tagIndex) => (
+                <Tag key={tagIndex}>{tag}</Tag>
               ))}
             </ProjectTags>
           </ProjectInfo>
           <ButtonGroup>
-            <StyledButton
-              onClick={() => onEdit(project)}
-              $variant="secondary"
-              type="button"
-            >
+            <StyledButton onClick={() => onEdit(project)} $variant="secondary" type="button">
               Edit
             </StyledButton>
             <StyledButton
@@ -122,13 +211,43 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit, onDelete })
             </StyledButton>
           </ButtonGroup>
         </ProjectItem>
-      ))}
-      {projects.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          No projects found. Create your first project using the form above.
-        </div>
       )}
-    </ListContainer>
+    </Draggable>
+  );
+
+  return (
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <ListContainer>
+        {featuredProjects.length > 0 && (
+          <FeaturedSection>
+            <FeaturedTitle>Featured Projects</FeaturedTitle>
+            <Droppable droppableId="featured-projects">
+              {(provided: DroppableProvided) => (
+                <ProjectsContainer ref={provided.innerRef} {...provided.droppableProps}>
+                  {featuredProjects.map((project, index) => renderProject(project, index, false))}
+                  {provided.placeholder}
+                </ProjectsContainer>
+              )}
+            </Droppable>
+          </FeaturedSection>
+        )}
+
+        <Droppable droppableId="project-list">
+          {(provided: DroppableProvided) => (
+            <ProjectsContainer ref={provided.innerRef} {...provided.droppableProps}>
+              {regularProjects.map((project, index) => renderProject(project, index))}
+              {provided.placeholder}
+            </ProjectsContainer>
+          )}
+        </Droppable>
+
+        {projects.length === 0 && (
+          <div style={{ textAlign: 'center', padding: '2rem' }}>
+            No projects found. Create your first project using the form above.
+          </div>
+        )}
+      </ListContainer>
+    </DragDropContext>
   );
 };
 

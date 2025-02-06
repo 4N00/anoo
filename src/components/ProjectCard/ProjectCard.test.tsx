@@ -51,13 +51,14 @@ describe('ProjectCard', () => {
   const mockProject: ProjectUI = {
     id: '1',
     title: 'Test Project',
-    description: 'Test Description',
+    description: 'A test project description',
     imageUrl: '/test-image.jpg',
-    tags: ['React', 'TypeScript', 'Node.js'],
-    liveUrl: 'https://test-live.com',
-    githubUrl: 'https://github.com/test',
+    tags: ['React', 'TypeScript'],
+    liveUrl: 'https://example.com',
+    githubUrl: 'https://github.com/example',
     featured: true,
-    version: 0,
+    displayOrder: 0,
+    version: 1,
     createdAt: new Date(),
     updatedAt: new Date(),
   };
@@ -73,7 +74,7 @@ describe('ProjectCard', () => {
     const { getByText, getByAltText } = render(<ProjectCard project={mockProject} />);
 
     expect(getByText('Test Project')).toBeInTheDocument();
-    expect(getByText('Test Description')).toBeInTheDocument();
+    expect(getByText('A test project description')).toBeInTheDocument();
     expect(getByText('React / TypeScript')).toBeInTheDocument();
     expect(getByAltText('Test Project')).toHaveAttribute('src', '/test-image.jpg');
   });
@@ -91,7 +92,7 @@ describe('ProjectCard', () => {
     const { getByTestId } = render(<ProjectCard project={mockProject} />);
 
     fireEvent.click(getByTestId('project-card'));
-    expect(mockWindowOpen).toHaveBeenCalledWith('https://test-live.com', '_blank');
+    expect(mockWindowOpen).toHaveBeenCalledWith('https://example.com', '_blank');
   });
 
   it('opens github URL when clicked, no onClick handler and no live URL', () => {
@@ -99,7 +100,7 @@ describe('ProjectCard', () => {
     const { getByTestId } = render(<ProjectCard project={projectWithoutLiveUrl} />);
 
     fireEvent.click(getByTestId('project-card'));
-    expect(mockWindowOpen).toHaveBeenCalledWith('https://github.com/test', '_blank');
+    expect(mockWindowOpen).toHaveBeenCalledWith('https://github.com/example', '_blank');
   });
 
   it('limits displayed tags to first two', () => {

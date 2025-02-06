@@ -7,6 +7,7 @@ export interface Project {
   featured: boolean;
   github_url: string | null;
   live_url: string | null;
+  display_order: number;
   created_at: string;
   updated_at: string;
   version: number;
@@ -25,6 +26,7 @@ export interface ProjectUI {
   featured: boolean;
   githubUrl: string | null;
   liveUrl: string | null;
+  displayOrder: number;
   createdAt: Date;
   updatedAt: Date;
   version: number;
@@ -53,6 +55,7 @@ export const toProjectUI = (project: Project): ProjectUI => ({
   featured: project.featured,
   githubUrl: project.github_url,
   liveUrl: project.live_url,
+  displayOrder: project.display_order,
   createdAt: new Date(project.created_at),
   updatedAt: new Date(project.updated_at),
   version: project.version,
@@ -61,7 +64,7 @@ export const toProjectUI = (project: Project): ProjectUI => ({
 // Convert UI format to database format
 export const toProjectDB = (
   data: ProjectFormData
-): Omit<Project, 'id' | 'created_at' | 'updated_at' | 'version'> => ({
+): Omit<Project, 'id' | 'created_at' | 'updated_at' | 'version' | 'display_order'> => ({
   title: data.title,
   description: data.description,
   image_url: data.imageUrl,
