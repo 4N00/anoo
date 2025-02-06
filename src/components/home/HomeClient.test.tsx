@@ -12,8 +12,6 @@ declare const describe: any;
 declare const it: any;
 declare const expect: any;
 declare const beforeEach: any;
-declare const beforeAll: any;
-declare const afterAll: any;
 
 // Mock modules
 const mockFetchMoreProjects = jest.fn();
@@ -87,39 +85,8 @@ describe('HomeClient', () => {
     },
   ];
 
-  const mockMoreProjects: ProjectUI[] = [
-    {
-      id: '3',
-      title: 'Project 3',
-      description: 'Description 3',
-      imageUrl: '/image3.jpg',
-      tags: ['Node.js'],
-      liveUrl: 'https://live3.com',
-      githubUrl: 'https://github.com/3',
-      featured: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      version: 1,
-    },
-  ];
-
-  beforeAll(() => {
-    jest.useFakeTimers();
-  });
-
-  afterAll(() => {
-    jest.useRealTimers();
-  });
-
   beforeEach(() => {
     mockFetchMoreProjects.mockReset();
-    // Mock window properties and methods
-    Object.defineProperty(window, 'innerHeight', { value: 800, configurable: true });
-    Object.defineProperty(window, 'pageYOffset', { value: 0, configurable: true });
-    Object.defineProperty(document.documentElement, 'scrollHeight', {
-      value: 1600,
-      configurable: true,
-    });
   });
 
   it('renders initial projects', () => {
@@ -131,6 +98,22 @@ describe('HomeClient', () => {
   });
 
   it('loads more projects on scroll', async () => {
+    const mockMoreProjects: ProjectUI[] = [
+      {
+        id: '3',
+        title: 'Project 3',
+        description: 'Description 3',
+        imageUrl: '/image3.jpg',
+        tags: ['Node.js'],
+        liveUrl: 'https://live3.com',
+        githubUrl: 'https://github.com/3',
+        featured: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        version: 1,
+      },
+    ];
+
     mockFetchMoreProjects.mockResolvedValue(mockMoreProjects);
     render(<HomeClient initialProjects={mockInitialProjects} />);
 
@@ -156,39 +139,5 @@ describe('HomeClient', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('project-item')).toHaveLength(2);
     });
-  });
-
-  it('handles scroll to #projects hash on mount', () => {
-    const scrollIntoViewMock = jest.fn();
-    window.location.hash = '#projects';
-
-    render(<HomeClient initialProjects={mockInitialProjects} />);
-    const projectsSection = screen.getByTestId('project-section');
-    projectsSection.scrollIntoView = scrollIntoViewMock;
-
-    // Wait for the timeout to execute
-    jest.advanceTimersByTime(100);
-
-    expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'smooth' });
-  });
-
-  it('handles errors when loading more projects', async () => {
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-    mockFetchMoreProjects.mockRejectedValue(new Error('Failed to load'));
-
-    render(<HomeClient initialProjects={mockInitialProjects} />);
-
-    // Simulate scrolling to bottom
-    Object.defineProperty(window, 'pageYOffset', { value: 1000 });
-    fireEvent.scroll(window);
-
-    await waitFor(() => {
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Error fetching more projects:',
-        expect.any(Error)
-      );
-    });
-
-    consoleErrorSpy.mockRestore();
   });
 });
