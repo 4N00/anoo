@@ -1,9 +1,10 @@
 /// <reference types="@testing-library/jest-dom" />
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import HomeClient from './HomeClient';
 import type { ProjectUI } from '@/types/project';
+import { render } from '@/test-utils/test-utils';
 
 // Declare Jest globals
 declare const jest: any;
@@ -11,6 +12,8 @@ declare const describe: any;
 declare const it: any;
 declare const expect: any;
 declare const beforeEach: any;
+declare const beforeAll: any;
+declare const afterAll: any;
 
 // Mock modules
 const mockFetchMoreProjects = jest.fn();
@@ -28,17 +31,21 @@ jest.mock('@/components/HeroSection', () => {
 });
 
 jest.mock('@/components/ProjectSection', () => {
-  return function MockProjectSection({ projects }: { projects: ProjectUI[] }) {
-    return (
-      <div data-testid="project-section">
-        {projects.map((project) => (
-          <div key={project.id} data-testid="project-item">
-            {project.title}
-          </div>
-        ))}
-      </div>
-    );
-  };
+  const MockProjectSection = React.forwardRef<HTMLDivElement, { projects: ProjectUI[] }>(
+    ({ projects }, ref) => {
+      return (
+        <div ref={ref} data-testid="project-section">
+          {projects.map((project) => (
+            <div key={project.id} data-testid="project-item">
+              {project.title}
+            </div>
+          ))}
+        </div>
+      );
+    }
+  );
+  MockProjectSection.displayName = 'MockProjectSection';
+  return MockProjectSection;
 });
 
 // Mock framer-motion
@@ -95,6 +102,14 @@ describe('HomeClient', () => {
       version: 1,
     },
   ];
+
+  beforeAll(() => {
+    jest.useFakeTimers();
+  });
+
+  afterAll(() => {
+    jest.useRealTimers();
+  });
 
   beforeEach(() => {
     mockFetchMoreProjects.mockReset();

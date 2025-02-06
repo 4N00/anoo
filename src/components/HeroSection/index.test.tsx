@@ -1,6 +1,6 @@
 /// <reference types="@testing-library/jest-dom" />
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '@/test-utils/test-utils';
 import '@testing-library/jest-dom';
 import HeroSection from './index';
 
@@ -55,17 +55,18 @@ describe('HeroSection', () => {
   it('renders the title correctly', () => {
     render(<HeroSection />);
 
+    // Test single occurrence letters
     expect(screen.getByText('H')).toBeInTheDocument();
-    expect(screen.getByText('I')).toBeInTheDocument();
     expect(screen.getByText(',')).toBeInTheDocument();
-    expect(screen.getByText('I')).toBeInTheDocument();
     expect(screen.getByText("'")).toBeInTheDocument();
     expect(screen.getByText('M')).toBeInTheDocument();
     expect(screen.getByText('A')).toBeInTheDocument();
     expect(screen.getByText('N')).toBeInTheDocument();
-    expect(screen.getByText('O')).toBeInTheDocument();
-    expect(screen.getByText('O')).toBeInTheDocument();
     expect(screen.getByText('.')).toBeInTheDocument();
+
+    // Test multiple occurrence letters
+    expect(screen.getAllByText('I')).toHaveLength(2);
+    expect(screen.getAllByText('O')).toHaveLength(2);
   });
 
   it('renders the subtitle', () => {

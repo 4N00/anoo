@@ -1,6 +1,6 @@
 /// <reference types="@testing-library/jest-dom" />
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '@/test-utils/test-utils';
 import '@testing-library/jest-dom';
 import PageFooter from './index';
 
@@ -19,12 +19,6 @@ mockIntersectionObserver.mockImplementation(() => ({
   disconnect: jest.fn(),
 }));
 window.IntersectionObserver = mockIntersectionObserver;
-
-// Mock styled-components
-jest.mock('styled-components', () => ({
-  ...jest.requireActual('styled-components'),
-  default: (component: any) => component,
-}));
 
 // Mock FooterLink component
 jest.mock('./styles', () => ({
