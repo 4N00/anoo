@@ -4,7 +4,6 @@ import { render } from '../../test-utils/test-utils';
 import '@testing-library/jest-dom';
 import ProjectSection from './index';
 import { ProjectUI } from '@/types/project';
-import styled from 'styled-components';
 
 // Declare Jest globals
 declare const jest: any;
@@ -30,12 +29,16 @@ jest.mock('../ProjectCard/ProjectCard', () => {
 
 // Mock the styled components
 jest.mock('../ProjectCard/styles', () => ({
-  ProjectContainer: styled.div<{ $featured?: boolean }>`
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    margin-bottom: ${({ $featured }) => ($featured ? '4rem' : '2rem')};
-  `,
+  ProjectContainer: function MockProjectContainer({
+    children,
+    $featured,
+  }: React.PropsWithChildren<{ $featured?: boolean }>) {
+    return (
+      <div data-testid="project-container" data-featured={$featured}>
+        {children}
+      </div>
+    );
+  },
 }));
 
 describe('ProjectSection', () => {
