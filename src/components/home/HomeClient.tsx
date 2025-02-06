@@ -14,7 +14,6 @@ interface HomeClientProps {
 }
 
 const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
   const projectsRef = useRef<HTMLElement>(null);
   const [projects, setProjects] = useState<ProjectUI[]>(initialProjects);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,8 +22,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
   const { fetchMoreProjects } = useProjects();
 
   const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start', 'end'],
+    offset: ['start', 'end start'],
   });
 
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
@@ -80,7 +78,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
   }, []);
 
   return (
-    <MainContainer ref={containerRef}>
+    <MainContainer>
       <motion.div style={{ opacity }}>
         <HeroSection />
       </motion.div>

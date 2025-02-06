@@ -33,9 +33,10 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(
         initial="initial"
         animate="animate"
         variants={containerVariants}
+        style={{ position: 'relative' }}
       >
         {title && <h2>{title}</h2>}
-        <ProjectContainer featured={featured}>
+        <ProjectContainer $featured={featured}>
           {projects.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
           ))}

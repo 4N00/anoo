@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface ProjectContainerProps {
-  featured?: boolean;
+  $featured?: boolean;
 }
 
 export const ProjectContainer = styled.div<ProjectContainerProps>`
@@ -9,14 +9,14 @@ export const ProjectContainer = styled.div<ProjectContainerProps>`
   gap: 3rem;
   grid-template-columns: 1fr;
   padding: 0 1rem;
-  
+
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-template-columns: ${props => props.featured ? '1fr' : '1fr 1fr'};
-    padding: ${props => props.featured ? '0 2rem' : '0'};
+    grid-template-columns: ${(props) => (props.$featured ? '1fr' : '1fr 1fr')};
+    padding: ${(props) => (props.$featured ? '0 2rem' : '0')};
   }
-  
-  max-height: ${props => props.featured ? '800px' : 'none'};
-  overflow: ${props => props.featured ? 'hidden' : 'visible'};
+
+  max-height: ${(props) => (props.$featured ? '800px' : 'none')};
+  overflow: ${(props) => (props.$featured ? 'hidden' : 'visible')};
 `;
 
 export const ProjectCardWrapper = styled.div`
@@ -29,7 +29,7 @@ export const ProjectImage = styled.img`
   aspect-ratio: 4/3;
   object-fit: cover;
   transition: transform ${({ theme }) => theme.transitions.normal};
-  
+
   &:hover {
     transform: scale(1.02);
   }

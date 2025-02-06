@@ -80,6 +80,8 @@ export const Background = styled.div<{ $color: string }>`
 export const MainContainer = styled.div`
   color: ${({ theme }) => theme.colors.text.primary};
   position: relative;
+  min-height: 100vh;
+  overflow: hidden;
 `;
 
 interface ProjectContainerProps {
