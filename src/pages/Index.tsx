@@ -13,6 +13,7 @@ import {
   ProjectNumber,
   Section,
   ProjectCard,
+  ProjectCardWrapper,
   FeaturedGrid,
 } from '../styles/HomeStyles';
 import { ProjectUI } from '@/types/project';
@@ -83,12 +84,14 @@ const Index: React.FC<IndexProps> = ({ initialProjects }) => {
             <HeaderText>FEATURED</HeaderText>
             <FeaturedGrid>
               {featuredProjects.map((project, index) => (
-                <ProjectCard key={project.id} $isFeatured>
-                  <ProjectNumber>F/{String(index + 1).padStart(2, '0')}</ProjectNumber>
-                  <img src={project.imageUrl} alt={project.title} />
-                  <ProjectTitle>{project.title}</ProjectTitle>
-                  <ProjectDescription>{project.description}</ProjectDescription>
-                </ProjectCard>
+                <ProjectCardWrapper key={project.id}>
+                  <ProjectCard $isFeatured>
+                    <ProjectNumber>F/{String(index + 1).padStart(2, '0')}</ProjectNumber>
+                    <img src={project.imageUrl} alt={project.title} />
+                    <ProjectTitle>{project.title}</ProjectTitle>
+                    <ProjectDescription>{project.description}</ProjectDescription>
+                  </ProjectCard>
+                </ProjectCardWrapper>
               ))}
             </FeaturedGrid>
           </Section>
@@ -103,12 +106,14 @@ const Index: React.FC<IndexProps> = ({ initialProjects }) => {
           <HeaderText>PROJECTS</HeaderText>
           <ProjectGrid>
             {nonFeaturedProjects.map((project, index) => (
-              <ProjectCard key={project.id}>
-                <ProjectNumber>P/{String(index + 1).padStart(2, '0')}</ProjectNumber>
-                <img src={project.imageUrl} alt={project.title} />
-                <ProjectTitle>{project.title}</ProjectTitle>
-                <ProjectDescription>{project.description}</ProjectDescription>
-              </ProjectCard>
+              <ProjectCardWrapper key={project.id}>
+                <ProjectCard>
+                  <ProjectNumber>P/{String(index + 1).padStart(2, '0')}</ProjectNumber>
+                  <img src={project.imageUrl} alt={project.title} />
+                  <ProjectTitle>{project.title}</ProjectTitle>
+                  <ProjectDescription>{project.description}</ProjectDescription>
+                </ProjectCard>
+              </ProjectCardWrapper>
             ))}
           </ProjectGrid>
         </Section>

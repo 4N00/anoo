@@ -95,7 +95,18 @@ interface ProjectCardProps {
   $isFeatured?: boolean;
 }
 
+export const ProjectCardWrapper = styled.div`
+  display: block;
+`;
+
 export const ProjectCard = styled.div<ProjectCardProps>`
+  display: block;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
   img {
     width: 100%;
     height: auto;

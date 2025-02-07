@@ -11,7 +11,7 @@ import {
   ProjectCategory,
   ProjectDescription,
 } from './styles';
-import { useScroll, useTransform } from 'framer-motion';
+import { useScroll, useTransform, motion } from 'framer-motion';
 
 interface ProjectCardProps {
   project: ProjectUI;
@@ -54,33 +54,29 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
   };
 
   return (
-    <ProjectCardWrapper
-      ref={ref}
-      style={{
-        filter: blur,
-        opacity,
-        y,
-      }}
-      whileHover={{
-        y: -5,
-        transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] },
-      }}
-      onClick={handleClick}
-    >
-      <ProjectImage 
-        variants={imageVariants} 
-        whileHover="hover"
-        src={project.imageUrl} 
-        alt={project.title}
-        loading="lazy"
-      />
-      <ProjectInfo>
-        <ProjectHeader>
-          <ProjectTitle>{project.title}</ProjectTitle>
-          <ProjectCategory>{project.tags.slice(0, 2).join(' / ')}</ProjectCategory>
-        </ProjectHeader>
-        <ProjectDescription>{project.description}</ProjectDescription>
-      </ProjectInfo>
+    <ProjectCardWrapper ref={ref} onClick={handleClick}>
+      <motion.div
+        style={{
+          filter: blur,
+          opacity,
+          y,
+        }}
+      >
+        <ProjectImage 
+          variants={imageVariants} 
+          whileHover="hover"
+          src={project.imageUrl} 
+          alt={project.title}
+          loading="lazy"
+        />
+        <ProjectInfo>
+          <ProjectHeader>
+            <ProjectTitle>{project.title}</ProjectTitle>
+            <ProjectCategory>{project.tags.slice(0, 2).join(' / ')}</ProjectCategory>
+          </ProjectHeader>
+          <ProjectDescription>{project.description}</ProjectDescription>
+        </ProjectInfo>
+      </motion.div>
     </ProjectCardWrapper>
   );
 };
