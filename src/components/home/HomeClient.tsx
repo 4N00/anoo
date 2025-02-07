@@ -77,6 +77,36 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleScroll = debounce(() => {
+      const scrollPosition = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const totalHeight = document.documentElement.scrollHeight;
+
+      // Calculate scroll percentage
+      const scrollPercentage = (scrollPosition + viewportHeight) / totalHeight;
+
+      // Change background color based on scroll position
+      if (scrollPercentage < 0.3) {
+        document.documentElement.style.backgroundColor = '#FFFFFF';
+      } else if (scrollPercentage < 0.6) {
+        document.documentElement.style.backgroundColor = '#F2FCE2';
+      } else if (scrollPercentage < 0.9) {
+        document.documentElement.style.backgroundColor = '#FEF7CD';
+      } else {
+        document.documentElement.style.backgroundColor = '#E5DEFF';
+      }
+    }, 100);
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial call
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.documentElement.style.backgroundColor = ''; // Reset on unmount
+    };
+  }, []);
+
   return (
     <MainContainer>
       <motion.div style={{ opacity }}>

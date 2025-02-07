@@ -9,7 +9,7 @@ import { ToastProvider } from '../context/ToastContext';
 import Navbar from '../components/Navbar';
 import PageFooter from '../components/PageFooter';
 import { AnimatePresence } from 'framer-motion';
-import { styled } from 'styled-components';
+import { styled, createGlobalStyle } from 'styled-components';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -43,12 +43,19 @@ const MainContent = styled.div`
   padding-top: 64px; /* Navbar height */
 `;
 
+const GlobalStyle = createGlobalStyle`
+  body {
+    transition: background-color 0.6s ease;
+  }
+`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={inter.className}>
         <QueryClientProvider client={getQueryClient()}>
           <ThemeProvider>
+            <GlobalStyle />
             <ToastProvider>
               <AuthProvider>
                 <ProjectsProvider>
