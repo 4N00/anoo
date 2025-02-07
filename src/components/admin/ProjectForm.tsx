@@ -39,12 +39,19 @@ const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  max-width: 600px;
-  margin: 2rem auto;
   padding: 2rem;
-  background: ${({ theme }) => theme.colors.background.secondary};
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
-  box-shadow: ${({ theme }) => theme.shadows.md};
+`;
+
+const FormHeader = styled.div`
+  padding: ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.lg} 0;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.text.secondary}20;
+`;
+
+const FormTitle = styled.h2`
+  font-size: ${({ theme }) => theme.typography.fontSize.xl};
+  color: ${({ theme }) => theme.colors.text.primary};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
 const InputGroup = styled.div`
@@ -174,75 +181,80 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSave, onClose }) =
   };
 
   return (
-    <FormContainer onSubmit={handleSubmit(handleFormSubmit)}>
-      <InputGroup>
-        <Label>Title</Label>
-        <FormInput
-          {...register('title')}
-          placeholder="Project Title"
-          error={errors.title?.message}
-        />
-      </InputGroup>
+    <>
+      <FormHeader>
+        <FormTitle>{project ? 'Edit Project' : 'New Project'}</FormTitle>
+      </FormHeader>
+      <FormContainer onSubmit={handleSubmit(handleFormSubmit)}>
+        <InputGroup>
+          <Label>Title</Label>
+          <FormInput
+            {...register('title')}
+            placeholder="Project Title"
+            error={errors.title?.message}
+          />
+        </InputGroup>
 
-      <InputGroup>
-        <Label>Description</Label>
-        <FormInput
-          {...register('description')}
-          placeholder="Project Description"
-          error={errors.description?.message}
-        />
-      </InputGroup>
+        <InputGroup>
+          <Label>Description</Label>
+          <FormInput
+            {...register('description')}
+            placeholder="Project Description"
+            error={errors.description?.message}
+          />
+        </InputGroup>
 
-      <InputGroup>
-        <Label>Image URL</Label>
-        <FormInput
-          {...register('imageUrl')}
-          placeholder="Image URL"
-          error={errors.imageUrl?.message}
-        />
-      </InputGroup>
+        <InputGroup>
+          <Label>Image URL</Label>
+          <FormInput
+            {...register('imageUrl')}
+            placeholder="Image URL"
+            error={errors.imageUrl?.message}
+          />
+        </InputGroup>
 
-      <InputGroup>
-        <Label>Tags</Label>
-        <FormInput
-          {...register('tags')}
-          placeholder="Tags (comma separated, e.g., React, TypeScript, Next.js)"
-          error={errors.tags?.message}
-        />
-      </InputGroup>
+        <InputGroup>
+          <Label>Tags</Label>
+          <FormInput
+            {...register('tags')}
+            placeholder="Tags (comma separated, e.g., React, TypeScript, Next.js)"
+            error={errors.tags?.message}
+          />
+        </InputGroup>
 
-      <CheckboxContainer>
-        <input type="checkbox" {...register('featured')} id="featured" />
-        <Label htmlFor="featured">Featured Project</Label>
-      </CheckboxContainer>
+        <CheckboxContainer>
+          <input type="checkbox" {...register('featured')} id="featured" />
+          <Label htmlFor="featured">Featured Project</Label>
+        </CheckboxContainer>
 
-      <InputGroup>
-        <Label>GitHub URL (optional)</Label>
-        <FormInput
-          {...register('githubUrl')}
-          placeholder="GitHub URL (leave empty if none)"
-          error={errors.githubUrl?.message}
-        />
-      </InputGroup>
+        <InputGroup>
+          <Label>GitHub URL (optional)</Label>
+          <FormInput
+            {...register('githubUrl')}
+            placeholder="GitHub URL (leave empty if none)"
+            error={errors.githubUrl?.message}
+          />
+        </InputGroup>
 
-      <InputGroup>
-        <Label>Live URL (optional)</Label>
-        <FormInput
-          {...register('liveUrl')}
-          placeholder="Live URL (leave empty if none)"
-          error={errors.liveUrl?.message}
-        />
-      </InputGroup>
+        <InputGroup>
+          <Label>Live URL (optional)</Label>
+          <FormInput
+            {...register('liveUrl')}
+            placeholder="Live URL (leave empty if none)"
+            error={errors.liveUrl?.message}
+          />
+        </InputGroup>
 
-      <ButtonContainer>
-        <Button $variant="secondary" onClick={onClose} type="button">
-          Cancel
-        </Button>
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving...' : 'Save Project'}
-        </Button>
-      </ButtonContainer>
-    </FormContainer>
+        <ButtonContainer>
+          <Button $variant="secondary" onClick={onClose} type="button">
+            Cancel
+          </Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Saving...' : 'Save Project'}
+          </Button>
+        </ButtonContainer>
+      </FormContainer>
+    </>
   );
 };
 

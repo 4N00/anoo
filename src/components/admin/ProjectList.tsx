@@ -26,7 +26,7 @@ const SectionTitle = styled.h2`
   font-size: ${({ theme }) => theme.typography.fontSize.lg};
   color: ${({ theme }) => theme.colors.text.secondary};
   font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  padding: ${({ theme }) => `${theme.spacing.lg} ${theme.spacing.xl}`};
   border-bottom: 1px solid ${({ theme }) => theme.colors.text.secondary}20;
   display: flex;
   align-items: center;
@@ -51,7 +51,7 @@ const ProjectItem = styled.div<{ $isDragging?: boolean }>`
   grid-template-columns: auto 1fr auto auto auto auto;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.md};
-  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  padding: ${({ theme }) => `${theme.spacing.lg} ${theme.spacing.xl}`};
   border-bottom: 1px solid ${({ theme }) => theme.colors.text.secondary}20;
   background: ${({ $isDragging, theme }) =>
     $isDragging ? theme.colors.background.secondary : theme.colors.background.primary};
@@ -162,7 +162,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit, onDelete, o
       <DragDropContext onDragEnd={handleDragEnd}>
         {featuredProjects.length > 0 && (
           <>
-            <SectionTitle>Week 1</SectionTitle>
+            <SectionTitle>Featured Projects</SectionTitle>
             <Droppable droppableId="featured-projects">
               {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
                 <ProjectsContainer
@@ -184,12 +184,13 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit, onDelete, o
                           <ProjectTitle>{project.title}</ProjectTitle>
                           <MetaItem>
                             <User />
-                            John Doe
+                            Admin
                           </MetaItem>
                           <MetaItem>
-                            <Clock />8 hours
+                            <Clock />
+                            {new Date(project.updatedAt || '').toLocaleDateString()}
                           </MetaItem>
-                          <StatusBadge $status="active">In Progress</StatusBadge>
+                          <StatusBadge $status="active">Featured</StatusBadge>
                           <Actions>
                             <Button $variant="secondary" onClick={() => onEdit(project)}>
                               Edit
@@ -209,7 +210,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit, onDelete, o
           </>
         )}
 
-        <SectionTitle>Week 2</SectionTitle>
+        <SectionTitle>All Projects</SectionTitle>
         <Droppable droppableId="project-list">
           {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
             <ProjectsContainer
@@ -231,12 +232,13 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit, onDelete, o
                       <ProjectTitle>{project.title}</ProjectTitle>
                       <MetaItem>
                         <User />
-                        Jane Smith
+                        Admin
                       </MetaItem>
                       <MetaItem>
-                        <Clock />6 hours
+                        <Clock />
+                        {new Date(project.updatedAt || '').toLocaleDateString()}
                       </MetaItem>
-                      <StatusBadge $status="completed">Done</StatusBadge>
+                      <StatusBadge $status="completed">Published</StatusBadge>
                       <Actions>
                         <Button $variant="secondary" onClick={() => onEdit(project)}>
                           Edit

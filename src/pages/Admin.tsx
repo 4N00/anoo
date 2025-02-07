@@ -7,26 +7,30 @@ import ProjectList from '@/components/admin/ProjectList';
 import ProjectForm from '@/components/admin/ProjectForm';
 import { useToast } from '@/context/ToastContext';
 import { Button } from '@/styles/components/Button';
-import { Search, Filter, SortAsc, Plus, User, Clock } from 'lucide-react';
+import { Search, Filter, SortAsc, Plus, User } from 'lucide-react';
+import Modal from '@/components/ui/Modal';
 
 const AdminContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.lg};
-  background: ${({ theme }) => theme.colors.background.secondary};
   min-height: calc(100vh - 64px);
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
 `;
 
 const ContentWrapper = styled.div`
+  width: 100%;
   background: ${({ theme }) => theme.colors.background.primary};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
-  padding: ${({ theme }) => theme.spacing.lg};
   box-shadow: ${({ theme }) => theme.shadows.sm};
 `;
 
 const Header = styled.header`
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  padding: ${({ theme }) => `${theme.spacing.lg} 0`};
   border-bottom: 1px solid ${({ theme }) => theme.colors.text.secondary}20;
 `;
 
@@ -49,7 +53,7 @@ const ToolBar = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
-  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  padding: ${({ theme }) => `${theme.spacing.lg} ${theme.spacing.xl}`};
   background: ${({ theme }) => theme.colors.background.secondary};
   border-bottom: 1px solid ${({ theme }) => theme.colors.text.secondary}20;
 `;
@@ -277,19 +281,19 @@ const Admin: React.FC<AdminProps> = ({ initialProjects }) => {
       <ContentWrapper>
         <Header>
           <Title>
-            <Clock />
-            Timesheet
+            <User />
+            Admin Panel
           </Title>
           <AddButton onClick={handleAddProject} disabled={isSaving || isDeleting}>
             <Plus />
-            New Entry
+            New Project
           </AddButton>
         </Header>
 
         <ToolBar>
           <SearchWrapper>
             <Search />
-            <SearchInput placeholder="Search entries..." disabled={isSaving || isDeleting} />
+            <SearchInput placeholder="Search projects..." disabled={isSaving || isDeleting} />
           </SearchWrapper>
           <IconButton disabled={isSaving || isDeleting}>
             <User />
@@ -314,9 +318,13 @@ const Admin: React.FC<AdminProps> = ({ initialProjects }) => {
           onReorder={handleProjectReorder}
         />
 
-        {showForm && (
-          <ProjectForm project={editingProject} onSave={handleSave} onClose={handleCloseForm} />
-        )}
+        <Modal isOpen={showForm} onClose={handleCloseForm}>
+          <ProjectForm 
+            project={editingProject} 
+            onSave={handleSave} 
+            onClose={handleCloseForm} 
+          />
+        </Modal>
       </ContentWrapper>
     </AdminContainer>
   );

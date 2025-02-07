@@ -1,129 +1,106 @@
-import React, { useEffect, useRef } from 'react';
-import styled from 'styled-components';
-import { createPortal } from 'react-dom';
-import Button from './Button';
+import React, { useEffect } from 'react';
+import { styled } from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X } from 'lucide-react';
 
-// Remove or comment out the unused variable
-// const fadeIn = keyframes`
-//   from {
-//     opacity: 0;
-//   }
-//   to {
-//     opacity: 1;
-//   }
-// `;
+const Overlay = styled(motion.div)`
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: ${({ theme }) => theme.zIndex.modal};
+  padding: ${({ theme }) => theme.spacing.lg};
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+`;
 
-// Remove or comment out the unused variable
-// const slideIn = keyframes`
-//   from {
-//     transform: translateY(-20px);
-//     opacity: 0;
-//   }
-//   to {
-//     transform: translateY(0);
-//     opacity: 1;
-//   }
-// `;
+const ModalContainer = styled(motion.div)`
+  background: ${({ theme }) => theme.colors.background.primary};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  box-shadow: ${({ theme }) => theme.shadows.lg};
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: ${({ theme }) => theme.spacing.md};
+  right: ${({ theme }) => theme.spacing.md};
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.colors.text.secondary};
+  cursor: pointer;
+  padding: ${({ theme }) => theme.spacing.xs};
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.background.secondary};
+    color: ${({ theme }) => theme.colors.text.primary};
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+`;
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
   children: React.ReactNode;
-  size?: 'small' | 'medium' | 'large';
-  showCloseButton?: boolean;
 }
 
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: ${({ theme }) => theme.zIndex.modal};
-  // Removed unused animation
-  padding: ${({ theme }) => theme.spacing.lg};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-`;
-
-export const ModalHeader = styled.h2`
-  font-size: ${({ theme }) => theme.typography.fontSize.lg};
-  color: ${({ theme }) => theme.colors.text.primary};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-`;
-
-const CloseButton = styled(Button)`
-  padding: 0.5rem;
-  min-width: unset;
-  height: unset;
-`;
-
-const Content = styled.div`
-  padding: 1.5rem;
-  overflow-y: auto;
-  flex: 1;
-
-  /* Custom scrollbar styling */
-  ${({ theme }) => theme.mixins.scrollbar}
-`;
-
-export default function Modal({
-  isOpen,
-  onClose,
-  title,
-  children,
-  showCloseButton = true,
-}: ModalProps) {
-  const overlayRef = useRef<HTMLDivElement>(null);
-
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  // Close on escape key
   useEffect(() => {
-    if (!isOpen) return;
-
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose();
       }
     };
 
-    const handleClick = (event: MouseEvent) => {
-      if (event.target === overlayRef.current) {
-        onClose();
-      }
-    };
-
-    document.addEventListener('keydown', handleEscape);
-    document.addEventListener('click', handleClick);
-
-    // Prevent body scroll when modal is open
-    document.body.style.overflow = 'hidden';
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.removeEventListener('click', handleClick);
-      document.body.style.overflow = 'unset';
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
-
-  // Use portal to render modal at the root level
-  return createPortal(
-    <Overlay ref={overlayRef}>
-      <div>
-        <h2>{title}</h2>
-        {showCloseButton && (
-          <CloseButton variant="ghost" onClick={onClose} aria-label="Close modal">
-            ✕
-          </CloseButton>
-        )}
-        <Content>{children}</Content>
-      </div>
-    </Overlay>,
-    document.body
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <Overlay
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+        >
+          <ModalContainer
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.95, opacity: 0 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <CloseButton onClick={onClose}>
+              <X />
+            </CloseButton>
+            {children}
+          </ModalContainer>
+        </Overlay>
+      )}
+    </AnimatePresence>
   );
-}
+};
+
+export default Modal;
