@@ -100,7 +100,7 @@ const Navbar = () => {
   return (
     <Nav>
       <Container>
-        <Logo href="/">ANOO</Logo>
+        <Logo href="/">anoo.nl</Logo>
         <NavLinks>
           <NavLink href="/about" aria-current={pathname === '/about' ? 'page' : undefined}>
             About

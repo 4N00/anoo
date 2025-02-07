@@ -89,15 +89,17 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
       const scrollPercentage = (scrollPosition + viewportHeight) / totalHeight;
 
       // Change background color based on scroll position
+      let newColor;
       if (scrollPercentage < 0.3) {
-        setBackgroundColor('#FFFFFF');
+        newColor = '#FFFFFF';
       } else if (scrollPercentage < 0.6) {
-        setBackgroundColor('#F2FCE2');
+        newColor = '#F2FCE2';
       } else if (scrollPercentage < 0.9) {
-        setBackgroundColor('#FEF7CD');
+        newColor = '#FEF7CD';
       } else {
-        setBackgroundColor('#E5DEFF');
+        newColor = '#E5DEFF';
       }
+      setBackgroundColor(newColor);
     }, 100);
 
     window.addEventListener('scroll', handleScroll);
@@ -105,7 +107,6 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      setBackgroundColor('#FFFFFF'); // Reset color on unmount
     };
   }, [setBackgroundColor]);
 

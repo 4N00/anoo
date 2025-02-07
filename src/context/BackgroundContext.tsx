@@ -1,7 +1,8 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import styled from 'styled-components';
+import { usePathname } from 'next/navigation';
 
 interface BackgroundContextType {
   backgroundColor: string;
@@ -10,7 +11,7 @@ interface BackgroundContextType {
 
 const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined);
 
-const PageBackground = styled.div<{ $bgColor: string }>`
+const PageBackground = styled.div<{ $bgColor: string; $isHome: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -19,14 +20,25 @@ const PageBackground = styled.div<{ $bgColor: string }>`
   background-color: ${props => props.$bgColor};
   transition: background-color 0.6s ease;
   z-index: -1;
+  opacity: ${props => props.$isHome ? 1 : 0};
+  pointer-events: none;
 `;
 
 export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
+  const pathname = usePathname();
+  const isHome = pathname === '/';
+
+  // Reset background color when leaving home page
+  useEffect(() => {
+    if (!isHome) {
+      setBackgroundColor('#FFFFFF');
+    }
+  }, [isHome]);
 
   return (
     <BackgroundContext.Provider value={{ backgroundColor, setBackgroundColor }}>
-      <PageBackground $bgColor={backgroundColor} />
+      <PageBackground $bgColor={backgroundColor} $isHome={isHome} />
       {children}
     </BackgroundContext.Provider>
   );
