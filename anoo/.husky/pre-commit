@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Change to the anoo directory where package.json is located
+cd anoo
+
+# Run lint-staged
+npx lint-staged
+
+# Type check
+npm run type-check
+
+# Run tests on staged files (relative to the git root)
+cd ..
+FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E "anoo/.*\.(tsx?|jsx?)$" | sed 's/anoo\///' | tr '\n' ' ')
+if [ -n "$FILES" ]; then
+  cd anoo
+  npm run test -- --bail --findRelatedTests $FILES
+  cd ..
+fi
+
+# Check for sensitive data
+if git diff --cached | grep -i "password\|secret\|key\|token" > /dev/null; then
+  echo "Warning: Possible sensitive data detected in commit"
+  echo "Please review the changes carefully"
+  exit 1
+fi

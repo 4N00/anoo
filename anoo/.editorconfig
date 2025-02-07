@@ -1,0 +1,88 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+trim_trailing_whitespace = true
+
+# TypeScript and JavaScript files
+[*.{ts,tsx,js,jsx,mjs,cjs}]
+indent_style = space
+indent_size = 2
+max_line_length = 100
+
+# JSON files
+[*.json]
+indent_style = space
+indent_size = 2
+
+# YAML files
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = 80
+
+# CSS, SCSS, and styled-components files
+[*.{css,scss,styled.ts,styled.tsx}]
+indent_style = space
+indent_size = 2
+
+# HTML files
+[*.html]
+indent_style = space
+indent_size = 2
+
+# Prisma schema
+[*.prisma]
+indent_style = space
+indent_size = 2
+
+# Environment files
+[*.env*]
+insert_final_newline = true
+end_of_line = lf
+
+# Package files
+[package.json]
+indent_style = space
+indent_size = 2
+
+# Configuration files
+[*.config.{js,ts}]
+indent_style = space
+indent_size = 2
+
+# Test files
+[*.{test,spec}.{ts,tsx,js,jsx}]
+indent_style = space
+indent_size = 2
+
+# Documentation files
+[*.{md,mdx}]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = false
+
+# Shell scripts
+[*.sh]
+end_of_line = lf
+indent_style = space
+indent_size = 2
+
+# Ignore build output and dependencies
+[{dist,build,node_modules}/**]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+indent_style = unset
+indent_size = unset
