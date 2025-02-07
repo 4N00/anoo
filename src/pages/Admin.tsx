@@ -6,6 +6,7 @@ import { ProjectUI } from '@/types/project';
 import ProjectList from '@/components/admin/ProjectList';
 import ProjectForm from '@/components/admin/ProjectForm';
 import { useToast } from '@/context/ToastContext';
+import { Button } from '@/styles/components/Button';
 
 const AdminContainer = styled.div`
   padding: 2rem;
@@ -25,20 +26,6 @@ const Title = styled.h1`
   color: ${({ theme }) => theme.colors.text.primary};
 `;
 
-const AddButton = styled.button`
-  padding: 0.75rem 1.5rem;
-  background-color: ${({ theme }) => theme.colors.primary.main};
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.primary.dark};
-  }
-`;
-
 interface AdminProps {
   initialProjects: ProjectUI[];
 }
@@ -48,6 +35,8 @@ const Admin: React.FC<AdminProps> = ({ initialProjects }) => {
   const [showForm, setShowForm] = useState(false);
   const [editingProject, setEditingProject] = useState<ProjectUI | null>(null);
   const { showToast } = useToast();
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleAddProject = () => {
     setEditingProject(null);
@@ -126,11 +115,61 @@ const Admin: React.FC<AdminProps> = ({ initialProjects }) => {
     }
   };
 
+  const handleSave = async (project: ProjectUI) => {
+    setIsSaving(true);
+    try {
+      const response = await fetch('/api/projects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(project),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        console.error('Server error:', responseData);
+        throw new Error(responseData.error || 'Failed to save project');
+      }
+
+      handleProjectSaved(responseData);
+      showToast('Project saved successfully', 'success');
+    } catch (error) {
+      console.error('Error saving project:', error);
+      showToast(error instanceof Error ? error.message : 'Failed to save project', 'error');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDelete = async (project: ProjectUI) => {
+    setIsDeleting(true);
+    try {
+      const response = await fetch(`/api/projects/${project.id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        console.error('Server error:', response.statusText);
+        throw new Error(response.statusText);
+      }
+
+      handleProjectDeleted(project.id);
+      showToast('Project deleted successfully', 'success');
+    } catch (error) {
+      console.error('Error deleting project:', error);
+      showToast(error instanceof Error ? error.message : 'Failed to delete project', 'error');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <AdminContainer>
       <Header>
         <Title>Project Management</Title>
-        <AddButton onClick={handleAddProject}>Add Project</AddButton>
+        <Button onClick={handleAddProject}>Add Project</Button>
       </Header>
 
       <ProjectList
@@ -143,7 +182,7 @@ const Admin: React.FC<AdminProps> = ({ initialProjects }) => {
       {showForm && (
         <ProjectForm
           project={editingProject}
-          onSave={handleProjectSaved}
+          onSave={handleSave}
           onClose={handleCloseForm}
         />
       )}

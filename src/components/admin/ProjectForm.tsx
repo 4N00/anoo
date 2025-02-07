@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ProjectUI } from '@/types/project';
 import FormInput from '../ui/FormInput';
-import { StyledButton } from '../ui/StyledButton';
+import { Button } from '@/styles/components/Button';
 import { styled } from 'styled-components';
 import { useToast } from '@/context/ToastContext';
 
@@ -65,10 +65,11 @@ const CheckboxContainer = styled.div`
   gap: 0.5rem;
 `;
 
-const ButtonGroup = styled.div`
+const ButtonContainer = styled.div`
   display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: ${({ theme }) => theme.spacing.md};
+  justify-content: flex-end;
+  margin-top: ${({ theme }) => theme.spacing.xl};
 `;
 
 interface ProjectFormProps {
@@ -228,14 +229,14 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSave, onClose }) =
         />
       </InputGroup>
 
-      <ButtonGroup>
-        <StyledButton type="submit" disabled={isSubmitting} $variant="primary">
-          {isSubmitting ? 'Saving...' : 'Save Project'}
-        </StyledButton>
-        <StyledButton type="button" onClick={onClose} $variant="secondary">
+      <ButtonContainer>
+        <Button $variant="secondary" onClick={onClose} type="button">
           Cancel
-        </StyledButton>
-      </ButtonGroup>
+        </Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Saving...' : 'Save Project'}
+        </Button>
+      </ButtonContainer>
     </FormContainer>
   );
 };

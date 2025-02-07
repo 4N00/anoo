@@ -14,7 +14,7 @@ import {
 } from '@hello-pangea/dnd';
 import { GripVertical } from 'lucide-react';
 import { ProjectUI } from '@/types/project';
-import { StyledButton } from '../ui/StyledButton';
+import { Button } from '@/styles/components/Button';
 import { useToast } from '@/context/ToastContext';
 
 const ListContainer = styled.div`
@@ -125,9 +125,9 @@ const Tag = styled.span`
   font-size: ${({ theme }) => theme.typography.fontSize.xs};
 `;
 
-const ButtonGroup = styled.div`
+const ActionButtons = styled.div`
   display: flex;
-  gap: 0.5rem;
+  gap: ${({ theme }) => theme.spacing.sm};
 `;
 
 interface ProjectListProps {
@@ -137,8 +137,7 @@ interface ProjectListProps {
   onReorder?: (startIndex: number, endIndex: number) => void;
 }
 
-const ProjectList = ({ projects, onEdit, onDelete, onReorder }: ProjectListProps) => {
-  const [isDeleting, setIsDeleting] = useState<string | null>(null);
+const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit, onDelete, onReorder }) => {
   const { showToast } = useToast();
 
   const handleDelete = async (project: ProjectUI) => {
@@ -146,7 +145,6 @@ const ProjectList = ({ projects, onEdit, onDelete, onReorder }: ProjectListProps
       return;
     }
 
-    setIsDeleting(project.id);
     try {
       const response = await fetch(`/api/projects/${project.id}`, {
         method: 'DELETE',
@@ -161,8 +159,6 @@ const ProjectList = ({ projects, onEdit, onDelete, onReorder }: ProjectListProps
     } catch (error) {
       console.error('Error deleting project:', error);
       showToast(error instanceof Error ? error.message : 'Failed to delete project', 'error');
-    } finally {
-      setIsDeleting(null);
     }
   };
 
@@ -205,19 +201,14 @@ const ProjectList = ({ projects, onEdit, onDelete, onReorder }: ProjectListProps
               ))}
             </ProjectTags>
           </ProjectInfo>
-          <ButtonGroup>
-            <StyledButton onClick={() => onEdit(project)} $variant="secondary" type="button">
+          <ActionButtons>
+            <Button $variant="secondary" onClick={() => onEdit(project)}>
               Edit
-            </StyledButton>
-            <StyledButton
-              onClick={() => handleDelete(project)}
-              $variant="error"
-              type="button"
-              disabled={isDeleting === project.id}
-            >
-              {isDeleting === project.id ? 'Deleting...' : 'Delete'}
-            </StyledButton>
-          </ButtonGroup>
+            </Button>
+            <Button $variant="danger" onClick={() => handleDelete(project)}>
+              Delete
+            </Button>
+          </ActionButtons>
         </ProjectItem>
       )}
     </Draggable>

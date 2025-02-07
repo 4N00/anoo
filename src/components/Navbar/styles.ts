@@ -10,7 +10,6 @@ export const Nav = styled.nav`
   z-index: ${({ theme }) => theme.zIndex.header};
   background: ${({ theme }) => theme.colors.background.primary};
   padding: ${({ theme }) => theme.spacing.sm};
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 `;
 
 export const Container = styled.div`

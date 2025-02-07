@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import StyledButton from '@/components/ui/StyledButton';
+import { Button } from '@/styles/components/Button';
 import FormInput from '@/components/ui/FormInput';
 import { Container, LoginCard, Title, Form, ErrorMessage } from './styles';
 import { useRouter } from 'next/navigation';
@@ -76,9 +76,9 @@ export default function LoginPage() {
             autoComplete="current-password"
             disabled={isProcessing}
           />
-          <StyledButton type="submit" $variant="primary" $fullWidth disabled={isProcessing}>
+          <Button type="submit" $variant="primary" disabled={isProcessing}>
             {isProcessing ? 'Logging in...' : 'Log In'}
-          </StyledButton>
+          </Button>
           {error && <ErrorMessage>{error}</ErrorMessage>}
         </Form>
       </LoginCard>

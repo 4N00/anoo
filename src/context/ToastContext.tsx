@@ -19,38 +19,59 @@ const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 const slideIn = keyframes`
   from {
-    transform: translateY(100%);
+    transform: translateX(100%);
     opacity: 0;
   }
   to {
-    transform: translateY(0);
+    transform: translateX(0);
     opacity: 1;
+  }
+`;
+
+const fadeOut = keyframes`
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 `;
 
 const ToastContainer = styled.div`
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: ${({ theme }) => theme.spacing.xl};
+  right: ${({ theme }) => theme.spacing.xl};
   z-index: ${({ theme }) => theme.zIndex.toast};
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: ${({ theme }) => theme.spacing.sm};
 `;
 
-const ToastItem = styled.div<{ $type: ToastType }>`
-  padding: 12px 24px;
-  border-radius: 4px;
-  background-color: ${({ theme, $type }) =>
-    $type === 'success' ? theme.colors.success.main : theme.colors.error.main};
-  color: ${({ theme, $type }) =>
-    $type === 'success' ? theme.colors.success.contrast : theme.colors.error.contrast};
+const ToastItem = styled.div<{ $type: ToastType; $isExiting?: boolean }>`
+  padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.lg}`};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  background: ${({ theme }) => theme.colors.background.primary};
+  color: ${({ theme }) => theme.colors.text.primary};
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
   font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  box-shadow: ${({ theme }) => theme.shadows.md};
-  animation: ${slideIn} 0.3s ease-out;
-  min-width: 200px;
+  box-shadow: ${({ theme }) => theme.shadows.lg};
+  border-left: 4px solid ${({ theme, $type }) =>
+    $type === 'success' ? theme.colors.success.main : theme.colors.error.main};
+  min-width: 300px;
   max-width: 400px;
+  animation: ${({ $isExiting }) => ($isExiting ? fadeOut : slideIn)} 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+  
+  &::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: ${({ theme, $type }) =>
+      $type === 'success' ? theme.colors.success.main : theme.colors.error.main};
+  }
 `;
 
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

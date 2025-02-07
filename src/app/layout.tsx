@@ -9,7 +9,7 @@ import { ToastProvider } from '../context/ToastContext';
 import Navbar from '../components/Navbar';
 import PageFooter from '../components/PageFooter';
 import { AnimatePresence } from 'framer-motion';
-import { styled, createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
 const inter = Inter({ subsets: ['latin'] });
 

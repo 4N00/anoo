@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { StyledButton } from '../../components/ui/StyledButton';
+import { Button } from '@/styles/components/Button';
 import { StyledInput, StyledTextarea } from '../../components/ui/StyledFormElements';
 import {
   Container,
@@ -33,7 +33,7 @@ const Contact = () => {
           <Title>LET'S TALK</Title>
           <Subtitle>
             Have a project in mind? Looking to partner or work together? Reach out through the form
-            and I'll get back to you in the next 48 hours.
+            and I'll get back to you.
           </Subtitle>
         </Header>
         <Form onSubmit={handleSubmit}>
@@ -44,9 +44,9 @@ const Contact = () => {
           <StyledInput type="text" placeholder="Subject" required />
           <StyledTextarea placeholder="Message" rows={6} required />
           <ButtonGroup>
-            <StyledButton type="submit" disabled={isSubmitting}>
+            <Button type="submit" $variant="primary" disabled={isSubmitting}>
               {isSubmitting ? 'Sending...' : 'Send Message'}
-            </StyledButton>
+            </Button>
           </ButtonGroup>
         </Form>
       </Content>
