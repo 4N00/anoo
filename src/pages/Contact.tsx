@@ -1,5 +1,4 @@
 import React from 'react';
-import PageFooter from '../components/PageFooter';
 import { styled } from 'styled-components';
 import { motion } from 'framer-motion';
 
@@ -14,22 +13,17 @@ const Contact: React.FC = () => {
     show: {
       opacity: 1,
       transition: {
-        duration: 0.3
-      }
-    }
+        duration: 0.3,
+      },
+    },
   };
 
   return (
     <ContactContainer>
-      <ContactContent
-        variants={container}
-        initial="hidden"
-        animate="show"
-      >
+      <ContactContent variants={container} initial="hidden" animate="show">
         <ContactTitle>Contact</ContactTitle>
         <ContactText>Contact page content will go here.</ContactText>
       </ContactContent>
-      <PageFooter />
     </ContactContainer>
   );
 };

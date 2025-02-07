@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  min-height: 100vh;
   padding: 8rem 2rem 8rem;
   background: white;
 
@@ -31,7 +30,7 @@ export const Title = styled.h1`
   line-height: 0.9;
   margin-bottom: 2rem;
   text-transform: uppercase;
-  
+
   @media (max-width: 768px) {
     font-size: 48px;
     margin-bottom: 1.5rem;
@@ -40,7 +39,7 @@ export const Title = styled.h1`
 
 export const Subtitle = styled.p`
   font-size: 1.125rem;
-  color: #A1A1A1;
+  color: #a1a1a1;
   max-width: 580px;
 
   @media (max-width: 768px) {
@@ -63,7 +62,7 @@ export const InputGroup = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: 1.5rem;

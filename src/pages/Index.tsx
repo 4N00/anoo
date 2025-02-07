@@ -1,61 +1,51 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import HeroSection from '../components/HeroSection';
 import ProjectSection from '../components/ProjectSection';
-import PageFooter from '../components/PageFooter';
-import { MainContainer, Separator, ProjectGrid } from '../styles/HomeStyles';
+import { MainContainer, Separator, ProjectGrid, Background } from '../styles/HomeStyles';
 import { ProjectUI } from '@/types/project';
 
 const COLORS = ['#FFFFFF', '#F2FCE2', '#FEF7CD', '#E5DEFF', '#FFDEE2'] as const;
-type BackgroundColor = typeof COLORS[number];
 
 interface IndexProps {
   initialProjects: ProjectUI[];
 }
 
 const Index: React.FC<IndexProps> = ({ initialProjects }) => {
-  const mainRef = useRef<HTMLDivElement>(null);
-  const sections = useRef<HTMLElement[]>([]);
+  const [currentColor, setCurrentColor] = useState<(typeof COLORS)[number]>(COLORS[0]);
+  const sectionsRef = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
     const handleScroll = () => {
-      const windowHeight = window.innerHeight;
-      let mostVisibleSection = 0;
-      let maxVisibleArea = 0;
+      const viewportHeight = window.innerHeight;
+      const scrollPosition = window.scrollY + viewportHeight / 2;
 
-      sections.current.forEach((section, index) => {
+      // Find which section is most visible
+      let activeIndex = 0;
+      sectionsRef.current.forEach((section, index) => {
+        if (!section) return;
         const rect = section.getBoundingClientRect();
-        const visibleHeight = Math.min(windowHeight, Math.max(0,
-          Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0)
-        ));
-        
-        const visiblePercentage = visibleHeight / section.offsetHeight;
-        
-        if (visiblePercentage > maxVisibleArea) {
-          maxVisibleArea = visiblePercentage;
-          mostVisibleSection = index;
+        const sectionTop = rect.top + window.scrollY;
+        const sectionBottom = sectionTop + rect.height;
+
+        if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+          activeIndex = index;
         }
       });
 
-      if (mainRef.current) {
-        const color: BackgroundColor = COLORS[mostVisibleSection] || COLORS[0];
-        mainRef.current.style.backgroundColor = color;
-      }
+      setCurrentColor(COLORS[activeIndex] || COLORS[0]);
     };
 
-    if (mainRef.current) {
-      sections.current = Array.from(mainRef.current.getElementsByTagName('section'));
-      window.addEventListener('scroll', handleScroll);
-      handleScroll();
-    }
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Filter projects based on featured flag
-  const featuredProjects = initialProjects.filter(p => p.featured);
-  const nonFeaturedProjects = initialProjects.filter(p => !p.featured);
+  const featuredProjects = initialProjects.filter((p) => p.featured);
+  const nonFeaturedProjects = initialProjects.filter((p) => !p.featured);
 
   // Split non-featured projects into groups
   const chunkSize = Math.ceil(nonFeaturedProjects.length / 4);
@@ -65,46 +55,62 @@ const Index: React.FC<IndexProps> = ({ initialProjects }) => {
   const projectsSetFour = nonFeaturedProjects.slice(chunkSize * 3);
 
   return (
-    <MainContainer ref={mainRef}>
-      <HeroSection />
-      <Separator />
-      {featuredProjects.length > 0 && (
-        <ProjectSection
-          title="FEATURED"
-          featured
-          projects={featuredProjects}
-        />
-      )}
-      {(projectsSetOne.length > 0 || projectsSetTwo.length > 0) && (
-        <ProjectGrid>
-          {projectsSetOne.length > 0 && (
-            <ProjectSection
-              projects={projectsSetOne}
-            />
-          )}
-          {projectsSetTwo.length > 0 && (
-            <ProjectSection
-              projects={projectsSetTwo}
-            />
-          )}
-        </ProjectGrid>
-      )}
-      {(projectsSetThree.length > 0 || projectsSetFour.length > 0) && (
-        <ProjectGrid>
-          {projectsSetThree.length > 0 && (
-            <ProjectSection
-              projects={projectsSetThree}
-            />
-          )}
-          {projectsSetFour.length > 0 && (
-            <ProjectSection
-              projects={projectsSetFour}
-            />
-          )}
-        </ProjectGrid>
-      )}
-      <PageFooter />
-    </MainContainer>
+    <>
+      <Background $color={currentColor} />
+      <MainContainer>
+        <section
+          ref={(el) => {
+            if (el) sectionsRef.current[0] = el;
+            return undefined;
+          }}
+        >
+          <HeroSection />
+        </section>
+        <Separator />
+        {featuredProjects.length > 0 && (
+          <section
+            ref={(el) => {
+              if (el) sectionsRef.current[1] = el;
+              return undefined;
+            }}
+          >
+            <ProjectSection title="FEATURED" featured projects={featuredProjects} />
+          </section>
+        )}
+        {(projectsSetOne.length > 0 || projectsSetTwo.length > 0) && (
+          <section
+            ref={(el) => {
+              if (el) sectionsRef.current[2] = el;
+              return undefined;
+            }}
+          >
+            <ProjectGrid>
+              {projectsSetOne.length > 0 && <ProjectSection projects={projectsSetOne} />}
+              {projectsSetTwo.length > 0 && <ProjectSection projects={projectsSetTwo} />}
+            </ProjectGrid>
+          </section>
+        )}
+        {(projectsSetThree.length > 0 || projectsSetFour.length > 0) && (
+          <section
+            ref={(el) => {
+              if (el) sectionsRef.current[3] = el;
+              return undefined;
+            }}
+          >
+            <ProjectGrid>
+              {projectsSetThree.length > 0 && <ProjectSection projects={projectsSetThree} />}
+              {projectsSetFour.length > 0 && <ProjectSection projects={projectsSetFour} />}
+            </ProjectGrid>
+          </section>
+        )}
+        <section
+          ref={(el) => {
+            if (el) sectionsRef.current[4] = el;
+            return undefined;
+          }}
+        ></section>
+      </MainContainer>
+    </>
   );
 };
 

@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import PageFooter from '../components/PageFooter';
 import ProfileSection from '../components/about/ProfileSection';
 import SkillsSection from '../components/about/SkillsSection';
 import { PageContainer, ContentWrapper } from '../styles/AboutStyles';
@@ -32,7 +31,6 @@ const About = () => {
         <ProfileSection />
         <SkillsSection skills={skills} />
       </ContentWrapper>
-      <PageFooter />
     </PageContainer>
   );
 };

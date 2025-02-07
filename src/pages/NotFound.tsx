@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import PageFooter from '../components/PageFooter';
 import { styled } from 'styled-components';
 import { motion } from 'framer-motion';
 
@@ -16,23 +15,18 @@ const NotFound: React.FC = () => {
     show: {
       opacity: 1,
       transition: {
-        duration: 0.3
-      }
-    }
+        duration: 0.3,
+      },
+    },
   };
 
   return (
     <NotFoundContainer>
-      <NotFoundContent
-        variants={container}
-        initial="hidden"
-        animate="show"
-      >
+      <NotFoundContent variants={container} initial="hidden" animate="show">
         <NotFoundTitle>404 - Page Not Found</NotFoundTitle>
         <NotFoundText>The page you're looking for doesn't exist.</NotFoundText>
         <HomeLink to="/">Return to Home</HomeLink>
       </NotFoundContent>
-      <PageFooter />
     </NotFoundContainer>
   );
 };

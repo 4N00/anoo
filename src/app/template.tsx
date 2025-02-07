@@ -13,7 +13,6 @@ export default function Template({ children }: { children: React.ReactNode }) {
       }}
       style={{
         width: '100%',
-        minHeight: '100vh',
         willChange: 'transform, opacity',
       }}
     >

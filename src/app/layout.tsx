@@ -40,7 +40,6 @@ const getQueryClient = () => {
 
 const MainContent = styled.div`
   position: relative;
-  min-height: 100vh;
   padding-top: 64px; /* Navbar height */
 `;
 
@@ -64,7 +63,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       }}
                       style={{
                         width: '100%',
-                        minHeight: '100vh',
                         willChange: 'opacity',
                       }}
                     >

@@ -74,93 +74,13 @@ export const Background = styled.div<{ $color: string }>`
   bottom: 0;
   background-color: ${(props) => props.$color};
   transition: background-color 0.8s ease-in-out;
-  z-index: -1;
+  z-index: 0;
 `;
 
 export const MainContainer = styled.div`
   color: ${({ theme }) => theme.colors.text.primary};
   position: relative;
-  min-height: 100vh;
   overflow: hidden;
-`;
-
-interface ProjectContainerProps {
-  featured?: boolean;
-}
-
-export const ProjectContainer = styled.div<ProjectContainerProps>`
-  display: grid;
-  gap: ${({ theme }) => theme.spacing['2xl']};
-  grid-template-columns: 1fr;
-  padding: 0 ${({ theme }) => theme.spacing.md};
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-template-columns: ${(props) => (props.featured ? '1fr' : '1fr 1fr')};
-    padding: ${(props) => (props.featured ? `0 ${props.theme.spacing.xl}` : '0')};
-  }
-
-  max-height: ${(props) => (props.featured ? '800px' : 'none')};
-  overflow: ${(props) => (props.featured ? 'hidden' : 'visible')};
-`;
-
-export const ProjectCardWrapper = styled.div`
-  width: 100%;
-  cursor: pointer;
-`;
-
-export const ProjectImage = styled.img`
-  width: 100%;
-  aspect-ratio: 4/3;
-  object-fit: cover;
-  transition: transform ${({ theme }) => theme.transitions.fast};
-
-  &:hover {
-    transform: scale(1.02);
-  }
-`;
-
-export const ProjectInfo = styled.div`
-  margin-top: ${({ theme }) => theme.spacing.md};
-`;
-
-export const ProjectHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing.xs};
-`;
-
-export const ProjectTitle = styled.h3`
-  font-family: ${({ theme }) => theme.fonts.heading};
-  font-size: ${({ theme }) => theme.typography.fontSize.md};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.normal};
-  text-transform: uppercase;
-  color: ${({ theme }) => theme.colors.text.primary};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  }
-`;
-
-export const ProjectCategory = styled.span`
-  font-family: ${({ theme }) => theme.fonts.body};
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  color: ${({ theme }) => theme.colors.text.secondary};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    font-size: ${({ theme }) => theme.typography.fontSize.xs};
-  }
-`;
-
-export const ProjectDescription = styled.p`
-  font-family: ${({ theme }) => theme.fonts.body};
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  color: ${({ theme }) => theme.colors.text.secondary};
-  margin-top: ${({ theme }) => theme.spacing.xs};
-  line-height: ${({ theme }) => theme.typography.lineHeight.relaxed};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    font-size: ${({ theme }) => theme.typography.fontSize.xs};
-  }
+  z-index: 1;
+  background: transparent;
 `;
