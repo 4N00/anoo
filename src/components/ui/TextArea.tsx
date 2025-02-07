@@ -23,25 +23,16 @@ const Label = styled.label`
 `;
 
 const StyledTextArea = styled.textarea<{ hasError?: boolean }>`
-  width: 100%;
-  min-height: 100px;
-  padding: 0.75rem 1rem;
+  padding: ${({ theme }) => theme.spacing.sm};
+  border: 1px solid ${({ theme }) => theme.colors.background.secondary};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
   font-size: ${({ theme }) => theme.typography.fontSize.md};
   color: ${({ theme }) => theme.colors.text.primary};
-  background: ${({ theme }) => theme.colors.background.primary};
-  border: 1px solid ${({ theme }) => theme.colors.secondary.light};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  transition: all ${({ theme }) => theme.transitions.normal};
   resize: vertical;
 
-  &:hover {
-    border-color: ${({ theme }) => theme.colors.primary.main};
-  }
-
   &:focus {
-    outline: none;
     border-color: ${({ theme }) => theme.colors.primary.main};
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary.light}40;
+    outline: none;
   }
 
   &:disabled {
@@ -58,9 +49,6 @@ const StyledTextArea = styled.textarea<{ hasError?: boolean }>`
     hasError &&
     `
       border-color: ${theme.colors.error.main};
-      &:focus {
-        box-shadow: 0 0 0 2px ${theme.colors.error.light}40;
-      }
     `}
 `;
 
@@ -72,17 +60,7 @@ const HelperText = styled.span<{ isError?: boolean }>`
 `;
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  (
-    {
-      label,
-      error,
-      helperText,
-      fullWidth = false,
-      disabled,
-      ...props
-    },
-    ref
-  ) => {
+  ({ label, error, helperText, fullWidth = false, disabled, ...props }, ref) => {
     const showHelper = error || helperText;
 
     return (
@@ -95,9 +73,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           aria-invalid={!!error}
           {...props}
         />
-        {showHelper && (
-          <HelperText isError={!!error}>{error || helperText}</HelperText>
-        )}
+        {showHelper && <HelperText isError={!!error}>{error || helperText}</HelperText>}
       </TextAreaWrapper>
     );
   }

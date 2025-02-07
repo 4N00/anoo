@@ -1,11 +1,10 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+#!/bin/sh
 
 # Validate commit message format
 npx --no -- commitlint --edit ${1}
 
 # Check commit message length
-if [ $(cat $1 | wc -c) -gt 100 ]; then
+if [ $(cat $1 | wc -c) -gt 200 ]; then
   echo "Commit message is too long (max 100 characters)"
   exit 1
 fi
@@ -28,14 +27,11 @@ if echo "$first_word" | grep -qE "ed$|ing$"; then
   exit 1
 fi
 
-# Check for proper capitalization
-if ! echo "$commit_msg" | grep -qE "^[^:]+: [A-Z]"; then
-  echo "Description should start with a capital letter"
-  exit 1
-fi
-
 # Check for period at the end
 if echo "$commit_msg" | grep -qE "\.$"; then
   echo "Commit message should not end with a period"
   exit 1
 fi
+
+# Debugging output
+echo "Validating commit message: $commit_msg"

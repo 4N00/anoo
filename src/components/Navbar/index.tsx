@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, MouseEvent } from 'react';
+import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
@@ -24,10 +24,11 @@ const MenuIcon = ({ isOpen }: { isOpen: boolean }) => (
     height="24"
     viewBox="0 0 24 24"
     fill="none"
-    stroke={isOpen ? '#fff' : 'currentColor'}
+    stroke="currentColor"
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
   >
     {isOpen ? (
       <>
@@ -54,6 +55,7 @@ const CloseIcon = () => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
   >
     <line x1="18" y1="6" x2="6" y2="18" />
     <line x1="6" y1="6" x2="18" y2="18" />
@@ -61,91 +63,38 @@ const CloseIcon = () => (
 );
 
 const mobileMenuVariants = {
-  closed: {
-    opacity: 0,
-    scale: 0.95,
-  },
+  closed: { opacity: 0, scale: 0.95 },
   open: {
     opacity: 1,
     scale: 1,
-    transition: {
-      duration: 0.3,
-      ease: [0.4, 0, 0.2, 1],
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
+    transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1], staggerChildren: 0.1 },
   },
-  exit: {
-    opacity: 0,
-    scale: 0.95,
-    transition: {
-      duration: 0.2,
-      ease: [0.4, 0, 1, 1],
-    },
-  },
+  exit: { opacity: 0, scale: 0.95, transition: { duration: 0.2 } },
 };
 
 const mobileNavLinkVariants = {
-  closed: {
-    opacity: 0,
-    y: 20,
-  },
-  open: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.4,
-      ease: [0.4, 0, 0.2, 1],
-    },
-  },
-  exit: {
-    opacity: 0,
-    y: -20,
-    transition: {
-      duration: 0.3,
-      ease: [0.4, 0, 1, 1],
-    },
-  },
+  closed: { opacity: 0, y: 20 },
+  open: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+  exit: { opacity: 0, y: -20, transition: { duration: 0.3 } },
 };
 
 const contactInfoVariants = {
-  closed: {
-    opacity: 0,
-    y: 20,
-  },
-  open: {
-    opacity: 0.5,
-    y: 0,
-    transition: {
-      duration: 0.4,
-      delay: 0.4,
-      ease: [0.4, 0, 0.2, 1],
-    },
-  },
-  exit: {
-    opacity: 0,
-    y: 20,
-    transition: {
-      duration: 0.2,
-      ease: [0.4, 0, 1, 1],
-    },
-  },
+  closed: { opacity: 0, y: 20 },
+  open: { opacity: 0.5, y: 0, transition: { duration: 0.4, delay: 0.4 } },
+  exit: { opacity: 0, y: 20, transition: { duration: 0.2 } },
 };
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const { isAdmin, isLoading } = useAuth();
-  const toggleMenu = () => setIsOpen(!isOpen);
+
+  const toggleMenu = () => setIsOpen((prev) => !prev);
+  const closeMenu = () => setIsOpen(false);
 
   const handleLogout = async () => {
     await signOut();
-    setIsOpen(false);
-  };
-
-  const handleLogoutClick = (e: MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    handleLogout();
+    closeMenu();
   };
 
   return (
@@ -160,7 +109,7 @@ const Navbar = () => {
             Contact
           </NavLink>
           {isLoading ? (
-            <NavLink href="#" style={{ opacity: 0.5, pointerEvents: 'none' }}>
+            <NavLink href="#" aria-disabled="true" style={{ opacity: 0.5 }}>
               Loading...
             </NavLink>
           ) : isAdmin ? (
@@ -168,7 +117,7 @@ const Navbar = () => {
               <NavLink href="/admin" aria-current={pathname === '/admin' ? 'page' : undefined}>
                 Admin
               </NavLink>
-              <NavLink href="#" onClick={handleLogoutClick}>
+              <NavLink href="#" onClick={handleLogout}>
                 Logout
               </NavLink>
             </>
@@ -177,13 +126,18 @@ const Navbar = () => {
               Login
             </NavLink>
           )}
-        </NavLinks>
-        <MenuButton onClick={toggleMenu} aria-label="Toggle menu" $isOpen={isOpen}>
-          <MenuIcon isOpen={isOpen} />
-        </MenuButton>
-      </Container>
 
-      <AnimatePresence mode="wait">
+          <MenuButton
+            onClick={toggleMenu}
+            aria-expanded={isOpen}
+            aria-label="Toggle menu"
+            $isOpen={isOpen}
+          >
+            <MenuIcon isOpen={isOpen} />
+          </MenuButton>
+        </NavLinks>
+      </Container>
+      <AnimatePresence>
         {isOpen && (
           <MobileMenuContainer
             initial="closed"
@@ -191,41 +145,30 @@ const Navbar = () => {
             exit="exit"
             variants={mobileMenuVariants}
           >
-            <CloseButton onClick={toggleMenu} aria-label="Close menu">
+            <CloseButton onClick={closeMenu} aria-label="Close menu">
               <CloseIcon />
             </CloseButton>
-            <MobileNavLink href="/about" onClick={toggleMenu} variants={mobileNavLinkVariants}>
+            <MobileNavLink href="/about" onClick={closeMenu} variants={mobileNavLinkVariants}>
               About
             </MobileNavLink>
-            <MobileNavLink href="/contact" onClick={toggleMenu} variants={mobileNavLinkVariants}>
+            <MobileNavLink href="/contact" onClick={closeMenu} variants={mobileNavLinkVariants}>
               Contact
             </MobileNavLink>
             {isLoading ? (
-              <MobileNavLink
-                href="#"
-                style={{ opacity: 0.5, pointerEvents: 'none' }}
-                variants={mobileNavLinkVariants}
-              >
+              <MobileNavLink href="#" aria-disabled="true" style={{ opacity: 0.5 }}>
                 Loading...
               </MobileNavLink>
             ) : isAdmin ? (
               <>
-                <MobileNavLink href="/admin" onClick={toggleMenu} variants={mobileNavLinkVariants}>
+                <MobileNavLink href="/admin" onClick={closeMenu} variants={mobileNavLinkVariants}>
                   Admin
                 </MobileNavLink>
-                <MobileNavLink
-                  href="#"
-                  onClick={(e: MouseEvent<HTMLAnchorElement>) => {
-                    e.preventDefault();
-                    handleLogout();
-                  }}
-                  variants={mobileNavLinkVariants}
-                >
+                <MobileNavLink href="#" onClick={handleLogout} variants={mobileNavLinkVariants}>
                   Logout
                 </MobileNavLink>
               </>
             ) : (
-              <MobileNavLink href="/login" onClick={toggleMenu} variants={mobileNavLinkVariants}>
+              <MobileNavLink href="/login" onClick={closeMenu} variants={mobileNavLinkVariants}>
                 Login
               </MobileNavLink>
             )}

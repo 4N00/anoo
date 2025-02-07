@@ -1,7 +1,12 @@
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
-export const SkillsContainer = styled(motion.section)``;
+export const SkillsContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing.md};
+`;
+
 export const SkillsTitle = styled.h2`
   font-family: ${({ theme }) => theme.fonts.heading};
   font-size: ${({ theme }) => theme.typography.fontSize['2xl']};
@@ -9,17 +14,25 @@ export const SkillsTitle = styled.h2`
   color: ${({ theme }) => theme.colors.text.primary};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
+
 export const SkillsGrid = styled.div``;
-export const SkillItem = styled.div``;
+
+export const SkillItem = styled(motion.div)`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+`;
+
+export const SkillIcon = styled.img`
+  width: 24px;
+  height: 24px;
+`;
+
 export const SkillPercentage = styled.span``;
 
-export const SkillName = styled.div`
-  margin-bottom: 2rem;
-  padding: 0 1rem;
-
-  @media (max-width: 768px) {
-    margin-bottom: 1rem;
-  }
+export const SkillName = styled.span`
+  font-size: ${({ theme }) => theme.typography.fontSize.md};
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 export const SkillNameText = styled.span`

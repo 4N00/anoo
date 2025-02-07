@@ -9,13 +9,20 @@ export const StyledButton = styled.button<ButtonProps>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.lg}`};
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
   font-size: ${({ theme }) => theme.typography.fontSize.md};
   font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
   border-radius: ${({ theme }) => theme.borderRadius.md};
   transition: all ${({ theme }) => theme.transitions.fast};
   cursor: pointer;
   width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
+  background: ${({ theme }) => theme.colors.primary.main};
+  color: ${({ theme }) => theme.colors.text.contrast};
+  border: none;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.primary.light};
+  }
 
   ${({ theme, $variant = 'primary' }) => {
     switch ($variant) {
@@ -69,14 +76,15 @@ export const StyledButton = styled.button<ButtonProps>`
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px ${({ theme, $variant = 'primary' }) => {
-      switch ($variant) {
-        case 'error':
-          return `${theme.colors.error.main}40`;
-        default:
-          return `${theme.colors.primary.main}40`;
-      }
-    }};
+    box-shadow: 0 0 0 2px
+      ${({ theme, $variant = 'primary' }) => {
+        switch ($variant) {
+          case 'error':
+            return `${theme.colors.error.main}40`;
+          default:
+            return `${theme.colors.primary.main}40`;
+        }
+      }};
   }
 `;
 

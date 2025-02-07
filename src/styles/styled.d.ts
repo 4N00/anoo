@@ -27,6 +27,7 @@ declare module 'styled-components' {
         secondary: string;
         muted: string;
         gray: string;
+        contrast: string;
       };
       error: {
         main: string;
@@ -69,6 +70,9 @@ declare module 'styled-components' {
         '4xl': string;
         hero: string;
         heroSubtitle: string;
+        '5xl': string;
+        '6xl': string;
+        '7xl': string;
       };
       fontWeight: {
         normal: number;
@@ -104,6 +108,8 @@ declare module 'styled-components' {
       xl: string;
       '2xl': string;
       '3xl': string;
+      '4xl': string;
+      '5xl': string;
     };
     borderRadius: {
       none: string;
@@ -140,6 +146,17 @@ declare module 'styled-components' {
       modal: number;
       popover: number;
       toast: number;
+    };
+    layout: {
+      maxWidth: string;
+      containerPadding: string;
+    };
+    grid: {
+      columns: {
+        desktop: string;
+        tablet: string;
+        mobile: string;
+      };
     };
   }
 }

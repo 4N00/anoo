@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
 import { ProjectUI } from '@/types/project';
 import {
   ProjectCardWrapper,
@@ -65,7 +64,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, index = 0 }
 
   return (
     <ProjectCardWrapper
-      as={motion.div}
       variants={cardVariants}
       initial="initial"
       animate="animate"
@@ -73,18 +71,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, index = 0 }
       custom={index}
       onClick={handleClick}
     >
-      <ProjectImage
-        as={motion.img}
-        variants={imageVariants}
-        src={project.imageUrl}
-        alt={project.title}
-      />
+      <ProjectImage variants={imageVariants} src={project.imageUrl} alt={project.title} />
       <ProjectInfo>
         <ProjectHeader>
           <ProjectTitle>{project.title}</ProjectTitle>
-          <ProjectCategory>
-            {project.tags.slice(0, 2).join(' / ')}
-          </ProjectCategory>
+          <ProjectCategory>{project.tags.slice(0, 2).join(' / ')}</ProjectCategory>
         </ProjectHeader>
         <ProjectDescription>{project.description}</ProjectDescription>
       </ProjectInfo>

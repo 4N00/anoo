@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 export const Letter = styled(motion.span)`
   font-family: ${({ theme }) => theme.fonts.body};
-  font-size: clamp(1.5rem, 8vw, 6rem);
+  font-size: clamp(1.5rem, 10vw, 12rem);
   font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
   line-height: ${({ theme }) => theme.typography.lineHeight.none};
   letter-spacing: ${({ theme }) => theme.typography.letterSpacing.tighter};
@@ -11,7 +11,7 @@ export const Letter = styled(motion.span)`
   will-change: transform, opacity;
   color: ${({ theme }) => theme.colors.text.primary};
 
-  &[data-extra-space="true"] {
+  &[data-extra-space='true'] {
     --letter-spacing: 0.3em;
   }
 `;
@@ -28,7 +28,7 @@ export const Section = styled.section`
 export const ContentWrapper = styled.div`
   position: relative;
   z-index: ${({ theme }) => theme.zIndex.base + 10};
-  max-width: 600px;
+  max-width: inherit;
   margin-left: ${({ theme }) => theme.spacing['2xl']};
 `;
 
@@ -40,7 +40,7 @@ export const LetterContainer = styled(motion.div)`
   will-change: transform;
   margin-bottom: ${({ theme }) => theme.spacing.lg};
   margin-right: ${({ theme }) => theme.spacing.lg};
-  
+
   &:last-of-type {
     margin-bottom: ${({ theme }) => theme.spacing['2xl']};
     margin-right: 0;
@@ -69,7 +69,7 @@ export const StyledLink = styled(motion.a)`
   will-change: transform, opacity;
   color: ${({ theme }) => theme.colors.text.primary};
   text-decoration: none;
-  
+
   &:hover {
     color: ${({ theme }) => theme.colors.text.secondary};
   }

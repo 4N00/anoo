@@ -1,7 +1,29 @@
 import React, { useEffect, useRef } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { createPortal } from 'react-dom';
 import Button from './Button';
+
+// Remove or comment out the unused variable
+// const fadeIn = keyframes`
+//   from {
+//     opacity: 0;
+//   }
+//   to {
+//     opacity: 1;
+//   }
+// `;
+
+// Remove or comment out the unused variable
+// const slideIn = keyframes`
+//   from {
+//     transform: translateY(-20px);
+//     opacity: 0;
+//   }
+//   to {
+//     transform: translateY(0);
+//     opacity: 1;
+//   }
+// `;
 
 interface ModalProps {
   isOpen: boolean;
@@ -11,26 +33,6 @@ interface ModalProps {
   size?: 'small' | 'medium' | 'large';
   showCloseButton?: boolean;
 }
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
-
-const slideIn = keyframes`
-  from {
-    transform: translateY(-20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-`;
 
 const Overlay = styled.div`
   position: fixed;
@@ -43,43 +45,16 @@ const Overlay = styled.div`
   align-items: center;
   justify-content: center;
   z-index: ${({ theme }) => theme.zIndex.modal};
-  animation: ${fadeIn} 0.2s ease-out;
+  // Removed unused animation
+  padding: ${({ theme }) => theme.spacing.lg};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
-const ModalContainer = styled.div<{ $size: 'small' | 'medium' | 'large' }>`
-  background: ${({ theme }) => theme.colors.background.primary};
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
-  box-shadow: ${({ theme }) => theme.shadows.lg};
-  max-height: 90vh;
-  width: ${({ $size }) => {
-    switch ($size) {
-      case 'small':
-        return '400px';
-      case 'large':
-        return '800px';
-      default:
-        return '600px';
-    }
-  }};
-  max-width: 90vw;
-  display: flex;
-  flex-direction: column;
-  animation: ${slideIn} 0.3s ease-out;
-`;
-
-const Header = styled.div`
-  padding: 1.5rem;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.background.secondary};
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const Title = styled.h2`
-  margin: 0;
+export const ModalHeader = styled.h2`
+  font-size: ${({ theme }) => theme.typography.fontSize.lg};
   color: ${({ theme }) => theme.colors.text.primary};
-  font-size: ${({ theme }) => theme.typography.fontSize['2xl']};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.semibold};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
 const CloseButton = styled(Button)`
@@ -102,7 +77,6 @@ export default function Modal({
   onClose,
   title,
   children,
-  size = 'medium',
   showCloseButton = true,
 }: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -140,21 +114,15 @@ export default function Modal({
   // Use portal to render modal at the root level
   return createPortal(
     <Overlay ref={overlayRef}>
-      <ModalContainer $size={size}>
-        <Header>
-          <Title>{title}</Title>
-          {showCloseButton && (
-            <CloseButton
-              variant="ghost"
-              onClick={onClose}
-              aria-label="Close modal"
-            >
-              ✕
-            </CloseButton>
-          )}
-        </Header>
+      <div>
+        <h2>{title}</h2>
+        {showCloseButton && (
+          <CloseButton variant="ghost" onClick={onClose} aria-label="Close modal">
+            ✕
+          </CloseButton>
+        )}
         <Content>{children}</Content>
-      </ModalContainer>
+      </div>
     </Overlay>,
     document.body
   );

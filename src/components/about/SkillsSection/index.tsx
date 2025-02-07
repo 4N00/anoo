@@ -10,8 +10,8 @@ import {
   SkillNameText,
   ProgressContainer,
   ProgressBar,
-  SkillLevel
-} from "@/styles/AboutStyles";
+  SkillLevel,
+} from '@/styles/AboutStyles';
 
 interface Skill {
   name: string;
@@ -25,7 +25,7 @@ interface SkillsSectionProps {
 
 const defaultVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 }
+  visible: { opacity: 1, y: 0 },
 };
 
 const SkillsSection: React.FC<SkillsSectionProps> = ({ variants = defaultVariants, skills }) => {
@@ -39,7 +39,7 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({ variants = defaultVariant
   }, []);
 
   return (
-    <SectionContainer 
+    <SectionContainer
       variants={variants}
       initial="hidden"
       animate="visible"
@@ -59,7 +59,7 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({ variants = defaultVariant
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.2 }}
+                    transition={{ duration: 0.5 }}
                   >
                     <ProgressBar
                       data-testid={`progress-${skill.name}`}
@@ -69,9 +69,7 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({ variants = defaultVariant
                       transition={{ duration: 1, delay: 0.4 }}
                     />
                   </ProgressContainer>
-                  <SkillLevel>
-                    {(skill.level / 10).toFixed(2)} / 10
-                  </SkillLevel>
+                  <SkillLevel>{(skill.level / 10).toFixed(2)} / 10</SkillLevel>
                 </SkillContainer>
               ))}
             </Grid>

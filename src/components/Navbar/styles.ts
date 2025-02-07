@@ -23,19 +23,14 @@ export const Container = styled.div`
   padding: 0 ${({ theme }) => theme.spacing.md};
 `;
 
-export const Logo = styled(Link)`
+export const Logo = styled.a`
   font-size: ${({ theme }) => theme.typography.fontSize.lg};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
   color: ${({ theme }) => theme.colors.text.primary};
-  text-decoration: none;
-  font-family: ${({ theme }) => theme.fonts.body};
-  z-index: ${({ theme }) => theme.zIndex.header + 10};
-  letter-spacing: 1px;
 `;
 
 export const NavLinks = styled.div`
   display: none;
-  
+
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     display: flex;
     gap: clamp(${({ theme }) => theme.spacing.md}, 2vw, ${({ theme }) => theme.spacing.xl});
@@ -93,7 +88,7 @@ export const MenuButton = styled.button<MenuButtonProps>`
   cursor: pointer;
   padding: ${({ theme }) => theme.spacing.sm};
   z-index: ${({ theme }) => theme.zIndex.header + 10};
-  color: ${({ theme, $isOpen }) => $isOpen ? theme.colors.background.primary : theme.colors.text.primary};
+  color: ${({ $isOpen }) => ($isOpen ? 'red' : 'black')};
   width: 40px;
   height: 40px;
   align-items: center;
@@ -101,11 +96,12 @@ export const MenuButton = styled.button<MenuButtonProps>`
   transition: all 0.3s ease;
   border-radius: 50%;
   margin-left: auto;
-  
+
   &:hover {
-    background-color: ${({ $isOpen }) => $isOpen ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'};
+    background-color: ${({ $isOpen }) =>
+      $isOpen ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'};
   }
-  
+
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     display: none;
   }
@@ -168,7 +164,11 @@ export const MobileMenuContainer = styled(motion.div)`
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 70%
+    );
     pointer-events: none;
   }
 
