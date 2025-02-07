@@ -8,7 +8,7 @@ const projectSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),
   imageUrl: z.string().url('Must be a valid URL'),
-  tags: z.string(),
+  tags: z.array(z.string()),
   featured: z.boolean(),
   githubUrl: z.string().nullable(),
   liveUrl: z.string().nullable(),
@@ -92,10 +92,7 @@ export async function POST(
           title: validatedData.title,
           description: validatedData.description,
           image_url: validatedData.imageUrl,
-          tags: validatedData.tags
-            .split(',')
-            .map((tag) => tag.trim())
-            .filter(Boolean),
+          tags: validatedData.tags,
           featured: validatedData.featured,
           github_url: validatedData.githubUrl,
           live_url: validatedData.liveUrl,

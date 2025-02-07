@@ -124,18 +124,20 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSave, onClose }) =
 
   const handleFormSubmit = async (data: ProjectFormInput) => {
     try {
-      console.log('Submitting data:', data); // Add logging
+      console.log('Submitting data:', data);
+      // Format the data before sending to API
+      const formattedTags = data.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
       const formattedData = {
         ...(project ? { id: project.id } : {}),
         title: data.title,
         description: data.description,
         imageUrl: data.imageUrl,
-        tags: data.tags,
+        tags: formattedTags,
         featured: data.featured,
-        githubUrl: data.githubUrl,
-        liveUrl: data.liveUrl,
+        githubUrl: data.githubUrl || null,
+        liveUrl: data.liveUrl || null,
       };
-      console.log('Formatted data:', formattedData); // Add logging
+      console.log('Formatted data:', formattedData);
 
       const response = await fetch(project ? `/api/projects/${project.id}` : '/api/projects', {
         method: project ? 'PATCH' : 'POST',
@@ -145,18 +147,21 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSave, onClose }) =
         body: JSON.stringify(formattedData),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Server error:', errorData); // Add logging
-        throw new Error(errorData.error || 'Failed to save project');
-      }
+      const responseData = await response.json();
+      console.log('Response from server:', responseData);
 
       if (!response.ok) {
-        throw new Error('Failed to save project');
+        console.error('Server error details:', responseData);
+        throw new Error(responseData.error || 'Failed to save project');
       }
 
-      const savedProject = await response.json();
-      onSave(savedProject);
+      // Check if we have a valid project response
+      if (!responseData.id) {
+        console.error('Invalid response format:', responseData);
+        throw new Error('Invalid response from server');
+      }
+
+      onSave(responseData);
       showToast('Project saved successfully', 'success');
     } catch (error) {
       console.error('Form submission error:', error);

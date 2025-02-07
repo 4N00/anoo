@@ -2,14 +2,14 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { Project } from '@/types/project';
+import { Project, ProjectUI, toProjectUI } from '@/types/project';
 
 const projectUpdateSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),
   imageUrl: z.string().url('Must be a valid URL'),
-  tags: z.string(),
+  tags: z.array(z.string()),
   featured: z.boolean(),
   githubUrl: z.string().nullable(),
   liveUrl: z.string().nullable(),
@@ -42,7 +42,7 @@ const createClient = () => {
 export async function PATCH(
   request: Request,
   { params }: { params: { id: string } }
-): Promise<NextResponse<Project | { error: string; details?: any }>> {
+): Promise<NextResponse<ProjectUI | { error: string; details?: any }>> {
   const supabase = createClient();
   
   try {
@@ -80,24 +80,33 @@ export async function PATCH(
         title: validatedData.title,
         description: validatedData.description,
         image_url: validatedData.imageUrl,
-        tags: validatedData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+        tags: validatedData.tags,
         featured: validatedData.featured,
         github_url: validatedData.githubUrl,
         live_url: validatedData.liveUrl,
         updated_at: new Date().toISOString(),
       })
       .eq('id', params.id)
-      .eq('author_id', user.id)
       .select()
       .single();
 
     if (error) {
-      console.error('Database error:', error); // Add logging
-      throw error;
+      console.error('Database error:', error);
+      return NextResponse.json(
+        { error: 'Database error', details: error },
+        { status: 500 }
+      );
     }
-    if (!project) throw new Error('Project not found');
 
-    return NextResponse.json(project);
+    if (!project) {
+      return NextResponse.json(
+        { error: 'Project not found' },
+        { status: 404 }
+      );
+    }
+
+    // Convert the database response to UI format using the helper function
+    return NextResponse.json(toProjectUI(project));
   } catch (error) {
     if (error instanceof z.ZodError) {
       console.error('Validation error:', error.errors); // Add logging
