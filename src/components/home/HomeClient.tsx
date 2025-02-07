@@ -2,12 +2,24 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import styled from 'styled-components';
 import HeroSection from '@/components/HeroSection';
 import ProjectSection from '@/components/ProjectSection';
 import { useProjects } from '@/hooks/useProjects';
 import { ProjectUI } from '@/types/project';
 import { MainContainer } from '@/styles/HomeStyles';
 import { debounce } from '@/utils/helpers';
+
+const PageBackground = styled.div<{ $bgColor: string }>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: ${props => props.$bgColor};
+  transition: background-color 0.6s ease;
+  z-index: -1;
+`;
 
 interface HomeClientProps {
   initialProjects: ProjectUI[];
@@ -19,6 +31,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
   const { fetchMoreProjects } = useProjects();
 
   const { scrollYProgress } = useScroll({
@@ -88,13 +101,13 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
 
       // Change background color based on scroll position
       if (scrollPercentage < 0.3) {
-        document.documentElement.style.backgroundColor = '#FFFFFF';
+        setBackgroundColor('#FFFFFF');
       } else if (scrollPercentage < 0.6) {
-        document.documentElement.style.backgroundColor = '#F2FCE2';
+        setBackgroundColor('#F2FCE2');
       } else if (scrollPercentage < 0.9) {
-        document.documentElement.style.backgroundColor = '#FEF7CD';
+        setBackgroundColor('#FEF7CD');
       } else {
-        document.documentElement.style.backgroundColor = '#E5DEFF';
+        setBackgroundColor('#E5DEFF');
       }
     }, 100);
 
@@ -103,17 +116,19 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      document.documentElement.style.backgroundColor = ''; // Reset on unmount
     };
   }, []);
 
   return (
-    <MainContainer>
-      <motion.div style={{ opacity }}>
-        <HeroSection />
-      </motion.div>
-      <ProjectSection ref={projectsRef} projects={projects} />
-    </MainContainer>
+    <>
+      <PageBackground $bgColor={backgroundColor} />
+      <MainContainer>
+        <motion.div style={{ opacity }}>
+          <HeroSection />
+        </motion.div>
+        <ProjectSection ref={projectsRef} projects={projects} />
+      </MainContainer>
+    </>
   );
 };
 

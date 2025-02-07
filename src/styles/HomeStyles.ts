@@ -119,8 +119,8 @@ export const Background = styled.div<{ $color: string }>`
 export const MainContainer = styled.div`
   color: ${({ theme }) => theme.colors.text.primary};
   position: relative;
-  overflow: hidden;
   z-index: 1;
+  min-height: 100vh;
   background: transparent;
 `;
 
