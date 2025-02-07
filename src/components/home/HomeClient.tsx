@@ -2,24 +2,13 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import styled from 'styled-components';
 import HeroSection from '@/components/HeroSection';
 import ProjectSection from '@/components/ProjectSection';
 import { useProjects } from '@/hooks/useProjects';
 import { ProjectUI } from '@/types/project';
 import { MainContainer } from '@/styles/HomeStyles';
 import { debounce } from '@/utils/helpers';
-
-const PageBackground = styled.div<{ $bgColor: string }>`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: ${props => props.$bgColor};
-  transition: background-color 0.6s ease;
-  z-index: -1;
-`;
+import { useBackground } from '@/context/BackgroundContext';
 
 interface HomeClientProps {
   initialProjects: ProjectUI[];
@@ -31,7 +20,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-  const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
+  const { setBackgroundColor } = useBackground();
   const { fetchMoreProjects } = useProjects();
 
   const { scrollYProgress } = useScroll({
@@ -116,19 +105,17 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      setBackgroundColor('#FFFFFF'); // Reset color on unmount
     };
-  }, []);
+  }, [setBackgroundColor]);
 
   return (
-    <>
-      <PageBackground $bgColor={backgroundColor} />
-      <MainContainer>
-        <motion.div style={{ opacity }}>
-          <HeroSection />
-        </motion.div>
-        <ProjectSection ref={projectsRef} projects={projects} />
-      </MainContainer>
-    </>
+    <MainContainer>
+      <motion.div style={{ opacity }}>
+        <HeroSection />
+      </motion.div>
+      <ProjectSection ref={projectsRef} projects={projects} />
+    </MainContainer>
   );
 };
 
