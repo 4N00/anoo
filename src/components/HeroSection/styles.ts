@@ -29,7 +29,6 @@ export const ContentWrapper = styled.div`
   position: relative;
   z-index: ${({ theme }) => theme.zIndex.base + 10};
   max-width: inherit;
-  margin-left: ${({ theme }) => theme.spacing['2xl']};
 `;
 
 export const LetterContainer = styled(motion.div)`

@@ -20,16 +20,59 @@ export const Container = styled.div`
   width: 100%;
   max-width: min(1400px, calc(100% - ${({ theme }) => theme.spacing.md} * 2));
   margin: 0 auto;
-  padding: 0 ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => theme.spacing.md};
 `;
 
 export const Logo = styled.a`
   font-size: ${({ theme }) => theme.typography.fontSize.lg};
   color: ${({ theme }) => theme.colors.text.primary};
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
+  text-decoration: none;
+`;
+
+interface MenuButtonProps {
+  $isOpen: boolean;
+}
+
+export const MenuButton = styled.button<MenuButtonProps>`
+  display: flex;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: ${({ theme }) => theme.spacing.sm};
+  z-index: ${({ theme }) => theme.zIndex.header + 10};
+  color: ${({ theme }) => theme.colors.text.primary};
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  margin-left: auto;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    display: none;
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+  }
 `;
 
 export const NavLinks = styled.div`
-  display: none;
+  display: flex;
+  align-items: center;
+
+  & > *:not(${MenuButton}) {
+    display: none;
+  }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     display: flex;
@@ -38,6 +81,14 @@ export const NavLinks = styled.div`
     align-items: center;
     flex-wrap: nowrap;
     overflow: hidden;
+
+    & > *:not(${MenuButton}) {
+      display: flex;
+    }
+
+    ${MenuButton} {
+      display: none;
+    }
   }
 `;
 
@@ -46,7 +97,7 @@ export const NavLink = styled(Link)`
   text-decoration: none;
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
   font-weight: ${({ theme }) => theme.typography.fontWeight.normal};
-  font-family: ${({ theme }) => theme.fonts.body};
+  font-family: 'Josefin Sans', sans-serif;
   transition: all 0.3s ease;
   opacity: 0.8;
   position: relative;
@@ -74,42 +125,6 @@ export const NavLink = styled(Link)`
     &:after {
       width: 100%;
     }
-  }
-`;
-
-interface MenuButtonProps {
-  $isOpen: boolean;
-}
-
-export const MenuButton = styled.button<MenuButtonProps>`
-  display: flex;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: ${({ theme }) => theme.spacing.sm};
-  z-index: ${({ theme }) => theme.zIndex.header + 10};
-  color: ${({ $isOpen }) => ($isOpen ? 'red' : 'black')};
-  width: 40px;
-  height: 40px;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  border-radius: 50%;
-  margin-left: auto;
-
-  &:hover {
-    background-color: ${({ $isOpen }) =>
-      $isOpen ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'};
-  }
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    display: none;
-  }
-
-  svg {
-    width: 24px;
-    height: 24px;
-    transition: transform 0.3s ease;
   }
 `;
 
@@ -183,7 +198,7 @@ export const MobileNavLink = styled(motion.a).attrs({ as: Link })`
   text-decoration: none;
   font-size: 2.5rem;
   font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  font-family: ${({ theme }) => theme.fonts.body};
+  font-family: 'Josefin Sans', sans-serif;
   opacity: 0.7;
   transition: all 0.3s ease;
   letter-spacing: 2px;

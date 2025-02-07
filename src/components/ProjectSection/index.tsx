@@ -3,7 +3,8 @@
 import React, { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import ProjectCard from '../ProjectCard/ProjectCard';
-import { ProjectContainer } from '../ProjectCard/styles';
+import { ProjectContainer, ProjectGrid } from '../ProjectCard/styles';
+import { HeaderText } from '@/styles/HomeStyles';
 import { ProjectUI } from '@/types/project';
 
 const containerVariants = {
@@ -21,12 +22,14 @@ const containerVariants = {
 
 interface ProjectSectionProps {
   projects: ProjectUI[];
-  title?: string;
-  featured?: boolean;
 }
 
 const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(
-  ({ projects, title, featured = false }, ref) => {
+  ({ projects }, ref) => {
+    // Split projects into featured and non-featured
+    const featuredProjects = projects.filter(p => p.featured);
+    const nonFeaturedProjects = projects.filter(p => !p.featured);
+
     return (
       <motion.section
         ref={ref}
@@ -35,12 +38,27 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(
         variants={containerVariants}
         style={{ position: 'relative' }}
       >
-        {title && <h2>{title}</h2>}
-        <ProjectContainer $featured={featured}>
-          {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
-          ))}
-        </ProjectContainer>
+        {featuredProjects.length > 0 && (
+          <ProjectContainer $featured>
+            <HeaderText>FEATURED</HeaderText>
+            <ProjectGrid $featured>
+              {featuredProjects.map((project, index) => (
+                <ProjectCard key={project.id} project={project} index={index} />
+              ))}
+            </ProjectGrid>
+          </ProjectContainer>
+        )}
+        
+        {nonFeaturedProjects.length > 0 && (
+          <ProjectContainer>
+            <HeaderText>PROJECTS</HeaderText>
+            <ProjectGrid>
+              {nonFeaturedProjects.map((project, index) => (
+                <ProjectCard key={project.id} project={project} index={index} />
+              ))}
+            </ProjectGrid>
+          </ProjectContainer>
+        )}
       </motion.section>
     );
   }

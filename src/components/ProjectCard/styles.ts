@@ -6,17 +6,20 @@ interface ProjectContainerProps {
 }
 
 export const ProjectContainer = styled.div<ProjectContainerProps>`
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+`;
+
+export const ProjectGrid = styled.div<ProjectContainerProps>`
   display: grid;
   gap: ${({ theme }) => theme.spacing.lg};
-  grid-template-columns: 1fr;
-  padding: 0 ${({ theme }) => theme.spacing.sm};
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-template-columns: 1fr 1fr;
+  grid-template-columns: ${({ $featured }) => ($featured ? '1fr' : 'repeat(2, 1fr)')};
+  margin-top: ${({ theme }) => theme.spacing.xl};
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    grid-template-columns: 1fr;
   }
-
-  max-height: ${(props) => (props.$featured ? '800px' : 'none')};
-  overflow: ${(props) => (props.$featured ? 'hidden' : 'visible')};
 `;
 
 export const ProjectCardWrapper = styled(motion.div)`

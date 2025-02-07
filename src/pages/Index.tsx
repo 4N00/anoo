@@ -2,8 +2,19 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import HeroSection from '../components/HeroSection';
-import ProjectSection from '../components/ProjectSection';
-import { MainContainer, Separator, ProjectGrid, Background } from '../styles/HomeStyles';
+import {
+  MainContainer,
+  Separator,
+  ProjectGrid,
+  Background,
+  HeaderText,
+  ProjectTitle,
+  ProjectDescription,
+  ProjectNumber,
+  Section,
+  ProjectCard,
+  FeaturedGrid,
+} from '../styles/HomeStyles';
 import { ProjectUI } from '@/types/project';
 
 const COLORS = ['#FFFFFF', '#F2FCE2', '#FEF7CD', '#E5DEFF'] as const;
@@ -21,7 +32,6 @@ const Index: React.FC<IndexProps> = ({ initialProjects }) => {
       const viewportHeight = window.innerHeight;
       const scrollPosition = window.scrollY + viewportHeight / 2;
 
-      // Find which section is most visible
       let activeIndex = 0;
       sectionsRef.current.forEach((section, index) => {
         if (!section) return;
@@ -38,71 +48,70 @@ const Index: React.FC<IndexProps> = ({ initialProjects }) => {
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial check
+    handleScroll();
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Filter projects based on featured flag
-  const featuredProjects = initialProjects.filter((p) => p.featured);
-  const nonFeaturedProjects = initialProjects.filter((p) => !p.featured);
-
-  // Split non-featured projects into groups
-  const chunkSize = Math.ceil(nonFeaturedProjects.length / 4);
-  const projectsSetOne = nonFeaturedProjects.slice(0, chunkSize);
-  const projectsSetTwo = nonFeaturedProjects.slice(chunkSize, chunkSize * 2);
-  const projectsSetThree = nonFeaturedProjects.slice(chunkSize * 2, chunkSize * 3);
-  const projectsSetFour = nonFeaturedProjects.slice(chunkSize * 3);
+  
+  // Sort projects in reverse order to match admin panel
+  const sortedProjects = [...initialProjects].reverse();
+  const featuredProjects = sortedProjects.filter((p) => {
+    return p.featured;
+  });
+  const nonFeaturedProjects = sortedProjects.filter((p) => !p.featured);
 
   return (
     <>
       <Background $color={currentColor} />
       <MainContainer>
-        <section
+        <Section
           ref={(el) => {
             if (el) sectionsRef.current[0] = el;
             return undefined;
           }}
         >
           <HeroSection />
-        </section>
+        </Section>
         <Separator />
         {featuredProjects.length > 0 && (
-          <section
+          <Section
             ref={(el) => {
               if (el) sectionsRef.current[1] = el;
               return undefined;
             }}
           >
-            <ProjectSection title="FEATURED" featured projects={featuredProjects} />
-          </section>
+            <HeaderText>FEATURED</HeaderText>
+            <FeaturedGrid>
+              {featuredProjects.map((project, index) => (
+                <ProjectCard key={project.id} $isFeatured>
+                  <ProjectNumber>F/{String(index + 1).padStart(2, '0')}</ProjectNumber>
+                  <img src={project.imageUrl} alt={project.title} />
+                  <ProjectTitle>{project.title}</ProjectTitle>
+                  <ProjectDescription>{project.description}</ProjectDescription>
+                </ProjectCard>
+              ))}
+            </FeaturedGrid>
+          </Section>
         )}
-        {(projectsSetOne.length > 0 || projectsSetTwo.length > 0) && (
-          <section
-            ref={(el) => {
-              if (el) sectionsRef.current[2] = el;
-              return undefined;
-            }}
-          >
-            <ProjectGrid>
-              {projectsSetOne.length > 0 && <ProjectSection projects={projectsSetOne} />}
-              {projectsSetTwo.length > 0 && <ProjectSection projects={projectsSetTwo} />}
-            </ProjectGrid>
-          </section>
-        )}
-        {(projectsSetThree.length > 0 || projectsSetFour.length > 0) && (
-          <section
-            ref={(el) => {
-              if (el) sectionsRef.current[3] = el;
-              return undefined;
-            }}
-          >
-            <ProjectGrid>
-              {projectsSetThree.length > 0 && <ProjectSection projects={projectsSetThree} />}
-              {projectsSetFour.length > 0 && <ProjectSection projects={projectsSetFour} />}
-            </ProjectGrid>
-          </section>
-        )}
+        <Separator />
+        <Section
+          ref={(el) => {
+            if (el) sectionsRef.current[2] = el;
+            return undefined;
+          }}
+        >
+          <HeaderText>PROJECTS</HeaderText>
+          <ProjectGrid>
+            {nonFeaturedProjects.map((project, index) => (
+              <ProjectCard key={project.id}>
+                <ProjectNumber>P/{String(index + 1).padStart(2, '0')}</ProjectNumber>
+                <img src={project.imageUrl} alt={project.title} />
+                <ProjectTitle>{project.title}</ProjectTitle>
+                <ProjectDescription>{project.description}</ProjectDescription>
+              </ProjectCard>
+            ))}
+          </ProjectGrid>
+        </Section>
       </MainContainer>
     </>
   );
