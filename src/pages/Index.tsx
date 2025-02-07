@@ -6,7 +6,7 @@ import ProjectSection from '../components/ProjectSection';
 import { MainContainer, Separator, ProjectGrid, Background } from '../styles/HomeStyles';
 import { ProjectUI } from '@/types/project';
 
-const COLORS = ['#FFFFFF', '#F2FCE2', '#FEF7CD', '#E5DEFF', '#FFDEE2'] as const;
+const COLORS = ['#FFFFFF', '#F2FCE2', '#FEF7CD', '#E5DEFF'] as const;
 
 interface IndexProps {
   initialProjects: ProjectUI[];
@@ -103,12 +103,6 @@ const Index: React.FC<IndexProps> = ({ initialProjects }) => {
             </ProjectGrid>
           </section>
         )}
-        <section
-          ref={(el) => {
-            if (el) sectionsRef.current[4] = el;
-            return undefined;
-          }}
-        ></section>
       </MainContainer>
     </>
   );

@@ -8,7 +8,7 @@ import { AuthProvider } from '../context/AuthContext';
 import { ToastProvider } from '../context/ToastContext';
 import Navbar from '../components/Navbar';
 import PageFooter from '../components/PageFooter';
-import { motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { styled } from 'styled-components';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -54,20 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <ProjectsProvider>
                   <Navbar />
                   <MainContent>
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{
-                        duration: 0.2,
-                        ease: 'linear',
-                      }}
-                      style={{
-                        width: '100%',
-                        willChange: 'opacity',
-                      }}
-                    >
-                      {children}
-                    </motion.div>
+                    <AnimatePresence mode="wait">{children}</AnimatePresence>
                   </MainContent>
                   <PageFooter />
                 </ProjectsProvider>
