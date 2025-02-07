@@ -25,6 +25,7 @@ export const ProjectGrid = styled.div<ProjectContainerProps>`
 export const ProjectCardWrapper = styled(motion.div)`
   width: 100%;
   cursor: pointer;
+  will-change: transform, opacity, filter;
 `;
 
 export const ProjectImage = styled(motion.img)`
@@ -32,6 +33,7 @@ export const ProjectImage = styled(motion.img)`
   aspect-ratio: 4/3;
   object-fit: cover;
   transition: transform ${({ theme }) => theme.transitions.normal};
+  will-change: transform;
 
   &:hover {
     transform: scale(1.02);

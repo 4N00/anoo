@@ -42,8 +42,8 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(
           <ProjectContainer $featured>
             <HeaderText>FEATURED</HeaderText>
             <ProjectGrid $featured>
-              {featuredProjects.map((project, index) => (
-                <ProjectCard key={project.id} project={project} index={index} />
+              {featuredProjects.map((project) => (
+                <ProjectCard key={project.id} project={project} />
               ))}
             </ProjectGrid>
           </ProjectContainer>
@@ -53,8 +53,8 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(
           <ProjectContainer>
             <HeaderText>PROJECTS</HeaderText>
             <ProjectGrid>
-              {nonFeaturedProjects.map((project, index) => (
-                <ProjectCard key={project.id} project={project} index={index} />
+              {nonFeaturedProjects.map((project) => (
+                <ProjectCard key={project.id} project={project} />
               ))}
             </ProjectGrid>
           </ProjectContainer>
