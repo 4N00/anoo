@@ -7,23 +7,127 @@ import ProjectList from '@/components/admin/ProjectList';
 import ProjectForm from '@/components/admin/ProjectForm';
 import { useToast } from '@/context/ToastContext';
 import { Button } from '@/styles/components/Button';
+import { Search, Filter, SortAsc, Plus, User, Clock } from 'lucide-react';
 
 const AdminContainer = styled.div`
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: ${({ theme }) => theme.spacing.lg};
+  background: ${({ theme }) => theme.colors.background.secondary};
+  min-height: calc(100vh - 64px);
+`;
+
+const ContentWrapper = styled.div`
+  background: ${({ theme }) => theme.colors.background.primary};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  padding: ${({ theme }) => theme.spacing.lg};
+  box-shadow: ${({ theme }) => theme.shadows.sm};
 `;
 
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.text.secondary}20;
 `;
 
 const Title = styled.h1`
-  font-size: ${({ theme }) => theme.typography.fontSize['3xl']};
+  font-size: ${({ theme }) => theme.typography.fontSize.xl};
   color: ${({ theme }) => theme.colors.text.primary};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+
+  svg {
+    color: ${({ theme }) => theme.colors.text.secondary};
+    width: 20px;
+    height: 20px;
+  }
+`;
+
+const ToolBar = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  background: ${({ theme }) => theme.colors.background.secondary};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.text.secondary}20;
+`;
+
+const SearchWrapper = styled.div`
+  position: relative;
+  flex: 1;
+  max-width: 240px;
+
+  svg {
+    position: absolute;
+    left: ${({ theme }) => theme.spacing.sm};
+    top: 50%;
+    transform: translateY(-50%);
+    color: ${({ theme }) => theme.colors.text.secondary};
+    width: 16px;
+    height: 16px;
+  }
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  height: 32px;
+  padding: 0 ${({ theme }) => theme.spacing.sm} 0 ${({ theme }) => theme.spacing.xl};
+  border: 1px solid ${({ theme }) => theme.colors.text.secondary}20;
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  font-size: ${({ theme }) => theme.typography.fontSize.sm};
+  background: ${({ theme }) => theme.colors.background.primary};
+  color: ${({ theme }) => theme.colors.text.primary};
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary.main};
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.text.secondary};
+  }
+`;
+
+const IconButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid ${({ theme }) => theme.colors.text.secondary}20;
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  background: ${({ theme }) => theme.colors.background.primary};
+  color: ${({ theme }) => theme.colors.text.primary};
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.background.secondary};
+    border-color: ${({ theme }) => theme.colors.primary.main};
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+const AddButton = styled(Button)`
+  height: 32px;
+  padding: 0 ${({ theme }) => theme.spacing.md};
+  font-size: ${({ theme }) => theme.typography.fontSize.sm};
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
 `;
 
 interface AdminProps {
@@ -144,6 +248,10 @@ const Admin: React.FC<AdminProps> = ({ initialProjects }) => {
   };
 
   const handleDelete = async (project: ProjectUI) => {
+    if (!window.confirm(`Are you sure you want to delete "${project.title}"?`)) {
+      return;
+    }
+
     setIsDeleting(true);
     try {
       const response = await fetch(`/api/projects/${project.id}`, {
@@ -151,8 +259,7 @@ const Admin: React.FC<AdminProps> = ({ initialProjects }) => {
       });
 
       if (!response.ok) {
-        console.error('Server error:', response.statusText);
-        throw new Error(response.statusText);
+        throw new Error('Failed to delete project');
       }
 
       handleProjectDeleted(project.id);
@@ -167,25 +274,50 @@ const Admin: React.FC<AdminProps> = ({ initialProjects }) => {
 
   return (
     <AdminContainer>
-      <Header>
-        <Title>Project Management</Title>
-        <Button onClick={handleAddProject}>Add Project</Button>
-      </Header>
+      <ContentWrapper>
+        <Header>
+          <Title>
+            <Clock />
+            Timesheet
+          </Title>
+          <AddButton onClick={handleAddProject} disabled={isSaving || isDeleting}>
+            <Plus />
+            New Entry
+          </AddButton>
+        </Header>
 
-      <ProjectList
-        projects={projects}
-        onEdit={handleEditProject}
-        onDelete={handleProjectDeleted}
-        onReorder={handleProjectReorder}
-      />
+        <ToolBar>
+          <SearchWrapper>
+            <Search />
+            <SearchInput placeholder="Search entries..." disabled={isSaving || isDeleting} />
+          </SearchWrapper>
+          <IconButton disabled={isSaving || isDeleting}>
+            <User />
+          </IconButton>
+          <IconButton disabled={isSaving || isDeleting}>
+            <Filter />
+          </IconButton>
+          <IconButton disabled={isSaving || isDeleting}>
+            <SortAsc />
+          </IconButton>
+        </ToolBar>
 
-      {showForm && (
-        <ProjectForm
-          project={editingProject}
-          onSave={handleSave}
-          onClose={handleCloseForm}
+        <ProjectList
+          projects={projects}
+          onEdit={handleEditProject}
+          onDelete={(projectId) => {
+            const project = projects.find((p) => p.id === projectId);
+            if (project) {
+              handleDelete(project);
+            }
+          }}
+          onReorder={handleProjectReorder}
         />
-      )}
+
+        {showForm && (
+          <ProjectForm project={editingProject} onSave={handleSave} onClose={handleCloseForm} />
+        )}
+      </ContentWrapper>
     </AdminContainer>
   );
 };

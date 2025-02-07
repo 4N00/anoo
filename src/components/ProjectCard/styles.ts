@@ -9,6 +9,7 @@ export const ProjectContainer = styled.div<ProjectContainerProps>`
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
+  padding: ${({ theme }) => theme.spacing.lg} 0;
 `;
 
 export const ProjectGrid = styled.div<ProjectContainerProps>`
@@ -16,7 +17,7 @@ export const ProjectGrid = styled.div<ProjectContainerProps>`
   gap: ${({ theme }) => theme.spacing.lg};
   grid-template-columns: ${({ $featured }) => ($featured ? '1fr' : 'repeat(2, 1fr)')};
   margin-top: ${({ theme }) => theme.spacing.xl};
-  
+
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     grid-template-columns: 1fr;
   }
