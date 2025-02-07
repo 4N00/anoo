@@ -10,6 +10,7 @@ import {
   type DroppableProvided,
   type DraggableProvided,
   type DraggableStateSnapshot,
+  type DroppableStateSnapshot,
 } from '@hello-pangea/dnd';
 import { GripVertical } from 'lucide-react';
 import { ProjectUI } from '@/types/project';
@@ -34,14 +35,19 @@ const FeaturedTitle = styled.h2`
   margin-bottom: 1rem;
 `;
 
-const ProjectsContainer = styled.div`
+const ProjectsContainer = styled.div<{ $isDraggingOver?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 1rem;
   width: 100%;
   padding: 1rem;
-  background-color: ${({ theme }) => theme.colors.background.primary};
+  background-color: ${({ theme, $isDraggingOver }) =>
+    $isDraggingOver ? theme.colors.background.secondary : theme.colors.background.primary};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
+  min-height: 100px;
+  transition: background-color 0.2s ease;
+  border: 2px dashed
+    ${({ theme, $isDraggingOver }) => ($isDraggingOver ? theme.colors.primary.main : 'transparent')};
 `;
 
 const ProjectItem = styled.div<{ $isDragging?: boolean }>`
@@ -55,10 +61,12 @@ const ProjectItem = styled.div<{ $isDragging?: boolean }>`
   box-shadow: ${({ theme, $isDragging }) => ($isDragging ? theme.shadows.lg : theme.shadows.sm)};
   transition:
     background-color 0.2s,
-    box-shadow 0.2s;
+    box-shadow 0.2s,
+    transform 0.2s;
   position: relative;
   border: 2px solid
     ${({ theme, $isDragging }) => ($isDragging ? theme.colors.primary.main : 'transparent')};
+  transform: scale(${({ $isDragging }) => ($isDragging ? 1.02 : 1)});
 `;
 
 const OrderNumber = styled.div`
@@ -222,8 +230,12 @@ const ProjectList = ({ projects, onEdit, onDelete, onReorder }: ProjectListProps
           <FeaturedSection>
             <FeaturedTitle>Featured Projects</FeaturedTitle>
             <Droppable droppableId="featured-projects">
-              {(provided: DroppableProvided) => (
-                <ProjectsContainer ref={provided.innerRef} {...provided.droppableProps}>
+              {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
+                <ProjectsContainer
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  $isDraggingOver={snapshot.isDraggingOver}
+                >
                   {featuredProjects.map((project, index) => renderProject(project, index, false))}
                   {provided.placeholder}
                 </ProjectsContainer>
@@ -233,8 +245,12 @@ const ProjectList = ({ projects, onEdit, onDelete, onReorder }: ProjectListProps
         )}
 
         <Droppable droppableId="project-list">
-          {(provided: DroppableProvided) => (
-            <ProjectsContainer ref={provided.innerRef} {...provided.droppableProps}>
+          {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
+            <ProjectsContainer
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              $isDraggingOver={snapshot.isDraggingOver}
+            >
               {regularProjects.map((project, index) => renderProject(project, index))}
               {provided.placeholder}
             </ProjectsContainer>
