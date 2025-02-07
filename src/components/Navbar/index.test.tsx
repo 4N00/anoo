@@ -127,7 +127,7 @@ describe('Navbar', () => {
     mockUseAuth.mockReturnValue({ isLoading: true });
     render(<Navbar />);
     expect(screen.getByText('ANOO')).toBeInTheDocument();
-    expect(screen.queryByText('Home')).not.toBeInTheDocument();
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 
   it('renders basic navigation links when not logged in', () => {
@@ -139,7 +139,6 @@ describe('Navbar', () => {
     });
     render(<Navbar />);
 
-    expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('About')).toBeInTheDocument();
     expect(screen.getByText('Contact')).toBeInTheDocument();
     expect(screen.getByText('Login')).toBeInTheDocument();

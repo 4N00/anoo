@@ -135,23 +135,8 @@ const contactInfoVariants = {
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  const { isAdmin, user, isLoading } = useAuth();
+  const { isAdmin, isLoading } = useAuth();
   const toggleMenu = () => setIsOpen(!isOpen);
-
-  // Don't render nav links while loading to prevent hydration mismatch
-  if (isLoading) {
-    return (
-      <Nav>
-        <Container>
-          <Logo href="/">ANOO</Logo>
-          <NavLinks />
-          <MenuButton onClick={toggleMenu} aria-label="Toggle menu" $isOpen={isOpen}>
-            <MenuIcon isOpen={isOpen} />
-          </MenuButton>
-        </Container>
-      </Nav>
-    );
-  }
 
   const handleLogout = async () => {
     await signOut();
@@ -168,16 +153,17 @@ const Navbar = () => {
       <Container>
         <Logo href="/">ANOO</Logo>
         <NavLinks>
-          <NavLink href="/" aria-current={pathname === '/' ? 'page' : undefined}>
-            Home
-          </NavLink>
           <NavLink href="/about" aria-current={pathname === '/about' ? 'page' : undefined}>
             About
           </NavLink>
           <NavLink href="/contact" aria-current={pathname === '/contact' ? 'page' : undefined}>
             Contact
           </NavLink>
-          {isAdmin ? (
+          {isLoading ? (
+            <NavLink href="#" style={{ opacity: 0.5, pointerEvents: 'none' }}>
+              Loading...
+            </NavLink>
+          ) : isAdmin ? (
             <>
               <NavLink href="/admin" aria-current={pathname === '/admin' ? 'page' : undefined}>
                 Admin
@@ -186,11 +172,11 @@ const Navbar = () => {
                 Logout
               </NavLink>
             </>
-          ) : !user ? (
+          ) : (
             <NavLink href="/login" aria-current={pathname === '/login' ? 'page' : undefined}>
               Login
             </NavLink>
-          ) : null}
+          )}
         </NavLinks>
         <MenuButton onClick={toggleMenu} aria-label="Toggle menu" $isOpen={isOpen}>
           <MenuIcon isOpen={isOpen} />
@@ -208,16 +194,21 @@ const Navbar = () => {
             <CloseButton onClick={toggleMenu} aria-label="Close menu">
               <CloseIcon />
             </CloseButton>
-            <MobileNavLink href="/" onClick={toggleMenu} variants={mobileNavLinkVariants}>
-              Home
-            </MobileNavLink>
             <MobileNavLink href="/about" onClick={toggleMenu} variants={mobileNavLinkVariants}>
               About
             </MobileNavLink>
             <MobileNavLink href="/contact" onClick={toggleMenu} variants={mobileNavLinkVariants}>
               Contact
             </MobileNavLink>
-            {isAdmin ? (
+            {isLoading ? (
+              <MobileNavLink
+                href="#"
+                style={{ opacity: 0.5, pointerEvents: 'none' }}
+                variants={mobileNavLinkVariants}
+              >
+                Loading...
+              </MobileNavLink>
+            ) : isAdmin ? (
               <>
                 <MobileNavLink href="/admin" onClick={toggleMenu} variants={mobileNavLinkVariants}>
                   Admin
@@ -233,11 +224,11 @@ const Navbar = () => {
                   Logout
                 </MobileNavLink>
               </>
-            ) : !user ? (
+            ) : (
               <MobileNavLink href="/login" onClick={toggleMenu} variants={mobileNavLinkVariants}>
                 Login
               </MobileNavLink>
-            ) : null}
+            )}
             <ContactInfo as={motion.div} variants={contactInfoVariants}>
               <span>info@anoo.com</span>
               <span>+31 6 12345678</span>

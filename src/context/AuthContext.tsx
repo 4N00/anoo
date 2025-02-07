@@ -42,6 +42,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const adminStatus = await checkIsAdmin();
           if (!mounted) return;
           setIsAdmin(adminStatus);
+        } else {
+          setIsAdmin(false);
         }
       } catch (error) {
         console.error('Error initializing auth:', error);
@@ -60,22 +62,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!mounted) return;
 
       try {
-        setIsLoading(true);
-        setSession(newSession);
-
         if (newSession) {
+          setSession(newSession);
           const adminStatus = await checkIsAdmin();
           if (!mounted) return;
           setIsAdmin(adminStatus);
         } else {
+          setSession(null);
           setIsAdmin(false);
         }
       } catch (error) {
         console.error('Error handling auth change:', error);
-      } finally {
-        if (mounted) {
-          setIsLoading(false);
-        }
+        setSession(null);
+        setIsAdmin(false);
       }
     });
 
