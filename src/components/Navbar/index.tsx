@@ -6,52 +6,61 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 
-const NavbarContainer = styled.nav`
+const NavbarContainer = styled.nav<{ $isMenuOpen: boolean }>`
   position: fixed;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   width: 100%;
-  max-width: 1400px;
   height: 64px;
+  z-index: 2000;
+  background: rgba(255, 255, 255, 0.01);
+  backdrop-filter: ${({ $isMenuOpen }) => $isMenuOpen ? 'none' : 'blur(10px)'};
+  -webkit-backdrop-filter: ${({ $isMenuOpen }) => $isMenuOpen ? 'none' : 'blur(10px)'};
+`;
+
+const NavbarContent = styled.div`
+  max-width: 1400px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 2rem;
-  z-index: 1000;
 `;
 
-const Logo = styled(Link)`
+const Logo = styled(Link)<{ $isMenuOpen: boolean }>`
   font-size: 1.5rem;
   font-weight: bold;
-  color: ${({ theme }) => theme.colors.text.primary};
+  color: ${({ $isMenuOpen, theme }) => $isMenuOpen ? 'white' : theme.colors.text.primary};
   text-decoration: none;
+  transition: color 0.2s ease;
 `;
 
 interface HamburgerButtonProps {
   isOpen: boolean;
 }
 
-const HamburgerButton = styled.button<HamburgerButtonProps>`
+const HamburgerButton = styled(motion.button)<HamburgerButtonProps>`
   background: none;
   border: none;
   cursor: pointer;
   padding: 1rem;
   margin: -1rem;
-  width: 48px;
-  height: 48px;
+  width: 64px;
+  height: 64px;
   position: relative;
-  z-index: 2000;
+  z-index: 2100;
   color: ${({ isOpen }) => isOpen ? 'white' : ({ theme }) => theme.colors.text.primary};
-  transition: opacity 0.2s ease, color 0.2s ease;
-
-  &:hover {
-    opacity: 0.7;
-  }
+  transition: color 0.2s ease;
 
   svg {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
+    path {
+      transform-origin: center;
+      stroke-width: 2.5;
+    }
   }
 `;
 
@@ -78,6 +87,7 @@ const Backdrop = styled(motion.div)`
   width: 100%;
   height: 100vh;
   z-index: 1400;
+  background: transparent;
 `;
 
 const MenuContent = styled(motion.div)`
@@ -98,8 +108,6 @@ const MenuItem = styled(Link)`
   opacity: 0.9;
   font-weight: 500;
 
-
-
   &:hover {
     opacity: 1;
   }
@@ -115,31 +123,6 @@ const BottomBar = styled.div`
   align-items: center;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: white;
-`;
-
-const CloseButton = styled(motion.button)`
-  position: absolute;
-  top: -3rem;
-  right: 2rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 1rem;
-  margin: -1rem;
-  width: 48px;
-  height: 48px;
-  color: white;
-  z-index: 2000;
-  transition: opacity 0.2s ease;
-
-  &:hover {
-    opacity: 0.7;
-  }
-
-  svg {
-    width: 24px;
-    height: 24px;
-  }
 `;
 
 const ThemeToggle = styled.button`
@@ -161,6 +144,35 @@ const ThemeToggle = styled.button`
   svg {
     width: 20px;
     height: 20px;
+  }
+`;
+
+const LanguageToggle = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  color: white;
+`;
+
+const LanguageOption = styled(motion.button)<{ $isActive?: boolean }>`
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: white;
+  opacity: ${({ $isActive }) => $isActive ? 1 : 0.5};
+  font-weight: ${({ $isActive }) => $isActive ? 500 : 400};
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: white;
+    transform: scaleX(${({ $isActive }) => $isActive ? 1 : 0});
+    transition: transform 0.2s ease;
   }
 `;
 
@@ -208,13 +220,76 @@ const contentVariants = {
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [language, setLanguage] = useState<'EN' | 'NL'>('EN');
   const { user } = useAuth();
   const [isDarkTheme, setIsDarkTheme] = useState(false);
+
+  const hamburgerVariants = {
+    hover: {
+      transition: {
+        staggerChildren: 0.1,
+      }
+    }
+  };
+
+  const lineOneVariants = {
+    initial: { y: 0, rotate: 0 },
+    hover: {
+      y: [0, -4, 0],
+      transition: {
+        repeat: Infinity,
+        duration: 1,
+        ease: "easeInOut"
+      }
+    },
+    open: {
+      y: 6,
+      rotate: 45,
+      transition: { duration: 0.2, ease: "easeOut" }
+    }
+  };
+
+  const lineTwoVariants = {
+    initial: { opacity: 1 },
+    hover: {
+      y: [0, -4, 0],
+      transition: {
+        repeat: Infinity,
+        duration: 1,
+        ease: "easeInOut"
+      }
+    },
+    open: {
+      opacity: 0,
+      transition: { duration: 0.15 }
+    }
+  };
+
+  const lineThreeVariants = {
+    initial: { y: 0, rotate: 0 },
+    hover: {
+      y: [0, -4, 0],
+      transition: {
+        repeat: Infinity,
+        duration: 1,
+        ease: "easeInOut"
+      }
+    },
+    open: {
+      y: -6,
+      rotate: -45,
+      transition: { duration: 0.2, ease: "easeOut" }
+    }
+  };
 
   const handleClickOutside = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       setIsMenuOpen(false);
     }
+  };
+
+  const handleLanguageChange = (newLang: 'EN' | 'NL') => {
+    setLanguage(newLang);
   };
 
   const toggleTheme = () => {
@@ -224,13 +299,24 @@ const Navbar = () => {
 
   return (
     <>
-      <NavbarContainer>
-        <Logo href="/">ANOO</Logo>
-        <HamburgerButton isOpen={isMenuOpen} onClick={() => setIsMenuOpen(true)}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </HamburgerButton>
+      <NavbarContainer $isMenuOpen={isMenuOpen}>
+        <NavbarContent>
+          <Logo href="/" $isMenuOpen={isMenuOpen}>anoo.nl</Logo>
+          <HamburgerButton 
+            isOpen={isMenuOpen} 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            variants={hamburgerVariants}
+            whileHover={isMenuOpen ? undefined : "hover"}
+            initial="initial"
+            animate={isMenuOpen ? "open" : "initial"}
+          >
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <motion.path variants={lineOneVariants} d="M4 6h16" />
+              <motion.path variants={lineTwoVariants} d="M4 12h16" />
+              <motion.path variants={lineThreeVariants} d="M4 18h16" />
+            </svg>
+          </HamburgerButton>
+        </NavbarContent>
       </NavbarContainer>
 
       <AnimatePresence>
@@ -242,19 +328,7 @@ const Navbar = () => {
               animate="open"
               exit="closed"
               variants={overlayVariants}
-            >
-              <CloseButton
-                onClick={() => setIsMenuOpen(false)}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M18 6L6 18M6 6l12 12" />
-                </svg>
-              </CloseButton>
-              
+            >              
               <MenuContent variants={contentVariants}>
                 <MenuItem href="/" onClick={() => setIsMenuOpen(false)}>
                   Home
@@ -276,7 +350,25 @@ const Navbar = () => {
               </MenuContent>
 
               <BottomBar>
-                <div>NL | EN</div>
+                <LanguageToggle>
+                  <LanguageOption
+                    $isActive={language === 'NL'}
+                    onClick={() => handleLanguageChange('NL')}
+                    whileHover={{ opacity: 1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    NL
+                  </LanguageOption>
+                  <span>|</span>
+                  <LanguageOption
+                    $isActive={language === 'EN'}
+                    onClick={() => handleLanguageChange('EN')}
+                    whileHover={{ opacity: 1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    EN
+                  </LanguageOption>
+                </LanguageToggle>
                 <ThemeToggle onClick={toggleTheme}>
                   {isDarkTheme ? (
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
