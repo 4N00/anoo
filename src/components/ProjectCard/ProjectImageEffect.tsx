@@ -12,8 +12,7 @@ const EffectContainer = styled.div.attrs({ className: 'effect-container' })`
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  opacity: 1;
 
   canvas {
     position: absolute !important;
@@ -21,6 +20,7 @@ const EffectContainer = styled.div.attrs({ className: 'effect-container' })`
     left: 0 !important;
     width: 100% !important;
     height: 100% !important;
+    opacity: 1;
   }
 `;
 
@@ -48,7 +48,7 @@ const fragmentShader = `
     // Create distortion effect based on mouse distance and hover state
     float wave = sin(dist * 10.0 - uTime) * 0.05 * uHover;
     
-    // Apply distortion to UV coordinates
+    // Apply distortion to UV coordinates only when hovering
     vec2 distortedUV = uv + vec2(wave * (uMouse.x - uv.x), wave * (uMouse.y - uv.y));
     
     // Sample texture with distorted coordinates
@@ -81,8 +81,11 @@ const ProjectImageEffect: React.FC<ProjectImageEffectProps> = ({ imageUrl }) => 
     cameraRef.current = camera;
 
     // Renderer setup
-    const renderer = new THREE.WebGLRenderer({ alpha: true });
-    renderer.setPixelRatio(window.devicePixelRatio);
+    const renderer = new THREE.WebGLRenderer({ 
+      alpha: true,
+      antialias: true,
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
@@ -93,7 +96,7 @@ const ProjectImageEffect: React.FC<ProjectImageEffectProps> = ({ imageUrl }) => 
       texture.magFilter = THREE.LinearFilter;
       textureRef.current = texture;
 
-      // Create material
+      // Create material with transparent background
       const material = new THREE.ShaderMaterial({
         uniforms: {
           uTexture: { value: texture },
@@ -103,6 +106,7 @@ const ProjectImageEffect: React.FC<ProjectImageEffectProps> = ({ imageUrl }) => 
         },
         vertexShader,
         fragmentShader,
+        transparent: true,
       });
       materialRef.current = material;
 
@@ -111,8 +115,9 @@ const ProjectImageEffect: React.FC<ProjectImageEffectProps> = ({ imageUrl }) => 
       const mesh = new THREE.Mesh(geometry, material);
       scene.add(mesh);
 
-      // Initial resize
+      // Initial render
       handleResize();
+      renderer.render(scene, camera);
     });
 
     return () => {

@@ -43,10 +43,6 @@ export const ProjectCardWrapper = styled(motion.div)<ProjectCardWrapperProps>`
 
   &:hover {
     transform: scale(1.02);
-
-    .effect-container {
-      opacity: 1;
-    }
   }
 `;
 
@@ -56,13 +52,10 @@ export const ProjectImageWrapper = styled.div`
   height: 0;
   padding-bottom: 56.25%; /* 16:9 aspect ratio */
   overflow: hidden;
+  background: ${({ theme }) => theme.colors.background.dark};
 
   canvas {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
+    opacity: 1 !important;
   }
 `;
 

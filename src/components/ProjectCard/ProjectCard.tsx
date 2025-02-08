@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import {
   ProjectCardWrapper,
   ProjectImageWrapper,
-  ProjectImage,
   ProjectInfo,
   ProjectHeader,
   ProjectTitle,
@@ -19,21 +18,12 @@ interface ProjectCardProps {
 }
 
 const ProjectCard = ({ project }: ProjectCardProps) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-
   return (
     <ProjectCardWrapper 
       data-testid="project-card"
       $featured={project.featured}
     >
       <ProjectImageWrapper>
-        <ProjectImage
-          src={project.imageUrl}
-          alt={project.title}
-          loading="lazy"
-          className={imageLoaded ? 'loaded' : ''}
-          onLoad={() => setImageLoaded(true)}
-        />
         <ProjectImageEffect imageUrl={project.imageUrl} />
       </ProjectImageWrapper>
       <ProjectInfo>
