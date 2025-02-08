@@ -4,6 +4,14 @@ export const GlobalStyles = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
   @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&display=swap');
 
+  html, body {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'><rect width='1' height='1' fill='transparent'/></svg>") 1 1, auto !important;
+  }
+
+  * {
+    cursor: inherit !important;
+  }
+
   /* CSS Reset and Base Styles */
   *, *::before, *::after {
     box-sizing: border-box;
@@ -15,6 +23,19 @@ export const GlobalStyles = createGlobalStyle`
   :root {
     --max-width: 1200px;
     scroll-behavior: smooth;
+  }
+
+  /* Add this at the very end of the file */
+  #root, #__next, [data-reactroot] {
+    cursor: none !important;
+  }
+
+  /* Force cursor none on all elements */
+  * {
+    cursor: none !important;
+    &:hover, &:active, &:focus {
+      cursor: none !important;
+    }
   }
 
   /* Body */
@@ -187,6 +208,15 @@ export const GlobalStyles = createGlobalStyle`
 
   code {
     font-family: ${({ theme }) => theme.fonts.mono};
+  }
+
+  /* Override any potential cursor styles */
+  *:hover, *:active, *:focus {
+    cursor: none !important;
+  }
+
+  [style*="cursor"] {
+    cursor: none !important;
   }
 `;
 

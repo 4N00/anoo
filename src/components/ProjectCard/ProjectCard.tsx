@@ -46,7 +46,7 @@ const ProjectCard = forwardRef<HTMLDivElement, ProjectCardProps>(({ project, onC
   };
 
   return (
-    <ProjectCardWrapper ref={ref} onClick={handleClick}>
+    <ProjectCardWrapper ref={ref} onClick={handleClick} data-testid="project-card">
       <motion.div
         ref={scrollRef}
         style={{

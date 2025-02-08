@@ -11,6 +11,7 @@ import Navbar from '../components/Navbar';
 import PageFooter from '../components/PageFooter';
 import { AnimatePresence } from 'framer-motion';
 import styled, { createGlobalStyle } from 'styled-components';
+import GlobalStyles from '../styles/GlobalStyles';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -53,10 +54,15 @@ const GlobalStyle = createGlobalStyle`
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>{`* { cursor: none !important; }`}</style>
+      </head>
       <body className={inter.className}>
         <QueryClientProvider client={getQueryClient()}>
           <ThemeProvider>
             <GlobalStyle />
+            <GlobalStyles />
             <ToastProvider>
               <AuthProvider>
                 <ProjectsProvider>

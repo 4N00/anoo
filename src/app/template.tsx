@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
+import CustomCursor from '@/components/CustomCursor';
 
 const Container = styled.div`
   width: 100%;
@@ -51,6 +52,7 @@ const pageVariants = {
 export default function Template({ children }: { children: React.ReactNode }) {
   return (
     <Container>
+      <CustomCursor />
       <ContentWrapper
         variants={pageVariants}
         initial="initial"
