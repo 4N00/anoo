@@ -1,29 +1,35 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import * as THREE from 'three';
 import { useScroll } from 'framer-motion';
 
 const Container = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
-  right: 0;
-  width: 50%;
+  left: 0;
+  width: 100vw;
   height: 100vh;
-  z-index: 1;
-  opacity: 0.75;
+  z-index: -1;
+  opacity: 0.3;
   transition: opacity 0.3s ease;
+  pointer-events: none;
+  overflow: hidden;
+  background: transparent;
 
-  &:hover {
-    opacity: 0.9;
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
   }
 `;
 
 const TrefoilKnot: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const knot = useRef<THREE.Mesh | null>(null);
-  const material = useRef<THREE.MeshNormalMaterial | null>(null);
+  const material = useRef<THREE.MeshPhongMaterial | null>(null);
   const geometry = useRef<THREE.TorusKnotGeometry | null>(null);
-  const [isHovered, setIsHovered] = useState(false);
   
   const { scrollYProgress } = useScroll();
 
@@ -45,80 +51,75 @@ const TrefoilKnot: React.FC = () => {
 
     container.appendChild(renderer.domElement);
 
-    // Create a more detailed trefoil knot
-    geometry.current = new THREE.TorusKnotGeometry(4.2, 1.2, 300, 40, 2, 3);
-    material.current = new THREE.MeshNormalMaterial({
+    // Create a larger background trefoil knot
+    geometry.current = new THREE.TorusKnotGeometry(8, 2.2, 400, 50, 2, 3);
+    material.current = new THREE.MeshPhongMaterial({
+      color: 0xffffff,
       wireframe: true,
-      wireframeLinewidth: 1.5
+      wireframeLinewidth: 1,
+      specular: 0xcccccc,
+      shininess: 30,
+      transparent: true,
+      opacity: 0.8
     });
     knot.current = new THREE.Mesh(geometry.current, material.current);
     
-    // Initial rotation
-    knot.current.rotation.x = Math.PI / 6;
-    knot.current.rotation.z = Math.PI / 8;
+    // Initial rotation for better viewing angle
+    knot.current.rotation.x = Math.PI / 4;
+    knot.current.rotation.z = Math.PI / 6;
     
     scene.add(knot.current);
 
-    // Position camera closer for more impact
-    camera.position.z = 10;
-    camera.position.y = 2;
+    // Position camera for full view
+    camera.position.z = 18;
+    camera.position.y = 0;
 
-    // Add ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+    // Add directional light for better grayscale definition
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    directionalLight.position.set(1, 1, 1);
+    scene.add(directionalLight);
+
+    // Add ambient light for base illumination
+    const ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
     scene.add(ambientLight);
 
     let prevScrollY = 0;
-    let vertexAnimationFrame: number;
     let targetRotationY = 0;
     let currentRotationY = 0;
-
-    const animateVertices = () => {
-      if (!geometry.current || !knot.current || !isHovered) return;
-      
-      const positions = geometry.current.attributes.position;
-      if (!positions) return;
-
-      const time = Date.now() * 0.001;
-
-      for (let i = 0; i < positions.count; i++) {
-        const x = positions.getX(i);
-        const y = positions.getY(i);
-        const z = positions.getZ(i);
-
-        // Create a moderate wave effect
-        positions.setX(i, x + Math.sin(time + y * 0.2) * 0.15);
-        positions.setY(i, y + Math.cos(time + x * 0.2) * 0.1);
-        positions.setZ(i, z + Math.sin(time + x * 0.2) * 0.15);
-      }
-
-      positions.needsUpdate = true;
-      vertexAnimationFrame = window.requestAnimationFrame(animateVertices);
-    };
+    let lastTime = Date.now();
 
     const animate = () => {
       if (!knot.current) return;
 
+      const currentTime = Date.now();
+      const deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
+      lastTime = currentTime;
+
       // Get current scroll progress (0 to 1)
       const currentScrollY = scrollYProgress.get();
       
-      // Calculate rotation based on scroll change with moderate effect
-      const rotationDelta = (currentScrollY - prevScrollY) * Math.PI * 1.5;
-      targetRotationY += rotationDelta * 0.75;
+      // Calculate rotation based on scroll change with smooth effect
+      const rotationDelta = (currentScrollY - prevScrollY) * Math.PI;
+      targetRotationY += rotationDelta * 0.3; // Reduced multiplier for smoother rotation
       
-      // Smooth rotation with moderate easing
-      currentRotationY += (targetRotationY - currentRotationY) * 0.1;
+      // Very smooth rotation with time-based interpolation
+      const rotationSpeed = 1.5 * deltaTime; // Consistent speed regardless of frame rate
+      currentRotationY += (targetRotationY - currentRotationY) * rotationSpeed;
+      
+      // Apply rotations with smoothing
       knot.current.rotation.y = currentRotationY;
-      knot.current.rotation.x += rotationDelta * 0.15;
-      knot.current.rotation.z += rotationDelta * 0.1;
+      knot.current.rotation.x += rotationDelta * 0.05;
+      knot.current.rotation.z += rotationDelta * 0.03;
 
-      // Add scale effect based on scroll speed
-      const scaleFactor = 1 + Math.abs(rotationDelta) * 1.5;
-      knot.current.scale.setScalar(Math.max(0.8, Math.min(1.3, scaleFactor)));
+      // Smoother scale effect
+      const scaleFactor = 1 + Math.abs(rotationDelta) * 0.5;
+      const targetScale = Math.max(0.95, Math.min(1.05, scaleFactor));
+      const currentScale = knot.current.scale.x;
+      knot.current.scale.setScalar(currentScale + (targetScale - currentScale) * rotationSpeed);
 
-      // Add position movement based on scroll
-      knot.current.position.y = Math.sin(currentRotationY) * 1.2;
-      knot.current.position.x = Math.cos(currentRotationY) * 1.2;
-      knot.current.position.z = Math.sin(currentRotationY * 0.5) * 0.6;
+      // Gentler floating movement
+      knot.current.position.y = Math.sin(currentRotationY * 0.3) * 0.8;
+      knot.current.position.x = Math.cos(currentRotationY * 0.3) * 0.8;
       
       prevScrollY = currentScrollY;
 
@@ -126,28 +127,6 @@ const TrefoilKnot: React.FC = () => {
       window.requestAnimationFrame(animate);
     };
     animate();
-
-    const handleMouseEnter = () => {
-      setIsHovered(true);
-      animateVertices();
-    };
-
-    const handleMouseLeave = () => {
-      setIsHovered(false);
-      if (vertexAnimationFrame) {
-        window.cancelAnimationFrame(vertexAnimationFrame);
-      }
-      // Reset vertices to original position
-      if (geometry.current) {
-        geometry.current.dispose();
-        geometry.current = new THREE.TorusKnotGeometry(4.2, 1.2, 300, 40, 2, 3);
-        if (knot.current) {
-          knot.current.geometry = geometry.current;
-          knot.current.scale.setScalar(1);
-          knot.current.position.set(0, 0, 0);
-        }
-      }
-    };
 
     const handleResize = () => {
       if (!container) return;
@@ -157,17 +136,10 @@ const TrefoilKnot: React.FC = () => {
       renderer.setSize(newWidth, newHeight);
     };
 
-    container.addEventListener('mouseenter', handleMouseEnter);
-    container.addEventListener('mouseleave', handleMouseLeave);
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      container.removeEventListener('mouseenter', handleMouseEnter);
-      container.removeEventListener('mouseleave', handleMouseLeave);
-      if (vertexAnimationFrame) {
-        window.cancelAnimationFrame(vertexAnimationFrame);
-      }
       if (geometry.current) geometry.current.dispose();
       if (material.current) material.current.dispose();
       renderer.dispose();
