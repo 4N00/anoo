@@ -23,12 +23,17 @@ export const Section = styled.section`
   max-width: 1400px;
   margin: 0 auto;
   position: relative;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  will-change: transform;
 `;
 
 export const ContentWrapper = styled.div`
   position: relative;
   z-index: ${({ theme }) => theme.zIndex.base + 10};
   max-width: inherit;
+  transform: translateZ(0);
+  will-change: transform;
 `;
 
 export const LetterContainer = styled(motion.div)`

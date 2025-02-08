@@ -38,7 +38,7 @@ const Logo = styled(Link)<{ $isMenuOpen: boolean }>`
 `;
 
 interface HamburgerButtonProps {
-  isOpen: boolean;
+  $isOpen: boolean;
 }
 
 const HamburgerButton = styled(motion.button)<HamburgerButtonProps>`
@@ -51,7 +51,7 @@ const HamburgerButton = styled(motion.button)<HamburgerButtonProps>`
   height: 64px;
   position: relative;
   z-index: 2100;
-  color: ${({ isOpen }) => isOpen ? 'white' : ({ theme }) => theme.colors.text.primary};
+  color: ${({ $isOpen }) => $isOpen ? 'white' : ({ theme }) => theme.colors.text.primary};
   transition: color 0.2s ease;
 
   svg {
@@ -99,6 +99,7 @@ const MenuContent = styled(motion.div)`
   width: 100%;
   padding: 0 2rem;
   position: relative;
+  transform-origin: top center;
 `;
 
 const MenuItem = styled(Link)`
@@ -303,7 +304,7 @@ const Navbar = () => {
         <NavbarContent>
           <Logo href="/" $isMenuOpen={isMenuOpen}>anoo.nl</Logo>
           <HamburgerButton 
-            isOpen={isMenuOpen} 
+            $isOpen={isMenuOpen} 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             variants={hamburgerVariants}
             whileHover={isMenuOpen ? undefined : "hover"}
