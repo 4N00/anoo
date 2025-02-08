@@ -28,7 +28,7 @@ const Container = styled.div`
 const TrefoilKnot: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const knot = useRef<THREE.Mesh | null>(null);
-  const material = useRef<THREE.MeshPhongMaterial | null>(null);
+  const material = useRef<THREE.ShaderMaterial | null>(null);
   const geometry = useRef<THREE.TorusKnotGeometry | null>(null);
   
   const { scrollYProgress } = useScroll();
@@ -52,16 +52,38 @@ const TrefoilKnot: React.FC = () => {
     container.appendChild(renderer.domElement);
 
     // Create a larger background trefoil knot
-    geometry.current = new THREE.TorusKnotGeometry(8, 2.2, 400, 50, 2, 3);
-    material.current = new THREE.MeshPhongMaterial({
-      color: 0xffffff,
+    geometry.current = new THREE.TorusKnotGeometry(12, 3, 400, 50, 2, 3);
+    
+    // Create a custom vertex shader for grayscale gradient
+    const customVertexShader = `
+      varying vec3 vNormal;
+      void main() {
+        vNormal = normalize(normalMatrix * normal);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `;
+
+    // Create a custom fragment shader for white to grey gradient
+    const customFragmentShader = `
+      varying vec3 vNormal;
+      void main() {
+        vec3 light = vec3(1.0, 1.0, 1.0);
+        float intensity = pow(0.8 - dot(vNormal, light), 2.0);
+        vec3 lightGrey = vec3(0.8, 0.8, 0.8);
+        vec3 darkGrey = vec3(0.05, 0.05, 0.05);
+        vec3 color = mix(lightGrey, darkGrey, intensity);
+        gl_FragColor = vec4(color, 0.9);
+      }
+    `;
+
+    material.current = new THREE.ShaderMaterial({
+      uniforms: {},
+      vertexShader: customVertexShader,
+      fragmentShader: customFragmentShader,
       wireframe: true,
-      wireframeLinewidth: 1,
-      specular: 0xcccccc,
-      shininess: 30,
-      transparent: true,
-      opacity: 0.8
+      transparent: true
     });
+
     knot.current = new THREE.Mesh(geometry.current, material.current);
     
     // Initial rotation for better viewing angle
@@ -70,19 +92,12 @@ const TrefoilKnot: React.FC = () => {
     
     scene.add(knot.current);
 
-    // Position camera for full view
-    camera.position.z = 18;
-    camera.position.y = 0;
+    // Position camera for full view of larger knot
+    camera.position.z = 28;  // Moved camera further back
+    camera.position.y = 3;   // Slightly higher angle
 
-    // Add directional light for better grayscale definition
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
-    directionalLight.position.set(1, 1, 1);
-    scene.add(directionalLight);
-
-    // Add ambient light for base illumination
-    const ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
-    scene.add(ambientLight);
-
+    // No need for lights with shader material
+    
     let prevScrollY = 0;
     let targetRotationY = 0;
     let currentRotationY = 0;
@@ -92,34 +107,29 @@ const TrefoilKnot: React.FC = () => {
       if (!knot.current) return;
 
       const currentTime = Date.now();
-      const deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
+      const deltaTime = (currentTime - lastTime) / 1000;
       lastTime = currentTime;
 
-      // Get current scroll progress (0 to 1)
       const currentScrollY = scrollYProgress.get();
       
-      // Calculate rotation based on scroll change with smooth effect
       const rotationDelta = (currentScrollY - prevScrollY) * Math.PI;
-      targetRotationY += rotationDelta * 0.3; // Reduced multiplier for smoother rotation
+      targetRotationY += rotationDelta * 0.3;
       
-      // Very smooth rotation with time-based interpolation
-      const rotationSpeed = 1.5 * deltaTime; // Consistent speed regardless of frame rate
+      const rotationSpeed = 1.5 * deltaTime;
       currentRotationY += (targetRotationY - currentRotationY) * rotationSpeed;
       
-      // Apply rotations with smoothing
       knot.current.rotation.y = currentRotationY;
       knot.current.rotation.x += rotationDelta * 0.05;
       knot.current.rotation.z += rotationDelta * 0.03;
 
-      // Smoother scale effect
       const scaleFactor = 1 + Math.abs(rotationDelta) * 0.5;
       const targetScale = Math.max(0.95, Math.min(1.05, scaleFactor));
       const currentScale = knot.current.scale.x;
       knot.current.scale.setScalar(currentScale + (targetScale - currentScale) * rotationSpeed);
 
-      // Gentler floating movement
-      knot.current.position.y = Math.sin(currentRotationY * 0.3) * 0.8;
-      knot.current.position.x = Math.cos(currentRotationY * 0.3) * 0.8;
+      // Increased movement range for larger size
+      knot.current.position.y = Math.sin(currentRotationY * 0.3) * 1.2;
+      knot.current.position.x = Math.cos(currentRotationY * 0.3) * 1.2;
       
       prevScrollY = currentScrollY;
 
