@@ -9,9 +9,6 @@ import {
   ProjectGrid,
   Background,
   HeaderText,
-  ProjectTitle,
-  ProjectDescription,
-  ProjectNumber,
   Section,
   FeaturedGrid,
   Header,
@@ -20,7 +17,7 @@ import {
 } from '../styles/HomeStyles';
 import { ProjectUI } from '@/types/project';
 import { motion } from 'framer-motion';
-import { featuredProjects, projects } from '@/data/projects';
+import { featuredProjects as importedFeatured, projects as importedProjects } from '@/data/projects';
 
 const COLORS = ['#FFFFFF', '#F2FCE2', '#FEF7CD', '#E5DEFF'] as const;
 
@@ -54,11 +51,6 @@ const Index = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
-  // Sort projects in reverse order to match admin panel
-  const sortedProjects = [...featuredProjects, ...projects].reverse();
-  const featuredProjects = sortedProjects.filter((p) => p.featured);
-  const nonFeaturedProjects = sortedProjects.filter((p) => !p.featured);
-
   return (
     <>
       <Background $color={currentColor} />
@@ -88,7 +80,7 @@ const Index = () => {
             </HeaderSubtitle>
           </Header>
           <FeaturedGrid>
-            {featuredProjects.map((project: ProjectUI) => (
+            {importedFeatured.map((project: ProjectUI) => (
               <ProjectCard key={project.id} project={project} />
             ))}
           </FeaturedGrid>
@@ -110,7 +102,7 @@ const Index = () => {
             </HeaderSubtitle>
           </Header>
           <ProjectGrid>
-            {projects.map((project: ProjectUI) => (
+            {importedProjects.map((project: ProjectUI) => (
               <ProjectCard key={project.id} project={project} />
             ))}
           </ProjectGrid>
