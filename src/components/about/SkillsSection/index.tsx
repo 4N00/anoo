@@ -20,7 +20,7 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({ skills }) => {
         {skills.map((skill, index) => (
           <AnimateOnScroll key={skill.name} delay={index * 0.1}>
             <SkillItem>
-              <SkillName>{skill.name}</SkillName>
+              <SkillName $level={skill.level}>{skill.name}</SkillName>
               <SkillBar>
                 <SkillLevel $level={skill.level} />
               </SkillBar>

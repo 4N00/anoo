@@ -22,18 +22,36 @@ export const SkillsGrid = styled.div`
 
 export const SkillItem = styled.div`
   width: 100%;
+  padding: 1rem 0;
+  position: relative;
+  border-left: 4px solid ${({ theme }) => theme.colors.text.primary};
+  padding-left: 1.5rem;
 `;
 
-export const SkillName = styled.div`
-  font-size: 1rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
+interface SkillNameProps {
+  $level: number;
+}
+
+export const SkillName = styled.div<SkillNameProps>`
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
   color: ${({ theme }) => theme.colors.text.primary};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &:after {
+    content: '${({ $level }) => ($level / 10).toFixed(1)}/10';
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: ${({ theme }) => theme.colors.text.secondary};
+  }
 `;
 
 export const SkillBar = styled.div`
   width: 100%;
-  height: 4px;
+  height: 3.5px;
   background: rgba(0, 0, 0, 0.1);
   border-radius: 2px;
   overflow: hidden;
@@ -43,12 +61,19 @@ interface SkillLevelProps {
   $level: number;
 }
 
-export const SkillLevel = styled.div<SkillLevelProps>`
-  width: ${({ $level }) => $level}%;
+export const SkillLevel = styled(motion.div)<SkillLevelProps>`
+  width: 0%;
   height: 100%;
   background: ${({ theme }) => theme.colors.text.primary};
   border-radius: 2px;
-  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: width;
+  animation: fillBar 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: 0.3s;
+
+  @keyframes fillBar {
+    from { width: 0%; }
+    to { width: ${({ $level }) => $level}%; }
+  }
 `;
 
 export const SkillsTitle = styled.h2`
@@ -60,36 +85,21 @@ export const SkillsTitle = styled.h2`
 `;
 
 export const SkillIcon = styled.img`
-  width: 24px;
-  height: 24px;
+  display: none;
 `;
 
-export const SkillPercentage = styled.span``;
+export const SkillPercentage = styled.span`
+  display: none;
+`;
 
 export const SkillNameText = styled.span`
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #1a1a1a;
-  padding: 0.5rem 0;
-  display: block;
-
-  @media (max-width: 768px) {
-    font-size: 0.75rem;
-  }
+  display: none;
 `;
 
 export const ProgressContainer = styled(motion.div)`
-  height: 3.5rem;
-  background: #f5f5f5;
-  width: 100%;
-  border: 1px solid #dedede;
-
-  @media (max-width: 768px) {
-    height: 2.5rem;
-  }
+  display: none;
 `;
 
 export const ProgressBar = styled(motion.div)`
-  height: 100%;
-  background: #e8e8e8;
+  display: none;
 `;
