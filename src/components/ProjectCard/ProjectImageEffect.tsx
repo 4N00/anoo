@@ -13,13 +13,17 @@ const EffectContainer = styled.div.attrs({ className: 'effect-container' })`
   width: 100%;
   height: 100%;
   opacity: 1;
+  overflow: hidden;
 
   canvas {
     position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    min-width: 100% !important;
+    min-height: 100% !important;
+    width: auto !important;
+    height: auto !important;
     opacity: 1;
   }
 `;
@@ -168,26 +172,36 @@ const ProjectImageEffect: React.FC<ProjectImageEffectProps> = ({ imageUrl }) => 
   }, [isHovered]);
 
   const handleResize = () => {
-    if (!containerRef.current || !rendererRef.current || !cameraRef.current) return;
+    if (!containerRef.current || !rendererRef.current || !cameraRef.current || !textureRef.current) return;
 
     const { width, height } = containerRef.current.getBoundingClientRect();
     rendererRef.current.setSize(width, height);
 
-    if (textureRef.current) {
-      const imageAspect = textureRef.current.image.width / textureRef.current.image.height;
-      const containerAspect = width / height;
+    const imageAspect = textureRef.current.image.width / textureRef.current.image.height;
+    const containerAspect = width / height;
 
-      // Force update the container size
-      containerRef.current.style.width = '100%';
-      containerRef.current.style.height = '100%';
+    // Update camera to maintain aspect ratio and fill container
+    const camera = cameraRef.current;
+    
+    if (containerAspect > imageAspect) {
+      // Container is wider than image - scale up to fill width
+      camera.left = -1;
+      camera.right = 1;
+      camera.top = 1 / containerAspect;
+      camera.bottom = -1 / containerAspect;
+    } else {
+      // Container is taller than image - scale up to fill height
+      camera.left = -containerAspect;
+      camera.right = containerAspect;
+      camera.top = 1;
+      camera.bottom = -1;
+    }
 
-      if (containerAspect > imageAspect) {
-        const scale = containerAspect / imageAspect;
-        cameraRef.current.scale.set(scale, 1, 1);
-      } else {
-        const scale = imageAspect / containerAspect;
-        cameraRef.current.scale.set(1, scale, 1);
-      }
+    camera.updateProjectionMatrix();
+
+    // Ensure immediate render
+    if (sceneRef.current) {
+      rendererRef.current.render(sceneRef.current, camera);
     }
   };
 
