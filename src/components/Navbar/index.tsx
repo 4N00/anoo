@@ -251,7 +251,7 @@ const Navbar = () => {
   };
 
   const lineTwoVariants = {
-    initial: { opacity: 1 },
+    initial: { y: 0, opacity: 1 },
     hover: {
       y: [0, -4, 0],
       transition: {
@@ -307,9 +307,9 @@ const Navbar = () => {
             $isOpen={isMenuOpen} 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             variants={hamburgerVariants}
-            whileHover={isMenuOpen ? undefined : "hover"}
-            initial="initial"
+            whileHover="hover"
             animate={isMenuOpen ? "open" : "initial"}
+            initial="initial"
           >
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <motion.path variants={lineOneVariants} d="M4 6h16" />
