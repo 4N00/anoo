@@ -10,7 +10,6 @@ import {
   Background,
   HeaderText,
   Section,
-  FeaturedGrid,
   Header,
   HeaderTitle,
   HeaderSubtitle,
@@ -79,11 +78,11 @@ const Index = () => {
               A curated selection of my favorite projects that showcase my skills and interests.
             </HeaderSubtitle>
           </Header>
-          <FeaturedGrid>
+          <ProjectGrid>
             {importedFeatured.map((project: ProjectUI) => (
               <ProjectCard key={project.id} project={project} />
             ))}
-          </FeaturedGrid>
+          </ProjectGrid>
         </Section>
         <Separator />
         <Section

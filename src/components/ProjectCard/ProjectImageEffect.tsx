@@ -14,6 +14,14 @@ const EffectContainer = styled.div.attrs({ className: 'effect-container' })`
   height: 100%;
   opacity: 0;
   transition: opacity 0.3s ease;
+
+  canvas {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
 `;
 
 const vertexShader = `
@@ -163,6 +171,10 @@ const ProjectImageEffect: React.FC<ProjectImageEffectProps> = ({ imageUrl }) => 
     if (textureRef.current) {
       const imageAspect = textureRef.current.image.width / textureRef.current.image.height;
       const containerAspect = width / height;
+
+      // Force update the container size
+      containerRef.current.style.width = '100%';
+      containerRef.current.style.height = '100%';
 
       if (containerAspect > imageAspect) {
         const scale = containerAspect / imageAspect;

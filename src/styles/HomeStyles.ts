@@ -98,11 +98,17 @@ export const ProjectGrid = styled.div`
 
 export const FeaturedGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: ${({ theme }) => theme.spacing.xl};
+  width: 100%;
   
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     grid-template-columns: 1fr;
+  }
+
+  > * {
+    width: 100%;
+    height: 100%;
   }
 `;
 

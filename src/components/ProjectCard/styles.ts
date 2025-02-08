@@ -35,13 +35,11 @@ export const ProjectCardWrapper = styled(motion.div)<ProjectCardWrapperProps>`
   overflow: hidden;
   border-radius: ${({ theme }) => theme.borderRadius.lg};
   transition: transform 0.3s ease;
+  grid-column: ${({ $featured }) => $featured ? 'span 2' : 'span 1'};
 
-  ${({ $featured, theme }) => $featured && `
-    grid-column: span 2;
-    @media (max-width: ${theme.breakpoints.md}) {
-      grid-column: span 1;
-    }
-  `}
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    grid-column: span 1;
+  }
 
   &:hover {
     transform: scale(1.02);
@@ -58,6 +56,14 @@ export const ProjectImageWrapper = styled.div`
   height: 0;
   padding-bottom: 56.25%; /* 16:9 aspect ratio */
   overflow: hidden;
+
+  canvas {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
 `;
 
 export const ProjectImage = styled.img`
