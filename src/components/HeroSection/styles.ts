@@ -51,10 +51,6 @@ export const ContentWrapper = styled.div`
   will-change: transform;
   padding: 2rem;
   transform-style: preserve-3d;
-  
-  &:hover {
-    cursor: none;
-  }
 `;
 
 export const LetterContainer = styled(motion.div)`
@@ -62,21 +58,15 @@ export const LetterContainer = styled(motion.div)`
   justify-content: flex-start;
   flex-wrap: nowrap;
   overflow: visible;
-  will-change: transform, filter;
+  will-change: transform;
   margin-bottom: ${({ theme }) => theme.spacing.lg};
   margin-right: ${({ theme }) => theme.spacing.lg};
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: none;
-  filter: none;
   transform-origin: center;
 
   &:last-of-type {
     margin-bottom: ${({ theme }) => theme.spacing['2xl']};
     margin-right: 0;
-  }
-
-  &:hover {
-    filter: url(#warpFilter);
   }
 `;
 

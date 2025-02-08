@@ -29,7 +29,7 @@ export const FooterLinks = styled.div`
 
 export const FooterLink = styled.a`
   font-family: ${({ theme }) => theme.fonts.body};
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
+  font-size: ${({ theme }) => theme.typography.fontSize.md};
   color: ${({ theme }) => theme.colors.text.primary} !important;
   text-decoration: none !important;
   transition: all 0.2s ease-in-out;
