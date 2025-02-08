@@ -47,6 +47,22 @@ export const HeaderText = styled.span`
   }
 `;
 
+export const HeaderTitle = styled.h2`
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: ${({ theme }) => theme.typography.fontSize['4xl']};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  color: ${({ theme }) => theme.colors.text.primary};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+`;
+
+export const HeaderSubtitle = styled.p`
+  font-family: ${({ theme }) => theme.fonts.body};
+  font-size: ${({ theme }) => theme.typography.fontSize.lg};
+  color: ${({ theme }) => theme.colors.text.secondary};
+  line-height: ${({ theme }) => theme.typography.lineHeight.relaxed};
+  max-width: 60ch;
+`;
+
 export const ProjectTitle = styled.h3`
   font-family: ${({ theme }) => theme.fonts.heading};
   font-size: ${({ theme }) => theme.typography.fontSize.xl};
@@ -72,22 +88,21 @@ export const Separator = styled.hr`
 
 export const ProjectGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: ${({ theme }) => theme.spacing['2xl']};
-
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: ${({ theme }) => theme.spacing.xl};
+  
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     grid-template-columns: 1fr;
-    gap: ${({ theme }) => theme.spacing.xl};
   }
 `;
 
 export const FeaturedGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
-  gap: ${({ theme }) => theme.spacing['2xl']};
-
+  grid-template-columns: repeat(2, 1fr);
+  gap: ${({ theme }) => theme.spacing.xl};
+  
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    gap: ${({ theme }) => theme.spacing.xl};
+    grid-template-columns: 1fr;
   }
 `;
 

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import HeroSection from '../components/HeroSection';
+import ProjectCard from '../components/ProjectCard/ProjectCard';
 import {
   MainContainer,
   Separator,
@@ -12,19 +13,18 @@ import {
   ProjectDescription,
   ProjectNumber,
   Section,
-  ProjectCard,
-  ProjectCardWrapper,
   FeaturedGrid,
+  Header,
+  HeaderTitle,
+  HeaderSubtitle,
 } from '../styles/HomeStyles';
 import { ProjectUI } from '@/types/project';
+import { motion } from 'framer-motion';
+import { featuredProjects, projects } from '@/data/projects';
 
 const COLORS = ['#FFFFFF', '#F2FCE2', '#FEF7CD', '#E5DEFF'] as const;
 
-interface IndexProps {
-  initialProjects: ProjectUI[];
-}
-
-const Index: React.FC<IndexProps> = ({ initialProjects }) => {
+const Index = () => {
   const [currentColor, setCurrentColor] = useState<(typeof COLORS)[number]>(COLORS[0]);
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
 
@@ -55,10 +55,8 @@ const Index: React.FC<IndexProps> = ({ initialProjects }) => {
   }, []);
   
   // Sort projects in reverse order to match admin panel
-  const sortedProjects = [...initialProjects].reverse();
-  const featuredProjects = sortedProjects.filter((p) => {
-    return p.featured;
-  });
+  const sortedProjects = [...featuredProjects, ...projects].reverse();
+  const featuredProjects = sortedProjects.filter((p) => p.featured);
   const nonFeaturedProjects = sortedProjects.filter((p) => !p.featured);
 
   return (
@@ -74,28 +72,27 @@ const Index: React.FC<IndexProps> = ({ initialProjects }) => {
           <HeroSection />
         </Section>
         <Separator />
-        {featuredProjects.length > 0 && (
-          <Section
-            ref={(el) => {
-              if (el) sectionsRef.current[1] = el;
-              return undefined;
-            }}
-          >
-            <HeaderText>FEATURED</HeaderText>
-            <FeaturedGrid>
-              {featuredProjects.map((project, index) => (
-                <ProjectCardWrapper key={project.id}>
-                  <ProjectCard $isFeatured>
-                    <ProjectNumber>F/{String(index + 1).padStart(2, '0')}</ProjectNumber>
-                    <img src={project.imageUrl} alt={project.title} />
-                    <ProjectTitle>{project.title}</ProjectTitle>
-                    <ProjectDescription>{project.description}</ProjectDescription>
-                  </ProjectCard>
-                </ProjectCardWrapper>
-              ))}
-            </FeaturedGrid>
-          </Section>
-        )}
+        <Section
+          ref={(el) => {
+            if (el) sectionsRef.current[1] = el;
+            return undefined;
+          }}
+        >
+          <Header>
+            <HeaderText>Featured Projects</HeaderText>
+            <HeaderTitle>
+              <motion.span>Selected Works</motion.span>
+            </HeaderTitle>
+            <HeaderSubtitle>
+              A curated selection of my favorite projects that showcase my skills and interests.
+            </HeaderSubtitle>
+          </Header>
+          <FeaturedGrid>
+            {featuredProjects.map((project: ProjectUI) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </FeaturedGrid>
+        </Section>
         <Separator />
         <Section
           ref={(el) => {
@@ -103,17 +100,18 @@ const Index: React.FC<IndexProps> = ({ initialProjects }) => {
             return undefined;
           }}
         >
-          <HeaderText>PROJECTS</HeaderText>
+          <Header>
+            <HeaderText>All Projects</HeaderText>
+            <HeaderTitle>
+              <motion.span>Project Archive</motion.span>
+            </HeaderTitle>
+            <HeaderSubtitle>
+              A comprehensive collection of my work, including personal projects, experiments, and contributions.
+            </HeaderSubtitle>
+          </Header>
           <ProjectGrid>
-            {nonFeaturedProjects.map((project, index) => (
-              <ProjectCardWrapper key={project.id}>
-                <ProjectCard>
-                  <ProjectNumber>P/{String(index + 1).padStart(2, '0')}</ProjectNumber>
-                  <img src={project.imageUrl} alt={project.title} />
-                  <ProjectTitle>{project.title}</ProjectTitle>
-                  <ProjectDescription>{project.description}</ProjectDescription>
-                </ProjectCard>
-              </ProjectCardWrapper>
+            {projects.map((project: ProjectUI) => (
+              <ProjectCard key={project.id} project={project} />
             ))}
           </ProjectGrid>
         </Section>

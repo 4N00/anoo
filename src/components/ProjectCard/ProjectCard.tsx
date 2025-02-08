@@ -1,9 +1,10 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { ProjectUI } from '@/types/project';
 import {
   ProjectCardWrapper,
+  ProjectImageWrapper,
   ProjectImage,
   ProjectInfo,
   ProjectHeader,
@@ -11,6 +12,7 @@ import {
   ProjectCategory,
   ProjectDescription,
 } from './styles';
+import ProjectImageEffect from './ProjectImageEffect';
 import { useScroll, useTransform, motion } from 'framer-motion';
 
 interface ProjectCardProps {
@@ -19,20 +21,14 @@ interface ProjectCardProps {
 }
 
 const ProjectCard = forwardRef<HTMLDivElement, ProjectCardProps>(({ project, onClick }, ref) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
   const scrollRef = React.useRef(null);
   const { scrollYProgress } = useScroll({
     target: scrollRef,
     offset: ['start end', 'end start'],
   });
 
-  const blur = useTransform(
-    scrollYProgress,
-    [0, 0.2, 0.8, 1],
-    ['blur(10px)', 'blur(0px)', 'blur(0px)', 'blur(10px)']
-  );
-
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-
   const y = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [50, 0, 0, 50]);
 
   const handleClick = () => {
@@ -46,22 +42,31 @@ const ProjectCard = forwardRef<HTMLDivElement, ProjectCardProps>(({ project, onC
   };
 
   return (
-    <ProjectCardWrapper ref={ref} onClick={handleClick} data-testid="project-card">
+    <ProjectCardWrapper 
+      ref={ref} 
+      onClick={handleClick} 
+      data-testid="project-card"
+      $featured={project.featured}
+    >
       <motion.div
         ref={scrollRef}
         style={{
-          filter: blur,
           opacity,
           y,
+          width: '100%',
+          height: '100%',
         }}
       >
-        <ProjectImage
-          variants={imageVariants}
-          whileHover="hover"
-          src={project.imageUrl}
-          alt={project.title}
-          loading="lazy"
-        />
+        <ProjectImageWrapper>
+          <ProjectImage
+            src={project.imageUrl}
+            alt={project.title}
+            loading="lazy"
+            className={imageLoaded ? 'loaded' : ''}
+            onLoad={() => setImageLoaded(true)}
+          />
+          <ProjectImageEffect imageUrl={project.imageUrl} />
+        </ProjectImageWrapper>
         <ProjectInfo>
           <ProjectHeader>
             <ProjectTitle>{project.title}</ProjectTitle>
@@ -73,16 +78,6 @@ const ProjectCard = forwardRef<HTMLDivElement, ProjectCardProps>(({ project, onC
     </ProjectCardWrapper>
   );
 });
-
-const imageVariants = {
-  hover: {
-    scale: 1.05,
-    transition: {
-      duration: 0.3,
-      ease: [0.25, 0.1, 0.25, 1],
-    },
-  },
-};
 
 ProjectCard.displayName = 'ProjectCard';
 

@@ -23,56 +23,92 @@ export const ProjectGrid = styled.div<ProjectContainerProps>`
   }
 `;
 
-export const ProjectCardWrapper = styled.div`
+interface ProjectCardWrapperProps {
+  $featured?: boolean;
+}
+
+export const ProjectCardWrapper = styled(motion.div)<ProjectCardWrapperProps>`
+  position: relative;
   width: 100%;
+  height: 100%;
   cursor: pointer;
+  overflow: hidden;
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  transition: transform 0.3s ease;
+
+  ${({ $featured, theme }) => $featured && `
+    grid-column: span 2;
+    @media (max-width: ${theme.breakpoints.md}) {
+      grid-column: span 1;
+    }
+  `}
+
+  &:hover {
+    transform: scale(1.02);
+
+    .effect-container {
+      opacity: 1;
+    }
+  }
 `;
 
-export const ProjectImage = styled(motion.img)`
+export const ProjectImageWrapper = styled.div`
+  position: relative;
   width: 100%;
-  aspect-ratio: 4/3;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  overflow: hidden;
+`;
+
+export const ProjectImage = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  transition: transform ${({ theme }) => theme.transitions.normal};
-  will-change: transform;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  &.loaded {
+    opacity: 1;
+  }
 `;
 
 export const ProjectInfo = styled.div`
-  margin-top: ${({ theme }) => theme.spacing.md};
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: ${({ theme }) => theme.spacing.lg};
+  color: ${({ theme }) => theme.colors.text.contrast};
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  z-index: 1;
 `;
 
 export const ProjectHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing.sm};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
 `;
 
 export const ProjectTitle = styled.h3`
-  font-size: ${({ theme }) => theme.typography.fontSize.md};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.normal};
-  color: ${({ theme }) => theme.colors.text.primary};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  }
+  font-size: ${({ theme }) => theme.typography.fontSize.lg};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  margin: 0;
+  color: ${({ theme }) => theme.colors.text.contrast};
 `;
 
 export const ProjectCategory = styled.span`
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    font-size: ${({ theme }) => theme.typography.fontSize.xs};
-  }
+  color: ${({ theme }) => theme.colors.text.contrast};
+  opacity: 0.8;
 `;
 
 export const ProjectDescription = styled.p`
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  color: ${({ theme }) => theme.colors.text.gray};
-  margin-top: ${({ theme }) => theme.spacing.sm};
-  line-height: ${({ theme }) => theme.typography.lineHeight.normal};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    font-size: ${({ theme }) => theme.typography.fontSize.xs};
-  }
+  font-size: ${({ theme }) => theme.typography.fontSize.md};
+  margin: 0;
+  color: ${({ theme }) => theme.colors.text.contrast};
+  opacity: 0.9;
 `;
