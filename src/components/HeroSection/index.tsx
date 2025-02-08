@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Section, ContentWrapper, LetterContainer, Letter, Subtitle, StyledLink } from './styles';
+import TrefoilKnot from '../TrefoilKnot';
 
 const HeroSection: React.FC = () => {
   const title = ["HI,", "I'M", "ANOO."];
@@ -45,6 +46,7 @@ const HeroSection: React.FC = () => {
           LEARN MORE ABOUT ME
         </StyledLink>
       </ContentWrapper>
+      <TrefoilKnot />
     </Section>
   );
 };
