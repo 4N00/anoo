@@ -1,6 +1,20 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
+export const SVGFilters = styled.div`
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  opacity: 0;
+
+  svg {
+    position: absolute;
+    width: 0;
+    height: 0;
+  }
+`;
+
 export const Letter = styled(motion.span)`
   font-family: ${({ theme }) => theme.fonts.body};
   font-size: clamp(1.5rem, 10vw, 12rem);
@@ -10,6 +24,7 @@ export const Letter = styled(motion.span)`
   margin-right: var(--letter-spacing, 0.02em);
   will-change: transform, opacity;
   color: ${({ theme }) => theme.colors.text.primary};
+  transition: all 0.4s ease;
 
   &[data-extra-space='true'] {
     --letter-spacing: 0.3em;
@@ -34,20 +49,34 @@ export const ContentWrapper = styled.div`
   max-width: inherit;
   transform: translateZ(0);
   will-change: transform;
+  padding: 2rem;
+  transform-style: preserve-3d;
+  
+  &:hover {
+    cursor: none;
+  }
 `;
 
 export const LetterContainer = styled(motion.div)`
   display: flex;
   justify-content: flex-start;
   flex-wrap: nowrap;
-  overflow: hidden;
-  will-change: transform;
+  overflow: visible;
+  will-change: transform, filter;
   margin-bottom: ${({ theme }) => theme.spacing.lg};
   margin-right: ${({ theme }) => theme.spacing.lg};
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: none;
+  filter: none;
+  transform-origin: center;
 
   &:last-of-type {
     margin-bottom: ${({ theme }) => theme.spacing['2xl']};
     margin-right: 0;
+  }
+
+  &:hover {
+    filter: url(#warpFilter);
   }
 `;
 
