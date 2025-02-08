@@ -70,7 +70,6 @@ export const GlobalStyles = createGlobalStyle`
 
   /* Links */
   a, a:link, a:visited, a:hover, a:active {
-    color: ${({ theme }) => theme.colors.text.primary} !important;
     text-decoration: none !important;
     transition: all 0.2s ease-in-out;
     position: relative;
