@@ -18,21 +18,35 @@ const translations = {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+const getStoredLanguage = (): Language | null => {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('language') as Language;
+};
+
+const setStoredLanguage = (lang: Language): void => {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem('language', lang);
+};
+
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('EN');
+  const [language, setLanguage] = useState<Language>('EN'); // Set default to English
 
   // Load saved language preference from localStorage
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('language') as Language;
+    const savedLanguage = getStoredLanguage();
     if (savedLanguage && (savedLanguage === 'EN' || savedLanguage === 'NL')) {
       setLanguage(savedLanguage);
+    } else {
+      // If no language is saved, set English as default and save it
+      setLanguage('EN');
+      setStoredLanguage('EN');
     }
   }, []);
 
   // Save language preference to localStorage
   const handleSetLanguage = useCallback((lang: Language) => {
     setLanguage(lang);
-    localStorage.setItem('language', lang);
+    setStoredLanguage(lang);
   }, []);
 
   // Translation function that handles nested keys (e.g., "navigation.home")

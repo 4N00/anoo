@@ -6,8 +6,15 @@ import { useLanguage } from '@/context/LanguageContext';
 
 const ContactContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.xl};
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: ${({ theme }) => theme.spacing.xl};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const ContactContent = styled(motion.div)`
@@ -38,6 +45,12 @@ const FormInput = styled.input`
   padding: ${({ theme }) => theme.spacing.md};
   border: 1px solid ${({ theme }) => theme.colors.text.secondary};
   border-radius: ${({ theme }) => theme.borderRadius.md};
+  background: transparent;
+  color: ${({ theme }) => theme.colors.text.primary};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.text.secondary};
+  }
 `;
 
 const FormTextarea = styled.textarea`
@@ -45,6 +58,45 @@ const FormTextarea = styled.textarea`
   border: 1px solid ${({ theme }) => theme.colors.text.secondary};
   border-radius: ${({ theme }) => theme.borderRadius.md};
   min-height: 150px;
+  background: transparent;
+  color: ${({ theme }) => theme.colors.text.primary};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.text.secondary};
+  }
+`;
+
+const ContactInfo = styled(motion.div)`
+  padding: ${({ theme }) => theme.spacing.xl};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  background: ${({ theme }) => theme.colors.background.secondary};
+  box-shadow: ${({ theme }) => theme.shadows.md};
+`;
+
+const ContactInfoTitle = styled.h2`
+  font-size: ${({ theme }) => theme.typography.fontSize['2xl']};
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
+  color: ${({ theme }) => theme.colors.text.primary};
+`;
+
+const ContactInfoItem = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  color: ${({ theme }) => theme.colors.text.primary};
+
+  strong {
+    display: inline-block;
+    margin-right: ${({ theme }) => theme.spacing.sm};
+  }
+
+  a {
+    color: ${({ theme }) => theme.colors.text.primary};
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
 `;
 
 const Contact: React.FC = () => {
@@ -52,11 +104,13 @@ const Contact: React.FC = () => {
   const { t } = useLanguage();
 
   const container = {
-    hidden: { opacity: 0 },
+    hidden: { opacity: 0, y: 20 },
     show: {
       opacity: 1,
+      y: 0,
       transition: {
-        duration: 0.3,
+        duration: 0.4,
+        ease: "easeOut"
       },
     },
   };
@@ -98,6 +152,25 @@ const Contact: React.FC = () => {
           </Button>
         </Form>
       </ContactContent>
+
+      <ContactInfo variants={container} initial="hidden" animate="show">
+        <ContactInfoTitle>{t('contact.info.title')}</ContactInfoTitle>
+        <ContactInfoItem>
+          <strong>{t('contact.info.email')}</strong>
+          <a href="mailto:info@anoo.nl">info@anoo.nl</a>
+        </ContactInfoItem>
+        <ContactInfoItem>
+          <strong>{t('contact.info.phone')}</strong>
+          <a href="tel:+31625135338">+31 625 135 338</a>
+        </ContactInfoItem>
+        <ContactInfoItem>
+          <strong>{t('contact.info.location')}</strong>
+          Amsterdam, Netherlands
+        </ContactInfoItem>
+        <ContactInfoItem>
+          {t('contact.info.availability')}
+        </ContactInfoItem>
+      </ContactInfo>
     </ContactContainer>
   );
 };
