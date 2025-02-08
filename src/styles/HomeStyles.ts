@@ -146,6 +146,7 @@ export const Background = styled.div<{ $color: string }>`
   background-color: ${(props) => props.$color};
   transition: background-color 0.8s ease-in-out;
   z-index: 0;
+  pointer-events: none;
 `;
 
 export const MainContainer = styled.div`
@@ -154,6 +155,7 @@ export const MainContainer = styled.div`
   z-index: 1;
   min-height: 100vh;
   background: transparent;
+  isolation: isolate;
 `;
 
 export const ProjectNumber = styled.span`

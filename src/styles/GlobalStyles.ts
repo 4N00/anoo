@@ -40,7 +40,7 @@ export const GlobalStyles = createGlobalStyle`
     min-height: 100vh;
     line-height: 1.5;
     font-family: ${({ theme }) => theme.fonts.body};
-    background-color: ${({ theme }) => theme.colors.background.primary};
+    background-color: #f5f5f5;
     color: ${({ theme }) => theme.colors.text.primary};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -213,6 +213,12 @@ export const GlobalStyles = createGlobalStyle`
 
   [style*="cursor"] {
     cursor: none !important;
+  }
+
+  /* Add background override for non-home pages */
+  #root, #__next, [data-reactroot] {
+    cursor: none !important;
+    background-color: #f5f5f5;
   }
 `;
 

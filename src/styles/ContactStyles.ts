@@ -11,6 +11,7 @@ export const Container = styled.div`
   padding: 0;
   background: #f5f5f5;
   color: #1a1a1a;
+  padding-top: 64px;
 `;
 
 export const BackgroundText = styled.div`
@@ -28,16 +29,17 @@ export const BackgroundText = styled.div`
   z-index: 0;
   display: flex;
   align-items: flex-start;
-  padding: 2rem;
+  padding: 8rem 2rem;
   overflow: hidden;
   user-select: none;
 `;
+
 
 export const Content = styled(motion.div)`
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 4rem 2rem;
+  padding: 8rem 2rem 4rem;
   position: relative;
   z-index: 1;
 `;
