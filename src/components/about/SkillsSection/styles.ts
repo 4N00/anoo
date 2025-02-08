@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { motion } from 'framer-motion';
 
 export const SkillsContainer = styled.div`
@@ -74,7 +74,8 @@ export const SkillBar = styled.div`
   width: 100%;
   height: 3.5rem;
   background: rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  overflow: visible;
+  position: relative;
 `;
 
 interface SkillLevelProps {
@@ -88,11 +89,37 @@ export const SkillLevel = styled(motion.div)<SkillLevelProps>`
   will-change: width;
   animation: fillBar 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   animation-delay: var(--delay, 0.8s);
+  position: relative;
 
   @keyframes fillBar {
     from { width: 0%; }
-    to { width: ${({ $level }) => $level}%; }
+    to { width: ${({ $level }) => Math.min($level, 100)}%; }
   }
+
+  ${({ $level }) => $level > 100 && css`
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 100%;
+      width: ${($level - 100) * 1.2}%; /* Make overflow 20% larger for emphasis */
+      height: 100%;
+      background: #ff3333;
+      animation: pulse 2s ease-in-out infinite;
+      box-shadow: 
+        0 0 10px #ff3333,
+        0 0 20px #ff3333,
+        0 0 30px #ff3333;
+      opacity: 0.8;
+      z-index: 10;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.4; box-shadow: 0 0 10px #ff3333, 0 0 20px #ff3333; }
+      50% { opacity: 0.9; box-shadow: 0 0 15px #ff3333, 0 0 30px #ff3333, 0 0 45px #ff3333; }
+      100% { opacity: 0.4; box-shadow: 0 0 10px #ff3333, 0 0 20px #ff3333; }
+    }
+  `}
 `;
 
 export const SkillsTitle = styled.h2`
