@@ -4,7 +4,8 @@
     "projects": "Projects",
     "about": "About",
     "contact": "Contact",
-    "admin": "Admin"
+    "admin": "Admin",
+    "services": "Services"
   },
   "hero": {
     "greeting": "HI,",
@@ -16,8 +17,7 @@
   "about": {
     "title": "About Me",
     "description": "I'm a creative developer and designer with a passion for building digital experiences that combine innovative technology with thoughtful design. With expertise in both frontend development and UI/UX design, I create solutions that are not only visually appealing but also highly functional and user-friendly.",
-    "closing": "HAVE A",
-    "closing_emphasis": "GREAT DAY!"
+    "closing": "HAVE A GREAT DAY!"
   },
   "contact": {
     "title": "Get in Touch",
@@ -48,21 +48,9 @@
     }
   },
   "footer": {
-    "copyright": "© 2024 Anoo. All rights reserved.",
-    "links": {
-      "github": "GitHub",
-      "linkedin": "LinkedIn",
-      "email": "Email",
-      "resume": "Resume",
-      "dribbble": "Dribbble",
-      "behance": "Behance"
-    },
-    "sections": {
-      "social": "Social",
-      "navigation": "Navigation",
-      "legal": "Legal",
-      "contact": "Contact"
-    }
+    "copyright": "©Anoo. All rights reserved.",
+    "collaborate": "LET'S COLLABORATE",
+    "beam_up": "ANOO, BEAM ME UP"
   },
   "theme": {
     "light": "Light Mode",

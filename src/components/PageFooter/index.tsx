@@ -124,18 +124,18 @@ const PageFooter = () => {
     <FooterContainer>
       <ContentWrapper>
         <TopNavigation>
-          <SmallText>{t('footer.collaborate')}</SmallText>
+          <SmallText>LATEN WE SAMENWERKEN</SmallText>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5rem' }}>
             <ContactInfo>
-              <FooterLink href="mailto:info@anoo.nl">{t('footer.links.email')}</FooterLink>
-              <FooterLink href="tel:+31625135338">{t('footer.links.phone')}</FooterLink>
+              <FooterLink href="mailto:info@anoo.nl">info@anoo.nl</FooterLink>
+              <FooterLink href="tel:+31625135338">+31 625 135 338</FooterLink>
             </ContactInfo>
 
             <NavigationGroup>
               <LinkColumn>
                 <FooterLink href="/projects">{t('navigation.projects')}</FooterLink>
                 <FooterLink href="/about">{t('navigation.about')}</FooterLink>
-                <FooterLink href="/services">{t('navigation.services')}</FooterLink>
+                <FooterLink href="/services">Diensten</FooterLink>
                 <FooterLink href="/contact">{t('navigation.contact')}</FooterLink>
               </LinkColumn>
             </NavigationGroup>
@@ -144,13 +144,13 @@ const PageFooter = () => {
 
         <LargeTextSection>
           <LargeText ref={textRef}>
-            {`${t('about.closing')} ${t('about.closing_emphasis')}`}
+            FIJNE DAG NOG!
           </LargeText>
         </LargeTextSection>
 
         <FooterInfo>
           <SmallText>{t('footer.copyright')}</SmallText>
-          <FooterLink href="#">{t('footer.beam_up')}</FooterLink>
+          <FooterLink href="#">ANOO, STRAAL ME OP</FooterLink>
         </FooterInfo>
       </ContentWrapper>
     </FooterContainer>
