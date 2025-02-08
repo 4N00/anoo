@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import { Container } from '../ui/Container';
 
 export const SVGFilters = styled.div`
   position: absolute;
@@ -15,29 +16,11 @@ export const SVGFilters = styled.div`
   }
 `;
 
-export const Letter = styled(motion.span)`
-  font-family: ${({ theme }) => theme.fonts.body};
-  font-size: clamp(1.5rem, 10vw, 12rem);
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  line-height: ${({ theme }) => theme.typography.lineHeight.none};
-  letter-spacing: ${({ theme }) => theme.typography.letterSpacing.tighter};
-  margin-right: var(--letter-spacing, 0.02em);
-  will-change: transform, opacity;
-  color: ${({ theme }) => theme.colors.text.primary};
-  transition: all 0.4s ease;
-
-  &[data-extra-space='true'] {
-    --letter-spacing: 0.3em;
-  }
-`;
-
-export const Section = styled.section`
+export const Section = styled(Container).attrs({ as: 'section' })`
   display: flex;
   align-items: center;
-  padding: ${({ theme }) => theme.spacing['3xl']} ${({ theme }) => theme.spacing.xl};
-  max-width: 1400px;
-  margin: 0 auto;
-  position: relative;
+  padding-top: ${({ theme }) => theme.spacing['3xl']};
+  padding-bottom: ${({ theme }) => theme.spacing['3xl']};
   transform-style: preserve-3d;
   perspective: 1000px;
   will-change: transform;
@@ -46,10 +29,8 @@ export const Section = styled.section`
 export const ContentWrapper = styled.div`
   position: relative;
   z-index: ${({ theme }) => theme.zIndex.base + 10};
-  max-width: inherit;
   transform: translateZ(0);
   will-change: transform;
-  padding: 2rem;
   transform-style: preserve-3d;
 `;
 
@@ -67,6 +48,22 @@ export const LetterContainer = styled(motion.div)`
   &:last-of-type {
     margin-bottom: ${({ theme }) => theme.spacing['2xl']};
     margin-right: 0;
+  }
+`;
+
+export const Letter = styled(motion.span)`
+  font-family: ${({ theme }) => theme.fonts.body};
+  font-size: clamp(1.5rem, 10vw, 12rem);
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  line-height: ${({ theme }) => theme.typography.lineHeight.none};
+  letter-spacing: ${({ theme }) => theme.typography.letterSpacing.tighter};
+  margin-right: var(--letter-spacing, 0.02em);
+  will-change: transform, opacity;
+  color: ${({ theme }) => theme.colors.text.primary};
+  transition: all 0.4s ease;
+
+  &[data-extra-space='true'] {
+    --letter-spacing: 0.3em;
   }
 `;
 

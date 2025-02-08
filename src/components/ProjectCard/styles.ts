@@ -5,11 +5,15 @@ interface ProjectContainerProps {
   $featured?: boolean;
 }
 
-export const ProjectContainer = styled.div<ProjectContainerProps>`
+export const ProjectContainer = styled.div`
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: ${({ theme }) => theme.spacing.lg} 0;
+  padding: ${({ theme }) => theme.spacing.lg} 2rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: ${({ theme }) => theme.spacing.lg} 1rem;
+  }
 `;
 
 export const ProjectGrid = styled.div<ProjectContainerProps>`
@@ -23,11 +27,7 @@ export const ProjectGrid = styled.div<ProjectContainerProps>`
   }
 `;
 
-interface ProjectCardWrapperProps {
-  $featured?: boolean;
-}
-
-export const ProjectCardWrapper = styled(motion.div)<ProjectCardWrapperProps>`
+export const ProjectCardWrapper = styled(motion.div)<ProjectContainerProps>`
   position: relative;
   width: 100%;
   height: 100%;

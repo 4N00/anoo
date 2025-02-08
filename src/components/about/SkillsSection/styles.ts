@@ -14,6 +14,10 @@ export const SkillsGrid = styled.div`
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 2rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 0 1rem;
+  }
 `;
 
 export const SkillItem = styled.div`

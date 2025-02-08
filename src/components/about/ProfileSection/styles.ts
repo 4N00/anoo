@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { Container } from '../../ui/Container';
 
 export const ProfileContainer = styled.div`
   width: 100%;
@@ -30,11 +30,7 @@ export const BackgroundText = styled.div`
   user-select: none;
 `;
 
-export const ProfileContent = styled(motion.div)`
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 2rem;
+export const ProfileContent = styled(Container)`
   position: relative;
   z-index: 1;
 `;
