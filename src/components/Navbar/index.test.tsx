@@ -4,6 +4,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Navbar from './index';
 import type { User, Session } from '@supabase/supabase-js';
+import { stripMotionProps, stripAllProps } from '@/test-utils/mockHelpers';
 
 // Declare Jest globals
 declare const jest: any;
@@ -32,7 +33,9 @@ jest.mock('next/navigation', () => ({
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: React.PropsWithChildren<any>) => <div {...props}>{children}</div>,
+    div: ({ children, ...props }: React.PropsWithChildren<any>) => (
+      <div {...stripMotionProps(props)}>{children}</div>
+    ),
   },
   AnimatePresence: ({ children }: React.PropsWithChildren<any>) => <>{children}</>,
 }));
@@ -40,52 +43,52 @@ jest.mock('framer-motion', () => ({
 // Mock styled components
 jest.mock('./styles', () => ({
   Nav: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <nav data-testid="nav" {...props}>
+    <nav data-testid="nav" {...stripAllProps(props)}>
       {children}
     </nav>
   ),
   Container: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <div data-testid="container" {...props}>
+    <div data-testid="container" {...stripAllProps(props)}>
       {children}
     </div>
   ),
   Logo: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <a data-testid="logo" {...props}>
+    <a data-testid="logo" {...stripAllProps(props)}>
       {children}
     </a>
   ),
   NavLinks: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <div data-testid="nav-links" {...props}>
+    <div data-testid="nav-links" {...stripAllProps(props)}>
       {children}
     </div>
   ),
   NavLink: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <a data-testid="nav-link" {...props}>
+    <a data-testid="nav-link" {...stripAllProps(props)}>
       {children}
     </a>
   ),
   MenuButton: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <button data-testid="menu-button" {...props}>
+    <button data-testid="menu-button" {...stripAllProps(props)}>
       {children}
     </button>
   ),
   MobileMenuContainer: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <div data-testid="mobile-menu" {...props}>
+    <div data-testid="mobile-menu" {...stripAllProps(props)}>
       {children}
     </div>
   ),
   MobileNavLink: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <a data-testid="mobile-nav-link" {...props}>
+    <a data-testid="mobile-nav-link" {...stripAllProps(props)}>
       {children}
     </a>
   ),
   ContactInfo: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <div data-testid="contact-info" {...props}>
+    <div data-testid="contact-info" {...stripAllProps(props)}>
       {children}
     </div>
   ),
   CloseButton: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <button data-testid="close-button" {...props}>
+    <button data-testid="close-button" {...stripAllProps(props)}>
       {children}
     </button>
   ),

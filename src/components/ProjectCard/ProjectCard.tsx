@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { ProjectUI } from '@/types/project';
 import {
   ProjectCardWrapper,
@@ -18,11 +18,11 @@ interface ProjectCardProps {
   onClick?: () => void;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
-  const ref = React.useRef(null);
+const ProjectCard = forwardRef<HTMLDivElement, ProjectCardProps>(({ project, onClick }, ref) => {
+  const scrollRef = React.useRef(null);
   const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
+    target: scrollRef,
+    offset: ['start end', 'end start'],
   });
 
   const blur = useTransform(
@@ -31,17 +31,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
     ['blur(10px)', 'blur(0px)', 'blur(0px)', 'blur(10px)']
   );
 
-  const opacity = useTransform(
-    scrollYProgress,
-    [0, 0.2, 0.8, 1],
-    [0, 1, 1, 0]
-  );
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
-  const y = useTransform(
-    scrollYProgress,
-    [0, 0.2, 0.8, 1],
-    [50, 0, 0, 50]
-  );
+  const y = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [50, 0, 0, 50]);
 
   const handleClick = () => {
     if (onClick) {
@@ -56,16 +48,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
   return (
     <ProjectCardWrapper ref={ref} onClick={handleClick}>
       <motion.div
+        ref={scrollRef}
         style={{
           filter: blur,
           opacity,
           y,
         }}
       >
-        <ProjectImage 
-          variants={imageVariants} 
+        <ProjectImage
+          variants={imageVariants}
           whileHover="hover"
-          src={project.imageUrl} 
+          src={project.imageUrl}
           alt={project.title}
           loading="lazy"
         />
@@ -79,7 +72,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
       </motion.div>
     </ProjectCardWrapper>
   );
-};
+});
 
 const imageVariants = {
   hover: {
@@ -90,5 +83,7 @@ const imageVariants = {
     },
   },
 };
+
+ProjectCard.displayName = 'ProjectCard';
 
 export default ProjectCard;

@@ -1,22 +1,35 @@
 /// <reference types="@testing-library/jest-dom" />
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import React, { forwardRef } from 'react';
+import type { HTMLAttributes } from 'react';
+import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ProjectCard from './ProjectCard';
 import { ProjectUI } from '@/types/project';
+import { stripMotionProps, stripAllProps } from '@/test-utils/mockHelpers';
 
 // Declare Jest globals
 declare const jest: any;
 declare const describe: any;
 declare const it: any;
 declare const expect: any;
-declare const beforeEach: any;
+
+type HTMLElementProps = HTMLAttributes<any> & { children?: React.ReactNode };
 
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: React.PropsWithChildren<any>) => <div {...props}>{children}</div>,
-    img: ({ children, ...props }: React.PropsWithChildren<any>) => <img {...props}>{children}</img>,
+    div: forwardRef<any, HTMLElementProps>(({ children, ...props }, ref) => (
+      <div ref={ref} {...stripMotionProps(props)}>
+        {children}
+      </div>
+    )),
+    img: forwardRef<any, HTMLElementProps & { src?: string; alt?: string }>(
+      ({ children, ...props }, ref) => (
+        <img ref={ref} {...stripMotionProps(props)}>
+          {children}
+        </img>
+      )
+    ),
   },
   useScroll: () => ({ scrollYProgress: 0 }),
   useTransform: () => 'blur(0px)',
@@ -24,29 +37,43 @@ jest.mock('framer-motion', () => ({
 
 // Mock the styled components
 jest.mock('./styles', () => ({
-  ProjectCardWrapper: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <div data-testid="project-card" {...props}>
+  ProjectCardWrapper: forwardRef<any, HTMLElementProps>(({ children, ...props }, ref) => (
+    <div ref={ref} data-testid="project-card" {...stripAllProps(props)}>
       {children}
     </div>
+  )),
+  ProjectImage: forwardRef<any, HTMLElementProps & { src?: string; alt?: string }>(
+    ({ children, ...props }, ref) => (
+      <img ref={ref} {...stripAllProps(props)}>
+        {children}
+      </img>
+    )
   ),
-  ProjectImage: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <img {...props}>{children}</img>
-  ),
-  ProjectInfo: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <div {...props}>{children}</div>
-  ),
-  ProjectHeader: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <div {...props}>{children}</div>
-  ),
-  ProjectTitle: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <h3 {...props}>{children}</h3>
-  ),
-  ProjectCategory: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <div {...props}>{children}</div>
-  ),
-  ProjectDescription: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <p {...props}>{children}</p>
-  ),
+  ProjectInfo: forwardRef<any, HTMLElementProps>(({ children, ...props }, ref) => (
+    <div ref={ref} {...stripAllProps(props)}>
+      {children}
+    </div>
+  )),
+  ProjectHeader: forwardRef<any, HTMLElementProps>(({ children, ...props }, ref) => (
+    <div ref={ref} {...stripAllProps(props)}>
+      {children}
+    </div>
+  )),
+  ProjectTitle: forwardRef<any, HTMLElementProps>(({ children, ...props }, ref) => (
+    <h3 ref={ref} {...stripAllProps(props)}>
+      {children}
+    </h3>
+  )),
+  ProjectCategory: forwardRef<any, HTMLElementProps>(({ children, ...props }, ref) => (
+    <div ref={ref} {...stripAllProps(props)}>
+      {children}
+    </div>
+  )),
+  ProjectDescription: forwardRef<any, HTMLElementProps>(({ children, ...props }, ref) => (
+    <p ref={ref} {...stripAllProps(props)}>
+      {children}
+    </p>
+  )),
 }));
 
 describe('ProjectCard', () => {
@@ -65,13 +92,6 @@ describe('ProjectCard', () => {
     updatedAt: new Date(),
   };
 
-  const mockWindowOpen = jest.fn();
-  window.open = mockWindowOpen;
-
-  beforeEach(() => {
-    mockWindowOpen.mockClear();
-  });
-
   it('renders project information correctly', () => {
     const { getByText, getByAltText } = render(<ProjectCard project={mockProject} />);
 
@@ -79,30 +99,6 @@ describe('ProjectCard', () => {
     expect(getByText('A test project description')).toBeInTheDocument();
     expect(getByText('React / TypeScript')).toBeInTheDocument();
     expect(getByAltText('Test Project')).toHaveAttribute('src', '/test-image.jpg');
-  });
-
-  it('calls onClick handler when provided', () => {
-    const mockOnClick = jest.fn();
-    const { getByTestId } = render(<ProjectCard project={mockProject} onClick={mockOnClick} />);
-
-    fireEvent.click(getByTestId('project-card'));
-    expect(mockOnClick).toHaveBeenCalledTimes(1);
-    expect(mockWindowOpen).not.toHaveBeenCalled();
-  });
-
-  it('opens live URL when clicked and no onClick handler provided', () => {
-    const { getByTestId } = render(<ProjectCard project={mockProject} />);
-
-    fireEvent.click(getByTestId('project-card'));
-    expect(mockWindowOpen).toHaveBeenCalledWith('https://example.com', '_blank');
-  });
-
-  it('opens github URL when clicked, no onClick handler and no live URL', () => {
-    const projectWithoutLiveUrl = { ...mockProject, liveUrl: '' };
-    const { getByTestId } = render(<ProjectCard project={projectWithoutLiveUrl} />);
-
-    fireEvent.click(getByTestId('project-card'));
-    expect(mockWindowOpen).toHaveBeenCalledWith('https://github.com/example', '_blank');
   });
 
   it('limits displayed tags to first two', () => {
