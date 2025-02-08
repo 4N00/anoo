@@ -5,6 +5,19 @@ import { useLanguage } from '@/context/LanguageContext';
 import ProfileSection from '../components/about/ProfileSection';
 import SkillsSection from '../components/about/SkillsSection';
 import { PageContainer, ContentWrapper } from '../styles/AboutStyles';
+import styled from 'styled-components';
+
+const Title = styled.h1`
+  font-size: clamp(2rem, 5vw, 4rem);
+  margin-bottom: 2rem;
+`;
+
+const Description = styled.p`
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  line-height: 1.6;
+  max-width: 800px;
+  margin-bottom: 4rem;
+`;
 
 const About = () => {
   const { t } = useLanguage();
@@ -31,8 +44,8 @@ const About = () => {
   return (
     <PageContainer>
       <ContentWrapper>
-        <h1>{t('about.title')}</h1>
-        <p>{t('about.description')}</p>
+        <Title>{t('about.title')}</Title>
+        <Description>{t('about.description')}</Description>
         <ProfileSection />
         <SkillsSection skills={skills} />
       </ContentWrapper>

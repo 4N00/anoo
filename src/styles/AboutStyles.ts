@@ -167,12 +167,11 @@ export const Grid = styled.div`
 
 export const SkillContainer = styled.div`
   width: 100%;
-  border-left: 1px solid ${({ theme }) => theme.colors.background.secondary};
+  border-left: 1px solid ${({ theme }) => theme.colors.background.dark};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    border-left: none;
-    border-top: 1px solid ${({ theme }) => theme.colors.background.secondary};
-    padding-top: ${({ theme }) => theme.spacing.sm};
+    border-left: 1px solid ${({ theme }) => theme.colors.background.dark};
+    padding: ${({ theme }) => theme.spacing.xl} 0;
   }
 `;
 
