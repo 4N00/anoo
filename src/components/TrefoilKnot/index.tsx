@@ -16,6 +16,10 @@ const Container = styled.div`
   overflow: hidden;
   background: transparent;
 
+  @media (max-width: 768px) {
+    display: none;
+  }
+
   canvas {
     position: absolute;
     top: 0;
