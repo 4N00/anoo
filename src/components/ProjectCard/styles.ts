@@ -49,14 +49,10 @@ export const ProjectCardWrapper = styled(motion.div)<ProjectCardWrapperProps>`
 export const ProjectImageWrapper = styled.div`
   position: relative;
   width: 100%;
-  height: 0;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-top: 56.25%; /* 16:9 aspect ratio */
   overflow: hidden;
   background: ${({ theme }) => theme.colors.background.dark};
-
-  canvas {
-    opacity: 1 !important;
-  }
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
 `;
 
 export const ProjectImage = styled.img`
@@ -66,11 +62,10 @@ export const ProjectImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: transform 0.3s ease;
 
-  &.loaded {
-    opacity: 1;
+  ${ProjectCardWrapper}:hover & {
+    transform: scale(1.05);
   }
 `;
 

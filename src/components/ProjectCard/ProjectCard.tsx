@@ -9,8 +9,8 @@ import {
   ProjectTitle,
   ProjectCategory,
   ProjectDescription,
+  ProjectImage,
 } from './styles';
-import ProjectImageEffect from './ProjectImageEffect';
 import { ProjectUI } from '@/types/project';
 
 interface ProjectCardProps {
@@ -24,7 +24,11 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
       $featured={project.featured}
     >
       <ProjectImageWrapper>
-        <ProjectImageEffect imageUrl={project.imageUrl} />
+        <ProjectImage 
+          src={project.imageUrl} 
+          alt={project.title}
+          loading="lazy"
+        />
       </ProjectImageWrapper>
       <ProjectInfo>
         <ProjectHeader>

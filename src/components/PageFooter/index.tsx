@@ -122,8 +122,7 @@ const PageFooter = () => {
     <FooterContainer>
       <ContentWrapper>
         <TopNavigation>
-          <FooterLink href="#">ANOO, BEAM ME UP</FooterLink>
-
+          <SmallText>LET'S COLLABORATE</SmallText>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5rem' }}>
             <ContactInfo>
               <FooterLink href="mailto:info@anoo.nl">info@anoo.nl</FooterLink>
@@ -147,7 +146,7 @@ const PageFooter = () => {
 
         <FooterInfo>
           <SmallText>anoo©</SmallText>
-          <SmallText>Let&apos;s make cool stuff</SmallText>
+          <FooterLink href="#">ANOO, BEAM ME UP</FooterLink>
         </FooterInfo>
       </ContentWrapper>
     </FooterContainer>

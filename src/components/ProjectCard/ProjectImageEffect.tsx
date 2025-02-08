@@ -10,20 +10,17 @@ const EffectContainer = styled.div.attrs({ className: 'effect-container' })`
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   opacity: 1;
   overflow: hidden;
 
   canvas {
     position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    min-width: 100% !important;
-    min-height: 100% !important;
-    width: auto !important;
-    height: auto !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
     opacity: 1;
   }
 `;
@@ -79,7 +76,7 @@ const ProjectImageEffect: React.FC<ProjectImageEffectProps> = ({ imageUrl }) => 
     const scene = new THREE.Scene();
     sceneRef.current = scene;
 
-    // Camera setup
+    // Camera setup - use simple orthographic camera
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
     camera.position.z = 1;
     cameraRef.current = camera;
@@ -100,7 +97,7 @@ const ProjectImageEffect: React.FC<ProjectImageEffectProps> = ({ imageUrl }) => 
       texture.magFilter = THREE.LinearFilter;
       textureRef.current = texture;
 
-      // Create material with transparent background
+      // Create material
       const material = new THREE.ShaderMaterial({
         uniforms: {
           uTexture: { value: texture },
@@ -114,8 +111,9 @@ const ProjectImageEffect: React.FC<ProjectImageEffectProps> = ({ imageUrl }) => 
       });
       materialRef.current = material;
 
-      // Create mesh
-      const geometry = new THREE.PlaneGeometry(2, 2);
+      // Create mesh with scaled geometry based on texture aspect ratio
+      const imageAspect = texture.image.width / texture.image.height;
+      const geometry = new THREE.PlaneGeometry(imageAspect * 2, 2);
       const mesh = new THREE.Mesh(geometry, material);
       scene.add(mesh);
 
@@ -180,26 +178,16 @@ const ProjectImageEffect: React.FC<ProjectImageEffectProps> = ({ imageUrl }) => 
     const imageAspect = textureRef.current.image.width / textureRef.current.image.height;
     const containerAspect = width / height;
 
-    // Update camera to maintain aspect ratio and fill container
+    // Scale the camera viewport to fit the container while maintaining aspect ratio
     const camera = cameraRef.current;
+    const scale = containerAspect < imageAspect ? 1 : imageAspect / containerAspect;
     
-    if (containerAspect > imageAspect) {
-      // Container is wider than image - scale up to fill width
-      camera.left = -1;
-      camera.right = 1;
-      camera.top = 1 / containerAspect;
-      camera.bottom = -1 / containerAspect;
-    } else {
-      // Container is taller than image - scale up to fill height
-      camera.left = -containerAspect;
-      camera.right = containerAspect;
-      camera.top = 1;
-      camera.bottom = -1;
-    }
-
+    camera.left = -1;
+    camera.right = 1;
+    camera.top = scale;
+    camera.bottom = -scale;
     camera.updateProjectionMatrix();
 
-    // Ensure immediate render
     if (sceneRef.current) {
       rendererRef.current.render(sceneRef.current, camera);
     }
