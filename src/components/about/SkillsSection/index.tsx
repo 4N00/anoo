@@ -15,20 +15,26 @@ interface SkillsSectionProps {
 
 const SkillsSection: React.FC<SkillsSectionProps> = ({ skills }) => {
   return (
-    <SkillsContainer>
-      <SkillsGrid>
-        {skills.map((skill, index) => (
-          <AnimateOnScroll key={skill.name} delay={index * 0.1}>
-            <SkillItem>
+    <AnimateOnScroll>
+      <SkillsContainer>
+        <SkillsGrid>
+          {skills.map((skill, index) => (
+            <SkillItem 
+              key={skill.name} 
+              style={{ '--delay': `${0.2 + index * 0.1}s` } as React.CSSProperties}
+            >
               <SkillName $level={skill.level}>{skill.name}</SkillName>
               <SkillBar>
-                <SkillLevel $level={skill.level} />
+                <SkillLevel 
+                  $level={skill.level} 
+                  style={{ '--delay': `${0.8 + index * 0.1}s` } as React.CSSProperties}
+                />
               </SkillBar>
             </SkillItem>
-          </AnimateOnScroll>
-        ))}
-      </SkillsGrid>
-    </SkillsContainer>
+          ))}
+        </SkillsGrid>
+      </SkillsContainer>
+    </AnimateOnScroll>
   );
 };
 

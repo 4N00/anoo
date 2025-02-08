@@ -4,6 +4,16 @@ import { motion } from 'framer-motion';
 export const SkillsContainer = styled.div`
   width: 100%;
   padding: 4rem 0;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 `;
 
 export const SkillsGrid = styled.div`
@@ -25,7 +35,17 @@ export const SkillItem = styled.div`
   padding: 1rem 0;
   position: relative;
   border-left: 4px solid ${({ theme }) => theme.colors.text.primary};
-  padding-left: 1.5rem;
+  opacity: 0;
+  transform: translateX(-10px);
+  animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: var(--delay, 0s);
+
+  @keyframes slideIn {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
 `;
 
 interface SkillNameProps {
@@ -33,9 +53,10 @@ interface SkillNameProps {
 }
 
 export const SkillName = styled.div<SkillNameProps>`
-  font-size: 1.125rem;
+  font-size: ${({ theme }) => theme.typography.fontSize.md};
   font-weight: 600;
   margin-bottom: 0.75rem;
+  padding-left: 1rem;
   color: ${({ theme }) => theme.colors.text.primary};
   display: flex;
   justify-content: space-between;
@@ -51,9 +72,8 @@ export const SkillName = styled.div<SkillNameProps>`
 
 export const SkillBar = styled.div`
   width: 100%;
-  height: 3.5px;
+  height: 3.5rem;
   background: rgba(0, 0, 0, 0.1);
-  border-radius: 2px;
   overflow: hidden;
 `;
 
@@ -65,10 +85,9 @@ export const SkillLevel = styled(motion.div)<SkillLevelProps>`
   width: 0%;
   height: 100%;
   background: ${({ theme }) => theme.colors.text.primary};
-  border-radius: 2px;
   will-change: width;
-  animation: fillBar 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 0.3s;
+  animation: fillBar 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: var(--delay, 0.8s);
 
   @keyframes fillBar {
     from { width: 0%; }
