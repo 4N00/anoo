@@ -14,7 +14,7 @@ const NavbarContainer = styled.nav<{ $isMenuOpen: boolean }>`
   width: 100%;
   height: 64px;
   z-index: 2000;
-  background: rgba(255, 255, 255, 0.01);
+  background: rgba(245, 245, 245, 0.01);
   backdrop-filter: ${({ $isMenuOpen }) => $isMenuOpen ? 'none' : 'blur(10px)'};
   -webkit-backdrop-filter: ${({ $isMenuOpen }) => $isMenuOpen ? 'none' : 'blur(10px)'};
 `;

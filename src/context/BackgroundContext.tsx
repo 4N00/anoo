@@ -28,7 +28,7 @@ const PageBackground = styled.div<{ $bgColor: string; $isHome: boolean }>`
 `;
 
 export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
+  const [backgroundColor, setBackgroundColor] = useState('#f5f5f5');
   const [showTrefoil, setShowTrefoil] = useState(true);
   const pathname = usePathname();
   const isHome = pathname === '/';
@@ -36,7 +36,7 @@ export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children
   // Reset background color when leaving home page
   useEffect(() => {
     if (!isHome) {
-      setBackgroundColor('#FFFFFF');
+      setBackgroundColor('#f5f5f5');
       setShowTrefoil(false);
     } else {
       setShowTrefoil(true);

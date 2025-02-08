@@ -15,11 +15,11 @@ export const theme: DefaultTheme = {
       contrast: '#ffffff',
     },
     background: {
-      primary: '#ffffff',
-      secondary: '#dfdfdf',
-      main: '#ffffff',
-      light: '#dfdfdf',
-      dark: '#000000',
+      primary: '#f5f5f5',
+      secondary: '#f0f0f0',
+      main: '#f5f5f5',
+      dark: '#1a1a1a',
+      light: '#fafafa',
     },
     text: {
       primary: '#000000',
