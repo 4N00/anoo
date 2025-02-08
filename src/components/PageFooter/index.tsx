@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { FooterLink } from './styles';
+import { useLanguage } from '@/context/LanguageContext';
 
 const FooterContainer = styled.section`
   width: 100%;
@@ -92,6 +93,7 @@ const SmallText = styled.div`
 
 const PageFooter = () => {
   const textRef = useRef<HTMLHeadingElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -122,31 +124,33 @@ const PageFooter = () => {
     <FooterContainer>
       <ContentWrapper>
         <TopNavigation>
-          <SmallText>LET'S COLLABORATE</SmallText>
+          <SmallText>{t('footer.collaborate')}</SmallText>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5rem' }}>
             <ContactInfo>
-              <FooterLink href="mailto:info@anoo.nl">info@anoo.nl</FooterLink>
-              <FooterLink href="tel:+31625135338">+31 625 135 338</FooterLink>
+              <FooterLink href="mailto:info@anoo.nl">{t('footer.links.email')}</FooterLink>
+              <FooterLink href="tel:+31625135338">{t('footer.links.phone')}</FooterLink>
             </ContactInfo>
 
             <NavigationGroup>
               <LinkColumn>
-                <FooterLink href="#">Work</FooterLink>
-                <FooterLink href="#">About</FooterLink>
-                <FooterLink href="#">Services</FooterLink>
-                <FooterLink href="#">Contact</FooterLink>
+                <FooterLink href="/projects">{t('navigation.projects')}</FooterLink>
+                <FooterLink href="/about">{t('navigation.about')}</FooterLink>
+                <FooterLink href="/services">{t('navigation.services')}</FooterLink>
+                <FooterLink href="/contact">{t('navigation.contact')}</FooterLink>
               </LinkColumn>
             </NavigationGroup>
           </div>
         </TopNavigation>
 
         <LargeTextSection>
-          <LargeText ref={textRef}>{'HAVE A\nGREAT DAY!'}</LargeText>
+          <LargeText ref={textRef}>
+            {`${t('about.closing')} ${t('about.closing_emphasis')}`}
+          </LargeText>
         </LargeTextSection>
 
         <FooterInfo>
-          <SmallText>anoo©</SmallText>
-          <FooterLink href="#">ANOO, BEAM ME UP</FooterLink>
+          <SmallText>{t('footer.copyright')}</SmallText>
+          <FooterLink href="#">{t('footer.beam_up')}</FooterLink>
         </FooterInfo>
       </ContentWrapper>
     </FooterContainer>

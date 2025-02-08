@@ -7,6 +7,7 @@ import { ThemeProvider } from '../styles/theme';
 import { AuthProvider } from '../context/AuthContext';
 import { ToastProvider } from '../context/ToastContext';
 import { BackgroundProvider } from '../context/BackgroundContext';
+import { LanguageProvider } from '../context/LanguageContext';
 import Navbar from '../components/Navbar';
 import PageFooter from '../components/PageFooter';
 import { AnimatePresence } from 'framer-motion';
@@ -82,11 +83,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <AuthProvider>
                 <ProjectsProvider>
                   <BackgroundProvider>
-                    <Navbar />
-                    <MainContent>
-                      <AnimatePresence mode="wait">{children}</AnimatePresence>
-                    </MainContent>
-                    <PageFooter />
+                    <LanguageProvider>
+                      <Navbar />
+                      <MainContent>
+                        <AnimatePresence mode="wait">{children}</AnimatePresence>
+                      </MainContent>
+                      <PageFooter />
+                    </LanguageProvider>
                   </BackgroundProvider>
                 </ProjectsProvider>
               </AuthProvider>

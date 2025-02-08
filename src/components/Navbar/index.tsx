@@ -5,6 +5,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
+import { useLanguage } from '@/context/LanguageContext';
 
 const NavbarContainer = styled.nav<{ $isMenuOpen: boolean }>`
   position: fixed;
@@ -221,7 +222,7 @@ const contentVariants = {
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [language, setLanguage] = useState<'EN' | 'NL'>('EN');
+  const { language, setLanguage, t } = useLanguage();
   const { user } = useAuth();
   const [isDarkTheme, setIsDarkTheme] = useState(false);
 
@@ -295,7 +296,6 @@ const Navbar = () => {
 
   const toggleTheme = () => {
     setIsDarkTheme(!isDarkTheme);
-    // Add your theme toggle logic here
   };
 
   return (
@@ -332,20 +332,20 @@ const Navbar = () => {
             >              
               <MenuContent variants={contentVariants}>
                 <MenuItem href="/" onClick={() => setIsMenuOpen(false)}>
-                  Home
+                  {t('navigation.home')}
                 </MenuItem>
                 <MenuItem href="/projects" onClick={() => setIsMenuOpen(false)}>
-                  Projects
+                  {t('navigation.projects')}
                 </MenuItem>
                 <MenuItem href="/about" onClick={() => setIsMenuOpen(false)}>
-                  About
+                  {t('navigation.about')}
                 </MenuItem>
                 <MenuItem href="/contact" onClick={() => setIsMenuOpen(false)}>
-                  Contact
+                  {t('navigation.contact')}
                 </MenuItem>
                 {user && (
                   <MenuItem href="/admin" onClick={() => setIsMenuOpen(false)}>
-                    Admin
+                    {t('navigation.admin')}
                   </MenuItem>
                 )}
               </MenuContent>
@@ -380,7 +380,7 @@ const Navbar = () => {
                       <path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                     </svg>
                   )}
-                  {isDarkTheme ? 'Light Mode' : 'Dark Mode'}
+                  {t(isDarkTheme ? 'theme.light' : 'theme.dark')}
                 </ThemeToggle>
               </BottomBar>
             </MenuOverlay>

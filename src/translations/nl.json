@@ -1,0 +1,71 @@
+{
+  "navigation": {
+    "home": "Home",
+    "projects": "Projecten",
+    "about": "Over mij",
+    "contact": "Contact",
+    "admin": "Admin"
+  },
+  "hero": {
+    "greeting": "HEY,",
+    "introduction": "IK BEN",
+    "name": "ANOO.",
+    "subtitle": "Scroll om mijn werk te bekijken - neem contact op als je mijn werk waardeert.",
+    "cta": "LEER MIJ KENNEN"
+  },
+  "about": {
+    "title": "Over Mij",
+    "description": "Ik ben een creatieve ontwikkelaar en designer met een passie voor het bouwen van digitale ervaringen die innovatieve technologie combineren met doordacht design. Met expertise in zowel frontend development als UI/UX design, creëer ik oplossingen die niet alleen visueel aantrekkelijk zijn, maar ook zeer functioneel en gebruiksvriendelijk.",
+    "closing": "FIJNE",
+    "closing_emphasis": "DAG NOG!"
+  },
+  "contact": {
+    "title": "Neem Contact Op",
+    "subtitle": "Laten we samen iets geweldigs creëren",
+    "form": {
+      "name": "Jouw Naam",
+      "email": "Jouw E-mail",
+      "message": "Jouw Bericht",
+      "send": "Verstuur Bericht"
+    },
+    "info": {
+      "title": "Contactgegevens",
+      "email": "E-mail:",
+      "location": "Locatie:",
+      "availability": "Beschikbaar voor freelance opdrachten"
+    }
+  },
+  "projects": {
+    "featured": {
+      "label": "Uitgelichte Projecten",
+      "title": "Geselecteerd Werk",
+      "subtitle": "Een selectie van mijn favoriete projecten die mijn vaardigheden en interesses laten zien."
+    },
+    "all": {
+      "label": "Alle Projecten",
+      "title": "Project Archief",
+      "subtitle": "Een uitgebreide verzameling van mijn werk, inclusief persoonlijke projecten, experimenten en bijdragen."
+    }
+  },
+  "footer": {
+    "copyright": "© 2024 Anoo. Alle rechten voorbehouden.",
+    "links": {
+      "github": "GitHub",
+      "linkedin": "LinkedIn",
+      "email": "E-mail",
+      "resume": "CV",
+      "dribbble": "Dribbble",
+      "behance": "Behance"
+    },
+    "sections": {
+      "social": "Social Media",
+      "navigation": "Navigatie",
+      "legal": "Juridisch",
+      "contact": "Contact"
+    }
+  },
+  "theme": {
+    "light": "Lichte Modus",
+    "dark": "Donkere Modus"
+  }
+} 

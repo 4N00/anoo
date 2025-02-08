@@ -1,11 +1,14 @@
 'use client';
 
 import React from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 import ProfileSection from '../components/about/ProfileSection';
 import SkillsSection from '../components/about/SkillsSection';
 import { PageContainer, ContentWrapper } from '../styles/AboutStyles';
 
 const About = () => {
+  const { t } = useLanguage();
+
   const skills = [
     { name: 'HTML', level: 90 },
     { name: 'CSS', level: 85 },
@@ -28,6 +31,8 @@ const About = () => {
   return (
     <PageContainer>
       <ContentWrapper>
+        <h1>{t('about.title')}</h1>
+        <p>{t('about.description')}</p>
         <ProfileSection />
         <SkillsSection skills={skills} />
       </ContentWrapper>

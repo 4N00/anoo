@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 import HeroSection from '../components/HeroSection';
 import ProjectCard from '../components/ProjectCard/ProjectCard';
 import {
@@ -21,6 +22,7 @@ import { featuredProjects as importedFeatured, projects as importedProjects } fr
 const COLORS = ['#FFFFFF', '#F2FCE2', '#FEF7CD', '#E5DEFF'] as const;
 
 const Index = () => {
+  const { t } = useLanguage();
   const [currentColor, setCurrentColor] = useState<(typeof COLORS)[number]>(COLORS[0]);
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
 
@@ -70,12 +72,12 @@ const Index = () => {
           }}
         >
           <Header>
-            <HeaderText>Featured Projects</HeaderText>
+            <HeaderText>{t('projects.featured.label')}</HeaderText>
             <HeaderTitle>
-              <motion.span>Selected Works</motion.span>
+              <motion.span>{t('projects.featured.title')}</motion.span>
             </HeaderTitle>
             <HeaderSubtitle>
-              A curated selection of my favorite projects that showcase my skills and interests.
+              {t('projects.featured.subtitle')}
             </HeaderSubtitle>
           </Header>
           <ProjectGrid>
@@ -92,12 +94,12 @@ const Index = () => {
           }}
         >
           <Header>
-            <HeaderText>All Projects</HeaderText>
+            <HeaderText>{t('projects.all.label')}</HeaderText>
             <HeaderTitle>
-              <motion.span>Project Archive</motion.span>
+              <motion.span>{t('projects.all.title')}</motion.span>
             </HeaderTitle>
             <HeaderSubtitle>
-              A comprehensive collection of my work, including personal projects, experiments, and contributions.
+              {t('projects.all.subtitle')}
             </HeaderSubtitle>
           </Header>
           <ProjectGrid>

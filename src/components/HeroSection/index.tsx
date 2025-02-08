@@ -1,10 +1,12 @@
 'use client';
 
 import React from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 import { Section, ContentWrapper, LetterContainer, Letter, Subtitle, StyledLink } from './styles';
 
 const HeroSection: React.FC = () => {
-  const title = ["HI,", "I'M", "ANOO."];
+  const { t } = useLanguage();
+  const title = [t('hero.greeting'), t('hero.introduction'), t('hero.name')];
 
   return (
     <Section>
@@ -34,7 +36,7 @@ const HeroSection: React.FC = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.8 }}
         >
-          Scroll to see some of my work - contact me if you like what i do.
+          {t('hero.subtitle')}
         </Subtitle>
         <StyledLink
           href="/about"
@@ -42,7 +44,7 @@ const HeroSection: React.FC = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5, delay: 1 }}
         >
-          LEARN MORE ABOUT ME
+          {t('hero.cta')}
         </StyledLink>
       </ContentWrapper>
     </Section>
