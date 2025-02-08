@@ -13,7 +13,11 @@ import { AnimatePresence } from 'framer-motion';
 import styled, { createGlobalStyle } from 'styled-components';
 import GlobalStyles from '../styles/GlobalStyles';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
 
 // Create a client
 const queryClient = new QueryClient({
@@ -56,9 +60,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link 
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Josefin+Sans:wght@400;500;600;700&display=swap" 
+          rel="stylesheet"
+          media="print"
+          onLoad={(e) => {
+            const link = e.currentTarget;
+            link.media = 'all';
+          }}
+        />
         <style>{`* { cursor: none !important; }`}</style>
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} ${inter.variable}`}>
         <QueryClientProvider client={getQueryClient()}>
           <ThemeProvider>
             <GlobalStyle />
