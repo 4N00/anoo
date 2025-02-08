@@ -3,10 +3,13 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import styled from 'styled-components';
 import { usePathname } from 'next/navigation';
+import TrefoilKnot from '@/components/TrefoilKnot';
 
 interface BackgroundContextType {
   backgroundColor: string;
   setBackgroundColor: (color: string) => void;
+  showTrefoil: boolean;
+  setShowTrefoil: (show: boolean) => void;
 }
 
 const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined);
@@ -19,13 +22,14 @@ const PageBackground = styled.div<{ $bgColor: string; $isHome: boolean }>`
   bottom: 0;
   background-color: ${props => props.$bgColor};
   transition: background-color 0.6s ease;
-  z-index: -1;
+  z-index: -1000;
   opacity: ${props => props.$isHome ? 1 : 0};
   pointer-events: none;
 `;
 
 export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
+  const [showTrefoil, setShowTrefoil] = useState(true);
   const pathname = usePathname();
   const isHome = pathname === '/';
 
@@ -33,12 +37,16 @@ export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children
   useEffect(() => {
     if (!isHome) {
       setBackgroundColor('#FFFFFF');
+      setShowTrefoil(false);
+    } else {
+      setShowTrefoil(true);
     }
   }, [isHome]);
 
   return (
-    <BackgroundContext.Provider value={{ backgroundColor, setBackgroundColor }}>
+    <BackgroundContext.Provider value={{ backgroundColor, setBackgroundColor, showTrefoil, setShowTrefoil }}>
       <PageBackground $bgColor={backgroundColor} $isHome={isHome} />
+      {showTrefoil && <TrefoilKnot />}
       {children}
     </BackgroundContext.Provider>
   );

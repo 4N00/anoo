@@ -6,10 +6,10 @@ import { useScroll } from 'framer-motion';
 const Container = styled.div`
   position: fixed;
   top: 0;
-  left: 0;
+  left: 30vw;
   width: 100vw;
   height: 100vh;
-  z-index: -1;
+  z-index: -999;
   opacity: 0.3;
   transition: opacity 0.3s ease;
   pointer-events: none;
@@ -112,24 +112,28 @@ const TrefoilKnot: React.FC = () => {
 
       const currentScrollY = scrollYProgress.get();
       
-      const rotationDelta = (currentScrollY - prevScrollY) * Math.PI;
-      targetRotationY += rotationDelta * 0.3;
+      // Reversed direction (positive instead of negative) and slowed down more
+      const parallaxY = currentScrollY * window.innerHeight * 0.01;
       
-      const rotationSpeed = 1.5 * deltaTime;
+      const rotationDelta = (currentScrollY - prevScrollY) * Math.PI;
+      targetRotationY += rotationDelta * 0.02; // Even slower rotation
+      
+      const rotationSpeed = 0.5 * deltaTime; // Even slower interpolation
       currentRotationY += (targetRotationY - currentRotationY) * rotationSpeed;
       
       knot.current.rotation.y = currentRotationY;
-      knot.current.rotation.x += rotationDelta * 0.05;
-      knot.current.rotation.z += rotationDelta * 0.03;
+      knot.current.rotation.x += rotationDelta * 0.002; // Much slower X rotation
+      knot.current.rotation.z += rotationDelta * 0.001; // Much slower Z rotation
 
-      const scaleFactor = 1 + Math.abs(rotationDelta) * 0.5;
-      const targetScale = Math.max(0.95, Math.min(1.05, scaleFactor));
+      // Even subtler scale effect
+      const scaleFactor = 1 + Math.abs(rotationDelta) * 0.1;
+      const targetScale = Math.max(0.99, Math.min(1.01, scaleFactor));
       const currentScale = knot.current.scale.x;
       knot.current.scale.setScalar(currentScale + (targetScale - currentScale) * rotationSpeed);
 
-      // Increased movement range for larger size
-      knot.current.position.y = Math.sin(currentRotationY * 0.3) * 1.2;
-      knot.current.position.x = Math.cos(currentRotationY * 0.3) * 1.2;
+      // Even slower floating movement
+      knot.current.position.y = Math.sin(currentRotationY * 0.05) * 0.3 + parallaxY;
+      knot.current.position.x = Math.cos(currentRotationY * 0.05) * 0.3;
       
       prevScrollY = currentScrollY;
 
