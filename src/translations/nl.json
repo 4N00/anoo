@@ -26,13 +26,15 @@
       "name": "Jouw Naam",
       "email": "Jouw E-mail",
       "message": "Jouw Bericht",
-      "send": "Verstuur Bericht"
+      "send": "Verstuur Jouw Bericht",
+      "click_to_send": "Klik om te Versturen"
     },
     "info": {
       "title": "Contactgegevens",
-      "email": "E-mail:",
-      "phone": "Telefoon:",
-      "location": "Locatie:",
+      "email": "E-mail",
+      "phone": "Telefoon",
+      "company": "Wat is de naam van je bedrijf?",
+      "location": "Locatie",
       "availability": "Beschikbaar voor freelance opdrachten"
     }
   },

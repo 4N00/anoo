@@ -5,7 +5,6 @@ import { useLanguage } from '@/context/LanguageContext';
 import {
   Container,
   Content,
-  Title,
   Form,
   FormInput,
   FormTextarea,
@@ -29,48 +28,48 @@ const Contact = () => {
 
   return (
     <Container>
-      <BackgroundText>WE CREATE.</BackgroundText>
+      <BackgroundText>{t('contact.title').toUpperCase()}.</BackgroundText>
       <Content>
         <Form onSubmit={handleSubmit}>
           <div>
-            <Label>NAME</Label>
+            <Label>{t('contact.form.name').toUpperCase()}</Label>
             <FormInput 
               type="text" 
-              placeholder="PLEASE ENTER YOUR NAME" 
+              placeholder={t('contact.form.name').toUpperCase()} 
               required 
             />
           </div>
           <div>
-            <Label>EMAIL</Label>
+            <Label>{t('contact.form.email').toUpperCase()}</Label>
             <FormInput 
               type="email" 
-              placeholder="PLEASE ENTER YOUR EMAIL" 
+              placeholder={t('contact.form.email').toUpperCase()} 
               required 
             />
           </div>
           <div>
-            <Label>PHONE</Label>
+            <Label>{t('contact.info.phone').toUpperCase()}</Label>
             <FormInput 
               type="tel" 
-              placeholder="WOULD YOU LIKE TO ADD A PHONE NUMBER?" 
+              placeholder={t('contact.info.phone').toUpperCase()} 
             />
           </div>
           <div>
             <Label>COMPANY</Label>
             <FormInput 
               type="text" 
-              placeholder="WHAT IS THE NAME OF YOUR COMPANY?" 
+              placeholder={t('contact.info.company').toUpperCase()} 
             />
           </div>
           <div>
-            <Label>MESSAGE</Label>
+            <Label>{t('contact.form.message').toUpperCase()}</Label>
             <FormTextarea 
-              placeholder="PLEASE ENTER A MESSAGE HERE" 
+              placeholder={t('contact.form.message').toUpperCase()} 
               required 
             />
           </div>
           <SubmitButton type="submit" disabled={isSubmitting}>
-            SEND YOUR MESSAGE <span>:)</span> CLICK TO SEND
+            {t('contact.form.send').toUpperCase()} <span>:)</span> {t('contact.form.click_to_send').toUpperCase()}
           </SubmitButton>
         </Form>
       </Content>
