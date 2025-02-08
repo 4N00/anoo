@@ -22,7 +22,7 @@ export const theme: DefaultTheme = {
       light: '#fafafa',
     },
     text: {
-      primary: '#000000',
+      primary: '#1a1a1a',
       secondary: '#666666',
       muted: '#999999',
       gray: '#4B5563',

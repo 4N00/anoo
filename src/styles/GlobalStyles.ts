@@ -220,6 +220,21 @@ export const GlobalStyles = createGlobalStyle`
     cursor: none !important;
     background-color: #f5f5f5;
   }
+
+  /* Add this at the very end of the file before the last closing brace */
+  .container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    .container {
+      padding: 0 1rem;
+    }
+  }
 `;
 
 export default GlobalStyles;
