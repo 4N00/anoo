@@ -1,21 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/styles/components/Button';
-import { StyledInput, StyledTextarea } from '../../components/ui/StyledFormElements';
 import { useLanguage } from '@/context/LanguageContext';
 import {
   Container,
   Content,
-  Header,
   Title,
-  Subtitle,
   Form,
-  InputGroup,
-  ButtonGroup,
-  ContactInfo,
-  ContactInfoTitle,
-  ContactInfoItem,
+  FormInput,
+  FormTextarea,
+  SubmitButton,
+  Label,
+  BackgroundText
 } from '../../styles/ContactStyles';
 
 const Contact = () => {
@@ -33,59 +29,51 @@ const Contact = () => {
 
   return (
     <Container>
+      <BackgroundText>WE CREATE.</BackgroundText>
       <Content>
-        <Header>
-          <Title>{t('contact.title')}</Title>
-          <Subtitle>{t('contact.subtitle')}</Subtitle>
-        </Header>
         <Form onSubmit={handleSubmit}>
-          <InputGroup>
-            <StyledInput 
+          <div>
+            <Label>NAME</Label>
+            <FormInput 
               type="text" 
-              placeholder={t('contact.form.name')} 
+              placeholder="PLEASE ENTER YOUR NAME" 
               required 
             />
-            <StyledInput 
+          </div>
+          <div>
+            <Label>EMAIL</Label>
+            <FormInput 
               type="email" 
-              placeholder={t('contact.form.email')} 
+              placeholder="PLEASE ENTER YOUR EMAIL" 
               required 
             />
-          </InputGroup>
-          <StyledInput 
-            type="text" 
-            placeholder="Subject" 
-            required 
-          />
-          <StyledTextarea 
-            placeholder={t('contact.form.message')} 
-            rows={6} 
-            required 
-          />
-          <ButtonGroup>
-            <Button type="submit" $variant="primary" disabled={isSubmitting}>
-              {isSubmitting ? '...' : t('contact.form.send')}
-            </Button>
-          </ButtonGroup>
+          </div>
+          <div>
+            <Label>PHONE</Label>
+            <FormInput 
+              type="tel" 
+              placeholder="WOULD YOU LIKE TO ADD A PHONE NUMBER?" 
+            />
+          </div>
+          <div>
+            <Label>COMPANY</Label>
+            <FormInput 
+              type="text" 
+              placeholder="WHAT IS THE NAME OF YOUR COMPANY?" 
+            />
+          </div>
+          <div>
+            <Label>MESSAGE</Label>
+            <FormTextarea 
+              placeholder="PLEASE ENTER A MESSAGE HERE" 
+              required 
+            />
+          </div>
+          <SubmitButton type="submit" disabled={isSubmitting}>
+            SEND YOUR MESSAGE <span>:)</span> CLICK TO SEND
+          </SubmitButton>
         </Form>
       </Content>
-      <ContactInfo>
-        <ContactInfoTitle>{t('contact.info.title')}</ContactInfoTitle>
-        <ContactInfoItem>
-          <strong>{t('contact.info.email')}</strong>
-          <a href="mailto:info@anoo.nl">info@anoo.nl</a>
-        </ContactInfoItem>
-        <ContactInfoItem>
-          <strong>{t('contact.info.phone')}</strong>
-          <a href="tel:+31625135338">+31 625 135 338</a>
-        </ContactInfoItem>
-        <ContactInfoItem>
-          <strong>{t('contact.info.location')}</strong>
-          Amsterdam, Netherlands
-        </ContactInfoItem>
-        <ContactInfoItem>
-          {t('contact.info.availability')}
-        </ContactInfoItem>
-      </ContactInfo>
     </Container>
   );
 };

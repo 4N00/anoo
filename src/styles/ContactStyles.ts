@@ -1,93 +1,136 @@
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 
 export const Container = styled.div`
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: ${({ theme }) => theme.spacing.xl};
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: ${({ theme }) => theme.spacing.xl};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-export const Content = styled.div`
-  width: 100%;
-`;
-
-export const Header = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
-`;
-
-export const Title = styled.h1`
-  font-size: ${({ theme }) => theme.typography.fontSize['4xl']};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-  color: ${({ theme }) => theme.colors.text.primary};
-`;
-
-export const Subtitle = styled.p`
-  font-size: ${({ theme }) => theme.typography.fontSize.lg};
-  color: ${({ theme }) => theme.colors.text.secondary};
-  max-width: 600px;
-`;
-
-export const Form = styled.form`
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.lg};
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  background: #f5f5f5;
+  color: #1a1a1a;
 `;
 
-export const InputGroup = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: ${({ theme }) => theme.spacing.md};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-export const ButtonGroup = styled.div`
+export const BackgroundText = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-size: clamp(150px, 20vw, 300px);
+  font-weight: 900;
+  line-height: 0.8;
+  color: #000;
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 0;
   display: flex;
-  justify-content: flex-start;
-  margin-top: ${({ theme }) => theme.spacing.md};
+  align-items: flex-start;
+  padding: 2rem;
+  overflow: hidden;
+  user-select: none;
 `;
 
-export const ContactInfo = styled.div`
-  padding: ${({ theme }) => theme.spacing.xl};
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
-  background: ${({ theme }) => theme.colors.background.secondary};
-  box-shadow: ${({ theme }) => theme.shadows.md};
-  height: fit-content;
+export const Content = styled(motion.div)`
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  position: relative;
+  z-index: 1;
 `;
 
-export const ContactInfoTitle = styled.h2`
-  font-size: ${({ theme }) => theme.typography.fontSize['2xl']};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
-  color: ${({ theme }) => theme.colors.text.primary};
+export const Form = styled(motion.form)`
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: 100%;
+
+  > div {
+    position: relative;
+  }
 `;
 
-export const ContactInfoItem = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-  color: ${({ theme }) => theme.colors.text.primary};
+export const Label = styled.label`
+  position: absolute;
+  top: -1.5rem;
+  left: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #666;
+  text-transform: uppercase;
+`;
 
-  strong {
-    display: inline-block;
-    margin-right: ${({ theme }) => theme.spacing.sm};
+export const FormInput = styled.input`
+  width: 100%;
+  padding: 0.5rem 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  color: #1a1a1a;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+
+  &::placeholder {
+    color: #999;
   }
 
-  a {
-    color: ${({ theme }) => theme.colors.text.primary};
-    text-decoration: none;
-    transition: opacity 0.2s ease;
+  &:focus {
+    outline: none;
+    border-color: #1a1a1a;
+  }
+`;
 
-    &:hover {
-      opacity: 0.8;
-    }
+export const FormTextarea = styled.textarea`
+  width: 100%;
+  padding: 0.5rem 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  color: #1a1a1a;
+  font-size: 1rem;
+  resize: none;
+  min-height: 100px;
+  transition: all 0.3s ease;
+
+  &::placeholder {
+    color: #999;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #1a1a1a;
+  }
+`;
+
+export const SubmitButton = styled.button`
+  width: 100%;
+  padding: 2rem 0;
+  background: transparent;
+  border: none;
+  color: #1a1a1a;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  letter-spacing: -0.02em;
+
+  span {
+    display: inline-block;
+    transform: rotate(90deg);
+    margin: 0 0.5rem;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `;
