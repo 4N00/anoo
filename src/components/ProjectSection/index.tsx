@@ -22,17 +22,19 @@ const containerVariants = {
 
 interface ProjectSectionProps {
   projects: ProjectUI[];
+  className?: string;
 }
 
 const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(
-  ({ projects }, ref) => {
+  ({ projects, className }, ref) => {
     // Split projects into featured and non-featured
-    const featuredProjects = projects.filter(p => p.featured);
-    const nonFeaturedProjects = projects.filter(p => !p.featured);
+    const featuredProjects = projects.filter((p) => p.featured);
+    const nonFeaturedProjects = projects.filter((p) => !p.featured);
 
     return (
       <motion.section
         ref={ref}
+        className={className}
         initial="initial"
         animate="animate"
         variants={containerVariants}
@@ -48,7 +50,7 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(
             </ProjectGrid>
           </ProjectContainer>
         )}
-        
+
         {nonFeaturedProjects.length > 0 && (
           <ProjectContainer>
             <HeaderText>PROJECTS</HeaderText>

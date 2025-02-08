@@ -2,7 +2,7 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { Project, ProjectUI, toProjectUI } from '@/types/project';
+import { ProjectUI, toProjectUI } from '@/types/project';
 
 const projectUpdateSchema = z.object({
   id: z.string().optional(),
@@ -24,13 +24,13 @@ const createClient = () => {
     {
       cookies: {
         getAll: () => {
-          return Array.from(cookieStore.getAll()).map(cookie => ({
+          return Array.from(cookieStore.getAll()).map((cookie) => ({
             name: cookie.name,
             value: cookie.value,
           }));
         },
         setAll: (cookies: { name: string; value: string; options?: CookieOptions }[]) => {
-          cookies.forEach(cookie => {
+          cookies.forEach((cookie) => {
             cookieStore.set(cookie.name, cookie.value, cookie.options);
           });
         },
@@ -44,15 +44,15 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ): Promise<NextResponse<ProjectUI | { error: string; details?: any }>> {
   const supabase = createClient();
-  
+
   try {
     // Get the current user
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
     if (userError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check if user is admin
@@ -63,16 +63,11 @@ export async function PATCH(
       .single();
 
     if (roleError || !userData || userData.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Unauthorized - Admin access required' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
     const json = await request.json();
-    console.log('Received data:', json); // Add logging
     const validatedData = projectUpdateSchema.parse(json);
-    console.log('Validated data:', validatedData); // Add logging
 
     const { data: project, error } = await supabase
       .from('projects')
@@ -92,17 +87,11 @@ export async function PATCH(
 
     if (error) {
       console.error('Database error:', error);
-      return NextResponse.json(
-        { error: 'Database error', details: error },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Database error', details: error }, { status: 500 });
     }
 
     if (!project) {
-      return NextResponse.json(
-        { error: 'Project not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
     }
 
     // Convert the database response to UI format using the helper function
@@ -117,10 +106,7 @@ export async function PATCH(
     }
 
     console.error('Error updating project:', error);
-    return NextResponse.json(
-      { error: 'Failed to update project' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to update project' }, { status: 500 });
   }
 }
 
@@ -132,12 +118,12 @@ export async function DELETE(
 
   try {
     // Get the current user
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
     if (userError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check if user is admin
@@ -148,10 +134,7 @@ export async function DELETE(
       .single();
 
     if (roleError || !userData || userData.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Unauthorized - Admin access required' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
     const { error } = await supabase
@@ -165,9 +148,6 @@ export async function DELETE(
     return new NextResponse(null, { status: 204 });
   } catch (error) {
     console.error('Error deleting project:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete project' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to delete project' }, { status: 500 });
   }
 }

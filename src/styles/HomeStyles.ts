@@ -66,7 +66,7 @@ export const Separator = styled.hr`
   margin: 0 auto;
   max-width: 1400px;
   border: none;
-  border-top: 1px solid ${({ theme }) => theme.colors.border.default};
+  border-top: 1px solid ${({ theme }) => theme.colors.text.secondary};
   opacity: 0.2;
 `;
 

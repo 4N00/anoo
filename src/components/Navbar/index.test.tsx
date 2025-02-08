@@ -126,7 +126,7 @@ describe('Navbar', () => {
   it('renders loading state', () => {
     mockUseAuth.mockReturnValue({ isLoading: true });
     render(<Navbar />);
-    expect(screen.getByText('ANOO')).toBeInTheDocument();
+    expect(screen.getByText('anoo.nl')).toBeInTheDocument();
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 

@@ -29,16 +29,12 @@ jest.mock('../ProjectCard/ProjectCard', () => {
 
 // Mock the styled components
 jest.mock('../ProjectCard/styles', () => ({
-  ProjectContainer: function MockProjectContainer({
-    children,
-    $featured,
-  }: React.PropsWithChildren<{ $featured?: boolean }>) {
-    return (
-      <div data-testid="project-container" data-featured={$featured}>
-        {children}
-      </div>
-    );
-  },
+  ProjectContainer: ({ children }: React.PropsWithChildren<any>) => (
+    <div data-testid="project-container">{children}</div>
+  ),
+  ProjectGrid: ({ children }: React.PropsWithChildren<any>) => (
+    <div data-testid="project-grid">{children}</div>
+  ),
 }));
 
 describe('ProjectSection', () => {
@@ -79,31 +75,46 @@ describe('ProjectSection', () => {
     expect(projectCards).toHaveLength(2);
   });
 
-  it('renders title when provided', () => {
-    const title = 'My Projects';
-    const { getByText } = render(<ProjectSection projects={mockProjects} title={title} />);
-    expect(getByText(title)).toBeInTheDocument();
-  });
+  it('renders featured and non-featured sections correctly', () => {
+    const { getAllByTestId, getByText } = render(<ProjectSection projects={mockProjects} />);
 
-  it('does not render title when not provided', () => {
-    const { container } = render(<ProjectSection projects={mockProjects} />);
-    expect(container.querySelector('h2')).not.toBeInTheDocument();
-  });
+    // Check for section headers
+    expect(getByText('FEATURED')).toBeInTheDocument();
+    expect(getByText('PROJECTS')).toBeInTheDocument();
 
-  it('passes featured prop to ProjectContainer', () => {
-    const { container } = render(<ProjectSection projects={mockProjects} featured={true} />);
-    const projectContainer = container.querySelector('[data-testid="project-container"]');
-    expect(projectContainer).toBeInTheDocument();
-  });
+    // Check for project containers
+    const projectContainers = getAllByTestId('project-container');
+    expect(projectContainers).toHaveLength(2);
 
-  it('renders with default featured value when not provided', () => {
-    const { container } = render(<ProjectSection projects={mockProjects} />);
-    const projectContainer = container.querySelector('[data-testid="project-container"]');
-    expect(projectContainer).toBeInTheDocument();
+    // Check for project grids
+    const projectGrids = getAllByTestId('project-grid');
+    expect(projectGrids).toHaveLength(2);
   });
 
   it('renders empty section when no projects provided', () => {
     const { queryByTestId } = render(<ProjectSection projects={[]} />);
     expect(queryByTestId('project-card')).not.toBeInTheDocument();
+  });
+
+  it('renders only non-featured section when no featured projects', () => {
+    const nonFeaturedProjects = mockProjects.map((p) => ({ ...p, featured: false }));
+    const { queryByText, getAllByTestId } = render(
+      <ProjectSection projects={nonFeaturedProjects} />
+    );
+
+    expect(queryByText('FEATURED')).not.toBeInTheDocument();
+    expect(queryByText('PROJECTS')).toBeInTheDocument();
+    const projectCards = getAllByTestId('project-card');
+    expect(projectCards).toHaveLength(2);
+  });
+
+  it('renders only featured section when all projects are featured', () => {
+    const featuredProjects = mockProjects.map((p) => ({ ...p, featured: true }));
+    const { queryByText, getAllByTestId } = render(<ProjectSection projects={featuredProjects} />);
+
+    expect(queryByText('FEATURED')).toBeInTheDocument();
+    expect(queryByText('PROJECTS')).not.toBeInTheDocument();
+    const projectCards = getAllByTestId('project-card');
+    expect(projectCards).toHaveLength(2);
   });
 });

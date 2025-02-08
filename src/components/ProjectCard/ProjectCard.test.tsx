@@ -18,6 +18,8 @@ jest.mock('framer-motion', () => ({
     div: ({ children, ...props }: React.PropsWithChildren<any>) => <div {...props}>{children}</div>,
     img: ({ children, ...props }: React.PropsWithChildren<any>) => <img {...props}>{children}</img>,
   },
+  useScroll: () => ({ scrollYProgress: 0 }),
+  useTransform: () => 'blur(0px)',
 }));
 
 // Mock the styled components

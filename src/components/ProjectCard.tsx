@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import type { ProjectListItem } from '@/types/project';
-import { Button, LinkButton } from '@/components/ui/Button';
+import { Button } from '@/styles/components/Button';
 
 interface ProjectCardProps {
   project: ProjectListItem;
@@ -100,15 +100,7 @@ export default function ProjectCard({
   onEdit,
   onDelete,
 }: ProjectCardProps) {
-  const {
-    title,
-    description,
-    imageUrl,
-    githubUrl,
-    liveUrl,
-    tags,
-    featured,
-  } = project;
+  const { title, description, imageUrl, githubUrl, liveUrl, tags, featured } = project;
 
   return (
     <Card>
@@ -125,7 +117,7 @@ export default function ProjectCard({
       <Content>
         <Title>{title}</Title>
         <Description>{description}</Description>
-        
+
         <TagsContainer>
           {tags.map((tag: string) => (
             <Tag key={tag}>{tag}</Tag>
@@ -134,44 +126,36 @@ export default function ProjectCard({
 
         <Links>
           {liveUrl && (
-            <LinkButton
+            <Button
+              as="a"
               href={liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              variant="primary"
-              size="small"
+              $variant="primary"
             >
               View Live
-            </LinkButton>
+            </Button>
           )}
           {githubUrl && (
-            <LinkButton
+            <Button
+              as="a"
               href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              variant="outline"
-              size="small"
+              $variant="secondary"
             >
               View Code
-            </LinkButton>
+            </Button>
           )}
         </Links>
 
         {isAdmin && (
           <AdminActions>
-            <Button
-              variant="secondary"
-              size="small"
-              onClick={() => onEdit?.(project)}
-            >
-              Edit
-            </Button>
-            <Button
-              variant="danger"
-              size="small"
-              onClick={() => onDelete?.(project)}
-            >
+            <Button $variant="danger" onClick={() => onDelete?.(project)}>
               Delete
+            </Button>
+            <Button $variant="primary" onClick={() => onEdit?.(project)}>
+              Edit
             </Button>
           </AdminActions>
         )}
