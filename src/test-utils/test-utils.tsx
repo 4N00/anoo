@@ -24,18 +24,31 @@ jest.mock('next/navigation', () => ({
 }));
 
 // Mock framer-motion
-jest.mock('framer-motion', () => ({
-  motion: {
-    div: ({ children, ...props }: React.PropsWithChildren<any>) => <div {...props}>{children}</div>,
-  },
-  useInView: () => true,
-  useAnimation: () => ({
-    start: jest.fn(),
-    set: jest.fn(),
-    stop: jest.fn(),
-  }),
-  AnimatePresence: ({ children }: React.PropsWithChildren<any>) => <>{children}</>,
-}));
+jest.mock('framer-motion', () => {
+  const actual = jest.requireActual('framer-motion');
+  return {
+    __esModule: true,
+    ...actual,
+    motion: new Proxy(
+      {},
+      {
+        get: (_, prop) => {
+          return ({ children, ...props }: { children?: React.ReactNode } & Record<string, any>) => {
+            const Component = prop.toString();
+            return React.createElement(Component, props, children);
+          };
+        },
+      }
+    ),
+    useInView: () => true,
+    useAnimation: () => ({
+      start: jest.fn(),
+      set: jest.fn(),
+      stop: jest.fn(),
+    }),
+    AnimatePresence: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
+  };
+});
 
 // Mock TrefoilKnot component
 jest.mock('../components/trefoil-knot/TrefoilKnot', () => ({

@@ -10,6 +10,10 @@ import { theme } from '@/styles/themeConfig';
 import ProjectCard from './ProjectCard';
 import { ProjectUI } from '@/types/project';
 
+declare const describe: any;
+declare const it: any;
+declare const expect: any;
+
 const renderWithTheme = (component: React.ReactNode) => {
   return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
 };

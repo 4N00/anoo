@@ -3,10 +3,21 @@ const React = require('react');
 
 // Mock framer-motion globally
 jest.mock('framer-motion', () => ({
-  motion: {
-    div: ({ children, ...props }) => React.createElement('div', props, children),
-  },
-  Variants: {},
+  motion: new Proxy({}, {
+    get: function(_, prop) {
+      return function({ children, ...props }) {
+        const Component = prop;
+        return React.createElement(Component, props, children);
+      };
+    }
+  }),
+  useInView: () => true,
+  useAnimation: () => ({
+    start: jest.fn(),
+    set: jest.fn(),
+    stop: jest.fn(),
+  }),
+  AnimatePresence: ({ children }) => children,
 }));
 
 // Mock styled-components theme

@@ -1,24 +1,15 @@
 /// <reference types="@testing-library/jest-dom" />
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render } from '@/test-utils/test-utils';
 import '@testing-library/jest-dom';
 import SkillsSection from './SkillsSection';
-import { stripMotionProps, stripAllProps } from '@/test-utils/mockHelpers';
+import { stripAllProps } from '@/test-utils/mockHelpers';
 
 // Declare Jest globals
 declare const jest: any;
 declare const describe: any;
 declare const it: any;
 declare const expect: any;
-
-// Mock framer-motion
-jest.mock('framer-motion', () => ({
-  motion: {
-    div: ({ children, ...props }: React.PropsWithChildren<any>) => (
-      <div {...stripMotionProps(props)}>{children}</div>
-    ),
-  },
-}));
 
 // Mock the styled components
 jest.mock('@/styles/AboutStyles', () => ({
@@ -51,6 +42,49 @@ jest.mock('@/styles/AboutStyles', () => ({
   ),
   SkillLevel: ({ children, ...props }: React.PropsWithChildren<any>) => (
     <div {...stripAllProps(props)}>{children}</div>
+  ),
+}));
+
+// Mock the local styles
+jest.mock('./styles', () => ({
+  SkillsContainer: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <div data-testid="skills-container" {...stripAllProps(props)}>{children}</div>
+  ),
+  SkillsGrid: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <div data-testid="skills-grid" {...stripAllProps(props)}>{children}</div>
+  ),
+  SkillItem: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <div data-testid="skill-item" {...stripAllProps(props)}>{children}</div>
+  ),
+  SkillName: ({ children, $level, ...props }: React.PropsWithChildren<{ $level: number }>) => (
+    <div data-testid="skill-name" {...stripAllProps(props)}>
+      {children}
+      <span>{($level / 10).toFixed(2)} / 10</span>
+    </div>
+  ),
+  SkillBar: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <div data-testid="skill-bar" {...stripAllProps(props)}>{children}</div>
+  ),
+  SkillLevel: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <div data-testid="skill-level" {...stripAllProps(props)}>{children}</div>
+  ),
+  SkillsTitle: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <h2 data-testid="skills-title" {...stripAllProps(props)}>{children}</h2>
+  ),
+  SkillIcon: ({ ...props }: React.PropsWithChildren<any>) => (
+    <img data-testid="skill-icon" {...stripAllProps(props)} />
+  ),
+  SkillPercentage: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <span data-testid="skill-percentage" {...stripAllProps(props)}>{children}</span>
+  ),
+  SkillNameText: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <span data-testid="skill-name-text" {...stripAllProps(props)}>{children}</span>
+  ),
+  ProgressContainer: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <div data-testid="progress-container" {...stripAllProps(props)}>{children}</div>
+  ),
+  ProgressBar: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <div data-testid="progress-bar" {...stripAllProps(props)}>{children}</div>
   ),
 }));
 
