@@ -1,7 +1,6 @@
 /// <reference types="@types/jest" />
 /// <reference types="@testing-library/jest-dom" />
 import '@testing-library/jest-dom';
-import '@testing-library/jest-dom/extend-expect';
 import 'jest-styled-components';
 import React from 'react';
 import { render, screen } from '@/test-utils/test-utils';
@@ -83,7 +82,7 @@ describe('ProjectSection', () => {
     const { container } = renderWithTheme(
       <ProjectSection projects={mockProjects} className={testClass} />
     );
-    expect(container.firstChild).toHaveClass(testClass);
+    expect(container.firstChild).toHaveAttribute('class', expect.stringContaining(testClass));
   });
 
   it('renders empty state when no projects are provided', () => {

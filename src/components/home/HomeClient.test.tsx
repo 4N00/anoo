@@ -28,12 +28,12 @@ jest.mock('@/components/hero/Hero', () => {
   };
 });
 
-jest.mock('@/components/ProjectSection', () => {
+jest.mock('@/components/project-section/ProjectSection', () => {
   const MockProjectSection = React.forwardRef<HTMLDivElement, { projects: ProjectUI[] }>(
     ({ projects }, ref) => {
       return (
-        <div ref={ref} data-testid="project-section">
-          {projects.map((project) => (
+        <div data-testid="project-section" ref={ref}>
+          {projects.map(project => (
             <div key={project.id} data-testid="project-item">
               {project.title}
             </div>
@@ -42,7 +42,6 @@ jest.mock('@/components/ProjectSection', () => {
       );
     }
   );
-  MockProjectSection.displayName = 'MockProjectSection';
   return MockProjectSection;
 });
 
@@ -54,6 +53,12 @@ jest.mock('framer-motion', () => ({
   useScroll: () => ({ scrollYProgress: { get: () => 0 } }),
   useTransform: () => ({ get: () => 1 }),
 }));
+
+jest.mock('@/components/trefoil-knot/TrefoilKnot', () => {
+  return function MockTrefoilKnot() {
+    return <div data-testid="trefoil-knot">Trefoil Knot</div>;
+  };
+});
 
 describe('HomeClient', () => {
   const mockInitialProjects: ProjectUI[] = [

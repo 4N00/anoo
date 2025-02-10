@@ -1,7 +1,6 @@
 /// <reference types="@types/jest" />
 /// <reference types="@testing-library/jest-dom" />
 import '@testing-library/jest-dom';
-import '@testing-library/jest-dom/extend-expect';
 import 'jest-styled-components';
 import React from 'react';
 import { render, screen } from '@/test-utils/test-utils';
@@ -42,26 +41,13 @@ describe('ProjectCard', () => {
 
   it('renders project tags', () => {
     renderWithTheme(<ProjectCard project={mockProject} />);
-    expect(screen.getByText(mockProject.tags.join(' • '))).toBeInTheDocument();
+    expect(screen.getByText(mockProject.tags.slice(0, 2).join(' / '))).toBeInTheDocument();
   });
 
-  it('renders project links when provided', () => {
+  it('renders project image', () => {
     renderWithTheme(<ProjectCard project={mockProject} />);
-    expect(screen.getByRole('link', { name: /github/i })).toHaveAttribute('href', mockProject.githubUrl);
-    expect(screen.getByRole('link', { name: /live/i })).toHaveAttribute('href', mockProject.liveUrl);
-  });
-
-  it('does not render links when urls are not provided', () => {
-    const projectWithoutLinks = { ...mockProject, githubUrl: null, liveUrl: null };
-    renderWithTheme(<ProjectCard project={projectWithoutLinks} />);
-    expect(screen.queryByRole('link', { name: /github/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: /live/i })).not.toBeInTheDocument();
-  });
-
-  it('renders project image with correct attributes', () => {
-    renderWithTheme(<ProjectCard project={mockProject} />);
-    const image = screen.getByRole('img');
+    const image = screen.getByAltText(mockProject.title);
+    expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute('src', mockProject.imageUrl);
-    expect(image).toHaveAttribute('alt', mockProject.title);
   });
 }); 

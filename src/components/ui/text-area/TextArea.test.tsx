@@ -1,14 +1,12 @@
 /// <reference types="@types/jest" />
 /// <reference types="@testing-library/jest-dom" />
 import '@testing-library/jest-dom';
-import '@testing-library/jest-dom/extend-expect';
-import 'jest-styled-components';
 import React from 'react';
 import { render, screen } from '@/test-utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '@/styles/themeConfig';
-import TextArea from './index';
+import TextArea from './TextArea';
 
 declare const describe: any;
 declare const it: any;
