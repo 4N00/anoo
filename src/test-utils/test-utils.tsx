@@ -1,13 +1,40 @@
+/// <reference types="@testing-library/jest-dom" />
+// Declare Jest globals
+declare const jest: any;
+
 import React from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '@/styles/theme';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { BackgroundProvider } from '@/context/BackgroundContext';
+import { ToastProvider } from '@/context/ToastContext';
 
 // Mock usePathname for BackgroundProvider
 jest.mock('next/navigation', () => ({
   usePathname: () => '/',
+  useRouter: () => ({
+    push: jest.fn(),
+    back: jest.fn(),
+    forward: jest.fn(),
+    refresh: jest.fn(),
+    replace: jest.fn(),
+    prefetch: jest.fn()
+  })
+}));
+
+// Mock framer-motion
+jest.mock('framer-motion', () => ({
+  motion: {
+    div: ({ children, ...props }: React.PropsWithChildren<any>) => <div {...props}>{children}</div>,
+  },
+  useInView: () => true,
+  useAnimation: () => ({
+    start: jest.fn(),
+    set: jest.fn(),
+    stop: jest.fn(),
+  }),
+  AnimatePresence: ({ children }: React.PropsWithChildren<any>) => <>{children}</>,
 }));
 
 // Mock TrefoilKnot component
@@ -21,7 +48,9 @@ const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
     <ThemeProvider theme={theme}>
       <LanguageProvider>
         <BackgroundProvider>
-          {children}
+          <ToastProvider>
+            {children}
+          </ToastProvider>
         </BackgroundProvider>
       </LanguageProvider>
     </ThemeProvider>

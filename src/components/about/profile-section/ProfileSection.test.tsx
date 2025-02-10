@@ -25,6 +25,9 @@ jest.mock('./styles', () => ({
   ProfileText: ({ children, ...props }: React.PropsWithChildren<any>) => (
     <p {...props}>{children}</p>
   ),
+  BackgroundText: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <div {...props}>{children}</div>
+  ),
 }));
 
 const renderWithProviders = (ui: React.ReactElement) => {

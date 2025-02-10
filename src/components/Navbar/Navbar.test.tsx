@@ -25,14 +25,6 @@ jest.mock('@/lib/supabase', () => ({
   signOut: () => mockSignOut(),
 }));
 
-// Mock next/navigation
-jest.mock('next/navigation', () => ({
-  usePathname: () => '/',
-  useRouter: () => ({
-    push: jest.fn(),
-  }),
-}));
-
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
   motion: {
