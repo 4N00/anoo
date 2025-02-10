@@ -1,5 +1,34 @@
 import styled from 'styled-components';
 
+export const FooterSection = styled.footer`
+  width: 100%;
+  padding: ${({ theme }) => theme.spacing.xl} 0;
+  background: ${({ theme }) => theme.colors.background.primary};
+  border-top: 1px solid ${({ theme }) => theme.colors.text.secondary}20;
+`;
+
+export const SocialLinks = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.md};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+`;
+
+export const SocialLink = styled.a`
+  color: ${({ theme }) => theme.colors.text.secondary};
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.text.primary};
+  }
+`;
+
+export const Copyright = styled.p`
+  text-align: center;
+  color: ${({ theme }) => theme.colors.text.secondary};
+  font-size: ${({ theme }) => theme.typography.fontSize.sm};
+`;
+
 export const FooterContainer = styled.footer`
   padding: ${({ theme }) => theme.spacing.xl};
   background-color: ${({ theme }) => theme.colors.background.primary};

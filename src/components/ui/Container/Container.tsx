@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyledContainer } from './styles';
 
 export interface ContainerProps {

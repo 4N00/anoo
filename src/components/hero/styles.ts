@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { Container } from '../ui/container';
+import Container from '../ui/container/Container';
+
 
 export const SVGFilters = styled.div`
   position: absolute;
