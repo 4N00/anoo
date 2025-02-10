@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Project } from '@/types/project';
+import { supabase } from '@/lib/supabase';
 
 interface ProjectsContextType {
   projects: Project[];
@@ -18,18 +19,41 @@ export const ProjectsProvider: React.FC<ProjectsProviderProps> = ({ children }) 
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    // Fetch projects from API
     const fetchProjects = async () => {
       try {
-        const response = await fetch('/api/projects');
-        const data = await response.json();
-        setProjects(data);
+        const { data, error } = await supabase
+          .from('projects')
+          .select('*')
+          .order('display_order', { ascending: true });
+
+        if (error) throw error;
+        setProjects(data || []);
       } catch (error) {
         console.error('Error fetching projects:', error);
       }
     };
 
     fetchProjects();
+
+    // Set up real-time subscription
+    const subscription = supabase
+      .channel('projects_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'projects',
+        },
+        () => {
+          fetchProjects();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   return (

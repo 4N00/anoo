@@ -39,20 +39,18 @@ export const Label = styled.label`
   color: ${({ theme }) => theme.colors.text.secondary};
 `;
 
-export const Input = styled.input<{ error?: boolean }>`
-  padding: ${({ theme }) => theme.spacing.md};
-  border: 2px solid ${({ theme, error }) =>
-    error ? theme.colors.error : theme.colors.primary.light};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  font-size: ${({ theme }) => theme.typography.fontSize.md};
-  background-color: ${({ theme }) => theme.colors.background.primary};
+export const Input = styled.input<{ $error?: boolean }>`
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid ${({ theme, $error }) => 
+    $error ? theme.colors.error : theme.colors.background.dark};
+  border-radius: 4px;
+  background-color: ${({ theme }) => theme.colors.background.light};
   color: ${({ theme }) => theme.colors.text.primary};
-  transition: all ${({ theme }) => theme.transitions.fast};
-
+  
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors.primary.main};
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary.light}40;
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary.main};
   }
 `;
 

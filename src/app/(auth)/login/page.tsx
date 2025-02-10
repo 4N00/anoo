@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -25,6 +27,8 @@ type FormData = z.infer<typeof schema>;
 
 export default function Login() {
   const { t } = useLanguage();
+  const router = useRouter();
+  const { login } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -49,12 +53,17 @@ export default function Login() {
         body: JSON.stringify(data),
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
-        throw new Error('Invalid credentials');
+        throw new Error(result.error || 'Invalid credentials');
       }
 
-      // Redirect to admin page on success
-      window.location.href = '/admin';
+      // Update auth context
+      await login(result.user);
+      
+      // Redirect to admin page
+      router.push('/admin');
     } catch (error) {
       setError(t('login.error'));
     } finally {
@@ -73,7 +82,7 @@ export default function Login() {
             id="email"
             type="email"
             {...register('email')}
-            error={!!errors.email}
+            $error={!!errors.email}
           />
           {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
         </FormGroup>
@@ -84,7 +93,7 @@ export default function Login() {
             id="password"
             type="password"
             {...register('password')}
-            error={!!errors.password}
+            $error={!!errors.password}
           />
           {errors.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
         </FormGroup>

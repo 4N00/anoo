@@ -9,6 +9,9 @@ interface AuthContextType {
   isAdmin: boolean;
   isLoading: boolean;
   user: User | null;
+  loading: boolean;
+  login: (user: User) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -26,6 +29,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
@@ -42,8 +47,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const adminStatus = await checkIsAdmin();
           if (!mounted) return;
           setIsAdmin(adminStatus);
+          setUser(initialSession.user);
         } else {
           setIsAdmin(false);
+          setUser(null);
         }
       } catch (error) {
         console.error('Error initializing auth:', error);
@@ -67,14 +74,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const adminStatus = await checkIsAdmin();
           if (!mounted) return;
           setIsAdmin(adminStatus);
+          setUser(newSession.user);
         } else {
           setSession(null);
           setIsAdmin(false);
+          setUser(null);
         }
       } catch (error) {
         console.error('Error handling auth change:', error);
         setSession(null);
         setIsAdmin(false);
+        setUser(null);
       }
     });
 
@@ -91,13 +101,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return null;
   }
 
+  const login = async (user: User) => {
+    setUser(user);
+  };
+
+  const logout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+  };
+
   return (
     <AuthContext.Provider
       value={{
         session,
         isAdmin,
         isLoading,
-        user: session?.user ?? null,
+        user,
+        loading,
+        login,
+        logout,
       }}
     >
       {children}
