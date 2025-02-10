@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import ProfileSection from '../../components/about/ProfileSection';
-import SkillsSection from '../../components/about/SkillsSection';
 import { PageContainer, ContentWrapper } from '../../styles/AboutStyles';
+import ProfileSection from '@/components/about/profile-section/ProfileSection';
+import SkillsSection from '@/components/about/skills-section/SkillsSection';
 
 const About = () => {
   const skills = [

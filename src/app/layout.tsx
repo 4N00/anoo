@@ -8,11 +8,11 @@ import { AuthProvider } from '../context/AuthContext';
 import { ToastProvider } from '../context/ToastContext';
 import { BackgroundProvider } from '../context/BackgroundContext';
 import { LanguageProvider } from '../context/LanguageContext';
-import Navbar from '../components/Navbar';
-import PageFooter from '../components/PageFooter';
 import { AnimatePresence } from 'framer-motion';
 import styled, { createGlobalStyle } from 'styled-components';
 import GlobalStyles from '../styles/GlobalStyles';
+import PageFooter from '@/components/footer/Footer';
+import Navbar from '@/components/navbar/Navbar';
 
 const inter = Inter({
   subsets: ['latin'],

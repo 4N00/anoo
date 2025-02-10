@@ -5,6 +5,8 @@ import { styled } from 'styled-components';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
 import { supabase } from '@/lib/supabase';
+import { AuthChangeEvent, Session } from '@supabase/supabase-js';
+import { useAuth } from '@/context/AuthContext';
 
 const AdminContainer = styled.div`
   display: flex;
@@ -31,6 +33,7 @@ const AdminClient: React.FC<AdminClientProps> = ({ children }) => {
   const { showToast } = useToast();
   const [isLoading, setIsLoading] = React.useState(true);
   const [isAuthorized, setIsAuthorized] = React.useState(false);
+  const { user, isAdmin, loading } = useAuth();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -64,7 +67,7 @@ const AdminClient: React.FC<AdminClientProps> = ({ children }) => {
     checkAuth();
 
     // Subscribe to auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session: Session | null) => {
       if (event === 'SIGNED_OUT') {
         setIsAuthorized(false);
         router.replace('/login');
@@ -77,6 +80,12 @@ const AdminClient: React.FC<AdminClientProps> = ({ children }) => {
       subscription.unsubscribe();
     };
   }, [router, showToast]);
+
+  useEffect(() => {
+    if (!loading && (!user || !isAdmin)) {
+      router.push('/login');
+    }
+  }, [user, isAdmin, loading, router]);
 
   // Show loading state while checking auth
   if (isLoading) {

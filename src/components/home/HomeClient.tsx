@@ -2,8 +2,8 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import HeroSection from '@/components/HeroSection';
-import ProjectSection from '@/components/ProjectSection';
+import HeroSection from '@/components/hero/Hero';
+import ProjectSection from '@/components/project-section/ProjectSection';
 import { useProjects } from '@/hooks/useProjects';
 import { ProjectUI } from '@/types/project';
 import { MainContainer } from '@/styles/HomeStyles';

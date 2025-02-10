@@ -14,8 +14,8 @@ import {
 } from '@hello-pangea/dnd';
 import { GripVertical, Clock, User } from 'lucide-react';
 import { ProjectUI } from '@/types/project';
-import { Button } from '@/styles/components/Button';
 import { useToast } from '@/context/ToastContext';
+import Button from '@/components/ui/Button/Button';
 
 const ListContainer = styled.div`
   display: flex;

@@ -1,8 +1,9 @@
 'use client';
 
+import CustomCursor from '@/components/custom-cursor/CustomCursor';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
-import CustomCursor from '@/components/CustomCursor';
+
 
 const Container = styled.div`
   width: 100%;

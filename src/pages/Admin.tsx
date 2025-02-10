@@ -8,7 +8,7 @@ import ProjectForm from '@/components/admin/ProjectForm';
 import { useToast } from '@/context/ToastContext';
 import { Button } from '@/styles/components/Button';
 import { Search, Filter, SortAsc, Plus, User } from 'lucide-react';
-import Modal from '@/components/ui/Modal';
+import Modal from '@/components/ui/Modal/Modal';
 
 const AdminContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.lg};

@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import styled from 'styled-components';
 import { usePathname } from 'next/navigation';
-import TrefoilKnot from '@/components/TrefoilKnot';
+import TrefoilKnot from '@/components/trefoil-knot/TrefoilKnot';
 
 interface BackgroundContextType {
   backgroundColor: string;
