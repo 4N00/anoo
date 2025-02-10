@@ -27,9 +27,6 @@ export async function POST(request: Request) {
   try {
     const supabase = createClient();
     const { email, password } = await request.json();
-
-    console.log('Login attempt for email:', email); // Debug log
-
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -65,8 +62,6 @@ export async function POST(request: Request) {
         { status: 401 }
       );
     }
-
-    console.log('Login successful for user:', data.user.id, 'role:', userData.role); // Debug log
 
     return NextResponse.json({
       user: {

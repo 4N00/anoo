@@ -134,7 +134,6 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSave, onClose }) =
 
   const handleFormSubmit = async (data: ProjectFormInput) => {
     try {
-      console.log('Submitting data:', data);
       const formattedTags = data.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
       const formattedData = {
         ...(project ? { id: project.id } : {}),
@@ -147,7 +146,6 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSave, onClose }) =
         live_url: data.liveUrl || null,
         version: 1,
       };
-      console.log('Formatted data:', formattedData);
 
       let response;
       if (project) {

@@ -34,7 +34,6 @@ const AdminClient: React.FC<AdminClientProps> = ({ children }) => {
   React.useEffect(() => {
     // Only redirect if we're done loading and either no user or not admin
     if (!isLoading && (!user || !isAdmin)) {
-      console.log('Redirecting to login. User:', !!user, 'IsAdmin:', isAdmin);
       showToast('Admin access required', 'error');
       router.replace('/login');
     }
