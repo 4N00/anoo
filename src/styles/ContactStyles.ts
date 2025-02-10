@@ -2,124 +2,137 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
 export const Container = styled.div`
-  max-width: 800px;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  background: #f5f5f5;
+  color: #1a1a1a;
+  padding-top: 64px;
+`;
+
+export const BackgroundText = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-size: clamp(150px, 20vw, 300px);
+  font-weight: 900;
+  line-height: 0.8;
+  color: #000;
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 0;
+  display: flex;
+  align-items: flex-start;
+  padding: 8rem 2rem;
+  overflow: hidden;
+  user-select: none;
+`;
+
+
+export const Content = styled(motion.div)`
+  width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: ${({ theme }) => theme.spacing.xl};
+  padding: 8rem 2rem 4rem;
+  position: relative;
+  z-index: 1;
 `;
 
-export const Title = styled.h1`
-  font-size: ${({ theme }) => theme.typography.fontSize['3xl']};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-  color: ${({ theme }) => theme.colors.text.primary};
-  text-align: center;
-`;
-
-export const Description = styled.p`
-  font-size: ${({ theme }) => theme.typography.fontSize.lg};
-  color: ${({ theme }) => theme.colors.text.secondary};
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
-  text-align: center;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-`;
-
-export const Form = styled.form`
+export const Form = styled(motion.form)`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.lg};
-  background-color: ${({ theme }) => theme.colors.background.secondary};
-  padding: ${({ theme }) => theme.spacing.xl};
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
-`;
+  gap: 3rem;
+  width: 100%;
 
-export const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs};
+  > div {
+    position: relative;
+  }
 `;
 
 export const Label = styled.label`
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  color: ${({ theme }) => theme.colors.text.secondary};
+  position: absolute;
+  top: -1.5rem;
+  left: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #666;
+  text-transform: uppercase;
 `;
 
-export const Input = styled.input<{ error?: boolean }>`
-  padding: ${({ theme }) => theme.spacing.md};
-  border: 2px solid ${({ theme, error }) =>
-    error ? theme.colors.error : theme.colors.primary.light};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  font-size: ${({ theme }) => theme.typography.fontSize.md};
-  background-color: ${({ theme }) => theme.colors.background.primary};
-  color: ${({ theme }) => theme.colors.text.primary};
-  transition: all ${({ theme }) => theme.transitions.fast};
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary.main};
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary.light}40;
-  }
-`;
-
-export const TextArea = styled.textarea<{ error?: boolean }>`
-  padding: ${({ theme }) => theme.spacing.md};
-  border: 2px solid ${({ theme, error }) =>
-    error ? theme.colors.error : theme.colors.primary.light};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  font-size: ${({ theme }) => theme.typography.fontSize.md};
-  background-color: ${({ theme }) => theme.colors.background.primary};
-  color: ${({ theme }) => theme.colors.text.primary};
-  min-height: 150px;
-  resize: vertical;
-  transition: all ${({ theme }) => theme.transitions.fast};
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary.main};
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary.light}40;
-  }
-`;
-
-export const ErrorMessage = styled.span`
-  color: ${({ theme }) => theme.colors.error};
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  margin-top: ${({ theme }) => theme.spacing.xs};
-`;
-
-export const SuccessMessage = styled.span`
-  color: ${({ theme }) => theme.colors.success};
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  text-align: center;
-  padding: ${({ theme }) => theme.spacing.sm};
-  background-color: ${({ theme }) => theme.colors.success}20;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-`;
-
-export const Button = styled.button`
-  background-color: ${({ theme }) => theme.colors.primary.main};
-  color: ${({ theme }) => theme.colors.text.contrast};
-  padding: ${({ theme }) => theme.spacing.md};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
+export const FormInput = styled.input`
+  width: 100%;
+  padding: 0.5rem 0;
+  background: transparent;
   border: none;
-  font-size: ${({ theme }) => theme.typography.fontSize.lg};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  color: #1a1a1a;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+
+  &::placeholder {
+    color: #999;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #1a1a1a;
+  }
+`;
+
+export const FormTextarea = styled.textarea`
+  width: 100%;
+  padding: 0.5rem 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  color: #1a1a1a;
+  font-size: 1rem;
+  resize: none;
+  min-height: 100px;
+  transition: all 0.3s ease;
+
+  &::placeholder {
+    color: #999;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #1a1a1a;
+  }
+`;
+
+export const SubmitButton = styled.button`
+  width: 100%;
+  padding: 2rem 0;
+  background: transparent;
+  border: none;
+  color: #1a1a1a;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 500;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: all ${({ theme }) => theme.transitions.fast};
+  transition: all 0.3s ease;
+  text-align: left;
+  letter-spacing: -0.02em;
+
+  span {
+    display: inline-block;
+    transform: rotate(90deg);
+    margin: 0 0.5rem;
+  }
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.primary.dark};
-    transform: translateY(-1px);
-  }
-
-  &:active {
-    transform: translateY(0);
+    opacity: 0.7;
   }
 
   &:disabled {
-    background-color: ${({ theme }) => theme.colors.primary.light};
+    opacity: 0.5;
     cursor: not-allowed;
-    transform: none;
   }
 `;
