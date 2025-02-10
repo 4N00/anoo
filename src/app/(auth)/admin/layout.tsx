@@ -7,4 +7,4 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   return <AdminClient>{children}</AdminClient>;
-}
+} 
