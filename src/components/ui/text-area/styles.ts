@@ -1,6 +1,9 @@
 import styled, { css } from 'styled-components';
 
-export const TextAreaContainer = styled.div`
+export const TextAreaContainer = styled.div<{ className?: string }>`
+  ${({ className }) => className && css`
+    ${className}
+  `}
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.xs};
@@ -15,9 +18,13 @@ export const Label = styled.label`
 
 interface StyledTextAreaProps {
   $hasError?: boolean;
+  className?: string;
 }
 
 export const StyledTextArea = styled.textarea<StyledTextAreaProps>`
+  ${({ className }) => className && css`
+    ${className}
+  `}
   width: 100%;
   min-height: 120px;
   padding: ${({ theme }) => theme.spacing.sm};

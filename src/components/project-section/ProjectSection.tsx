@@ -25,46 +25,43 @@ interface ProjectSectionProps {
   className?: string;
 }
 
-const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(
-  ({ projects, className }, ref) => {
-    // Split projects into featured and non-featured
-    const featuredProjects = projects.filter((p) => p.featured);
-    const nonFeaturedProjects = projects.filter((p) => !p.featured);
+const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(({ projects = [], className }, ref) => {
+  const featuredProjects = projects.filter((project) => project.featured);
+  const nonFeaturedProjects = projects.filter((project) => !project.featured);
 
-    return (
-      <motion.section
-        ref={ref}
-        className={className}
-        initial="initial"
-        animate="animate"
-        variants={containerVariants}
-        style={{ position: 'relative' }}
-      >
-        {featuredProjects.length > 0 && (
-          <ProjectContainer $featured>
-            <HeaderText>FEATURED</HeaderText>
-            <ProjectGrid $featured>
-              {featuredProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
-            </ProjectGrid>
-          </ProjectContainer>
-        )}
+  return (
+    <motion.section
+      ref={ref}
+      className={className}
+      initial="initial"
+      animate="animate"
+      variants={containerVariants}
+      style={{ position: 'relative' }}
+    >
+      {featuredProjects.length > 0 && (
+        <ProjectContainer $featured>
+          <HeaderText>FEATURED</HeaderText>
+          <ProjectGrid $featured>
+            {featuredProjects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </ProjectGrid>
+        </ProjectContainer>
+      )}
 
-        {nonFeaturedProjects.length > 0 && (
-          <ProjectContainer>
-            <HeaderText>PROJECTS</HeaderText>
-            <ProjectGrid>
-              {nonFeaturedProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
-            </ProjectGrid>
-          </ProjectContainer>
-        )}
-      </motion.section>
-    );
-  }
-);
+      {nonFeaturedProjects.length > 0 && (
+        <ProjectContainer>
+          <HeaderText>PROJECTS</HeaderText>
+          <ProjectGrid>
+            {nonFeaturedProjects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </ProjectGrid>
+        </ProjectContainer>
+      )}
+    </motion.section>
+  );
+});
 
 ProjectSection.displayName = 'ProjectSection';
 

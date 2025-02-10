@@ -7,11 +7,11 @@ export interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextArea
 }
 
 const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({ label, error, ...props }, ref) => {
+  ({ label, error, className, ...props }, ref) => {
     return (
       <TextAreaContainer>
         {label && <Label>{label}</Label>}
-        <StyledTextArea ref={ref} {...props} />
+        <StyledTextArea ref={ref} className={className} {...props} />
         {error && <ErrorMessage>{error}</ErrorMessage>}
       </TextAreaContainer>
     );

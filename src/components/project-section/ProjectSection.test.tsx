@@ -9,9 +9,41 @@ import { theme } from '@/styles/themeConfig';
 import ProjectSection from './ProjectSection';
 import { ProjectUI } from '@/types/project';
 
+declare const jest: any;
 declare const describe: any;
 declare const it: any;
 declare const expect: any;
+
+// Mock framer-motion
+jest.mock('framer-motion', () => ({
+  motion: {
+    section: ({ children, className, ...props }: React.PropsWithChildren<{ className?: string }>) => (
+      <section data-testid="motion-section" className={className} {...props}>{children}</section>
+    ),
+  },
+}));
+
+// Mock styled components
+jest.mock('../project-card/styles', () => ({
+  ProjectContainer: ({ children, $featured, ...props }: React.PropsWithChildren<{ $featured?: boolean }>) => (
+    <div data-testid={$featured ? "featured-container" : "project-container"} {...props}>{children}</div>
+  ),
+  ProjectGrid: ({ children, $featured, ...props }: React.PropsWithChildren<{ $featured?: boolean }>) => (
+    <div data-testid={$featured ? "featured-grid" : "project-grid"} {...props}>{children}</div>
+  ),
+}));
+
+jest.mock('@/styles/HomeStyles', () => ({
+  HeaderText: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <h2 data-testid="header-text" {...props}>{children}</h2>
+  ),
+}));
+
+jest.mock('../project-card/ProjectCard', () => {
+  return function MockProjectCard({ project }: { project: ProjectUI }) {
+    return <div data-testid="project-card">{project.title}</div>;
+  };
+});
 
 const renderWithTheme = (component: React.ReactNode) => {
   return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
@@ -52,11 +84,8 @@ describe('ProjectSection', () => {
   it('renders featured and non-featured projects separately', () => {
     renderWithTheme(<ProjectSection projects={mockProjects} />);
     
-    // Check for section headers
-    expect(screen.getByText('FEATURED')).toBeInTheDocument();
-    expect(screen.getByText('PROJECTS')).toBeInTheDocument();
-    
-    // Check for project titles
+    expect(screen.getByTestId('featured-container')).toBeInTheDocument();
+    expect(screen.getByTestId('project-container')).toBeInTheDocument();
     expect(screen.getByText('Featured Project')).toBeInTheDocument();
     expect(screen.getByText('Regular Project')).toBeInTheDocument();
   });
@@ -65,29 +94,27 @@ describe('ProjectSection', () => {
     const nonFeaturedProjects = mockProjects.map(p => ({ ...p, featured: false }));
     renderWithTheme(<ProjectSection projects={nonFeaturedProjects} />);
     
-    expect(screen.queryByText('FEATURED')).not.toBeInTheDocument();
-    expect(screen.getByText('PROJECTS')).toBeInTheDocument();
+    expect(screen.queryByTestId('featured-container')).not.toBeInTheDocument();
+    expect(screen.getByTestId('project-container')).toBeInTheDocument();
   });
 
   it('renders only featured section when no non-featured projects exist', () => {
     const featuredProjects = mockProjects.map(p => ({ ...p, featured: true }));
     renderWithTheme(<ProjectSection projects={featuredProjects} />);
     
-    expect(screen.getByText('FEATURED')).toBeInTheDocument();
-    expect(screen.queryByText('PROJECTS')).not.toBeInTheDocument();
+    expect(screen.getByTestId('featured-container')).toBeInTheDocument();
+    expect(screen.queryByTestId('project-container')).not.toBeInTheDocument();
   });
 
   it('applies custom className when provided', () => {
     const testClass = 'custom-class';
-    const { container } = renderWithTheme(
-      <ProjectSection projects={mockProjects} className={testClass} />
-    );
-    expect(container.firstChild).toHaveAttribute('class', expect.stringContaining(testClass));
+    renderWithTheme(<ProjectSection projects={mockProjects} className={testClass} />);
+    expect(screen.getByTestId('motion-section')).toHaveClass(testClass);
   });
 
   it('renders empty state when no projects are provided', () => {
     renderWithTheme(<ProjectSection projects={[]} />);
-    expect(screen.queryByText('FEATURED')).not.toBeInTheDocument();
-    expect(screen.queryByText('PROJECTS')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('featured-container')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('project-container')).not.toBeInTheDocument();
   });
 }); 

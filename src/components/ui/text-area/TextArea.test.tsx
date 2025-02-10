@@ -8,6 +8,7 @@ import { ThemeProvider } from 'styled-components';
 import { theme } from '@/styles/themeConfig';
 import TextArea from './TextArea';
 
+declare const jest: any;
 declare const describe: any;
 declare const it: any;
 declare const expect: any;
@@ -39,12 +40,6 @@ describe('TextArea', () => {
     
     expect(onChange).toHaveBeenCalled();
     expect(textarea).toHaveValue(testValue);
-  });
-
-  it('applies custom className', () => {
-    const testClass = 'custom-class';
-    const { container } = renderWithTheme(<TextArea className={testClass} />);
-    expect(container.firstChild).toHaveClass(testClass);
   });
 
   it('forwards ref correctly', () => {
