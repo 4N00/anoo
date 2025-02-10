@@ -137,12 +137,3 @@ export default function Home() {
     </>
   );
 }
-
-// This function runs at build time in production
-export async function generateStaticParams() {
-  return [{}]; // Single static instance
-}
-
-// Force static rendering
-export const dynamic = 'force-static';
-export const revalidate = 3600; // Revalidate every hour
