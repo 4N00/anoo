@@ -1,9 +1,16 @@
+/// <reference types="@testing-library/jest-dom" />
 import '@testing-library/jest-dom';
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '@/styles/theme';
 import Input from './Input';
+
+// Declare Jest globals
+declare const jest: any;
+declare const describe: any;
+declare const it: any;
+declare const expect: any;
 
 const renderWithProviders = (ui: React.ReactElement) => {
   return render(
