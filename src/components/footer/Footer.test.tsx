@@ -89,9 +89,8 @@ describe('PageFooter', () => {
 
     // Check specific links
     expect(screen.getByText('ANOO, BEAM ME UP')).toBeInTheDocument();
-    expect(screen.getByText('Work')).toBeInTheDocument();
+    expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('About')).toBeInTheDocument();
-    expect(screen.getByText('Services')).toBeInTheDocument();
     expect(screen.getByText('Contact')).toBeInTheDocument();
   });
 
@@ -99,7 +98,7 @@ describe('PageFooter', () => {
     render(<PageFooter />);
 
     const emailLink = screen.getByText('info@anoo.nl');
-    const phoneLink = screen.getByText('+31 625 135 338');
+    const phoneLink = screen.getByText('+31 6 12 34 56 78');
 
     expect(emailLink).toBeInTheDocument();
     expect(emailLink.closest('a')).toHaveAttribute('href', 'mailto:info@anoo.nl');
@@ -110,8 +109,8 @@ describe('PageFooter', () => {
 
   it('renders footer information', () => {
     render(<PageFooter />);
-    expect(screen.getByText('anoo©')).toBeInTheDocument();
-    expect(screen.getByText("Let's make cool stuff")).toBeInTheDocument();
+    expect(screen.getByText('©Anoo. All rights reserved.')).toBeInTheDocument();
+    expect(screen.getByText('HAVE A GREAT DAY!')).toBeInTheDocument();
   });
 
   it('sets up intersection observer', () => {

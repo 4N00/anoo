@@ -1,6 +1,6 @@
 /// <reference types="@testing-library/jest-dom" />
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@/test-utils/test-utils';
 import '@testing-library/jest-dom';
 import Navbar from './Navbar';
 import type { User, Session } from '@supabase/supabase-js';
@@ -28,6 +28,9 @@ jest.mock('@/lib/supabase', () => ({
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
   usePathname: () => '/',
+  useRouter: () => ({
+    push: jest.fn(),
+  }),
 }));
 
 // Mock framer-motion
@@ -36,18 +39,21 @@ jest.mock('framer-motion', () => ({
     div: ({ children, ...props }: React.PropsWithChildren<any>) => (
       <div {...stripMotionProps(props)}>{children}</div>
     ),
+    path: ({ children, ...props }: React.PropsWithChildren<any>) => (
+      <path {...stripMotionProps(props)}>{children}</path>
+    ),
   },
   AnimatePresence: ({ children }: React.PropsWithChildren<any>) => <>{children}</>,
 }));
 
 // Mock styled components
 jest.mock('./styles', () => ({
-  Nav: ({ children, ...props }: React.PropsWithChildren<any>) => (
+  NavbarContainer: ({ children, ...props }: React.PropsWithChildren<any>) => (
     <nav data-testid="nav" {...stripAllProps(props)}>
       {children}
     </nav>
   ),
-  Container: ({ children, ...props }: React.PropsWithChildren<any>) => (
+  NavbarContent: ({ children, ...props }: React.PropsWithChildren<any>) => (
     <div data-testid="container" {...stripAllProps(props)}>
       {children}
     </div>
@@ -57,38 +63,48 @@ jest.mock('./styles', () => ({
       {children}
     </a>
   ),
-  NavLinks: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <div data-testid="nav-links" {...stripAllProps(props)}>
-      {children}
-    </div>
-  ),
-  NavLink: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <a data-testid="nav-link" {...stripAllProps(props)}>
-      {children}
-    </a>
-  ),
-  MenuButton: ({ children, ...props }: React.PropsWithChildren<any>) => (
+  HamburgerButton: ({ children, ...props }: React.PropsWithChildren<any>) => (
     <button data-testid="menu-button" {...stripAllProps(props)}>
       {children}
     </button>
   ),
-  MobileMenuContainer: ({ children, ...props }: React.PropsWithChildren<any>) => (
+  Backdrop: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <div data-testid="backdrop" {...stripAllProps(props)}>
+      {children}
+    </div>
+  ),
+  MenuOverlay: ({ children, ...props }: React.PropsWithChildren<any>) => (
     <div data-testid="mobile-menu" {...stripAllProps(props)}>
       {children}
     </div>
   ),
-  MobileNavLink: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <a data-testid="mobile-nav-link" {...stripAllProps(props)}>
-      {children}
-    </a>
-  ),
-  ContactInfo: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <div data-testid="contact-info" {...stripAllProps(props)}>
+  MenuContent: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <div data-testid="menu-content" {...stripAllProps(props)}>
       {children}
     </div>
   ),
-  CloseButton: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <button data-testid="close-button" {...stripAllProps(props)}>
+  MenuItem: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <a data-testid="menu-item" {...stripAllProps(props)}>
+      {children}
+    </a>
+  ),
+  BottomBar: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <div data-testid="bottom-bar" {...stripAllProps(props)}>
+      {children}
+    </div>
+  ),
+  LanguageToggle: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <div data-testid="language-toggle" {...stripAllProps(props)}>
+      {children}
+    </div>
+  ),
+  LanguageOption: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <button data-testid="language-option" {...stripAllProps(props)}>
+      {children}
+    </button>
+  ),
+  ThemeToggle: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <button data-testid="theme-toggle" {...stripAllProps(props)}>
       {children}
     </button>
   ),
@@ -130,7 +146,6 @@ describe('Navbar', () => {
     mockUseAuth.mockReturnValue({ isLoading: true });
     render(<Navbar />);
     expect(screen.getByText('anoo.nl')).toBeInTheDocument();
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 
   it('renders basic navigation links when not logged in', () => {
@@ -141,6 +156,8 @@ describe('Navbar', () => {
       session: null,
     });
     render(<Navbar />);
+
+    fireEvent.click(screen.getByTestId('menu-button'));
 
     expect(screen.getByText('About')).toBeInTheDocument();
     expect(screen.getByText('Contact')).toBeInTheDocument();
@@ -157,6 +174,8 @@ describe('Navbar', () => {
       session: mockSession,
     });
     render(<Navbar />);
+
+    fireEvent.click(screen.getByTestId('menu-button'));
 
     expect(screen.getByText('Admin')).toBeInTheDocument();
     expect(screen.getByText('Logout')).toBeInTheDocument();
@@ -178,8 +197,7 @@ describe('Navbar', () => {
     fireEvent.click(menuButton);
     expect(screen.getByTestId('mobile-menu')).toBeInTheDocument();
 
-    const closeButton = screen.getByTestId('close-button');
-    fireEvent.click(closeButton);
+    fireEvent.click(screen.getByTestId('backdrop'));
     expect(screen.queryByTestId('mobile-menu')).not.toBeInTheDocument();
   });
 
@@ -193,6 +211,7 @@ describe('Navbar', () => {
     mockSignOut.mockResolvedValue(undefined);
 
     render(<Navbar />);
+    fireEvent.click(screen.getByTestId('menu-button'));
     const logoutLink = screen.getByText('Logout');
 
     fireEvent.click(logoutLink);
@@ -202,7 +221,7 @@ describe('Navbar', () => {
     });
   });
 
-  it('shows contact info in mobile menu', () => {
+  it('shows language toggle in mobile menu', () => {
     mockUseAuth.mockReturnValue({
       isLoading: false,
       isAdmin: false,
@@ -213,7 +232,7 @@ describe('Navbar', () => {
 
     fireEvent.click(screen.getByTestId('menu-button'));
 
-    expect(screen.getByText('info@anoo.com')).toBeInTheDocument();
-    expect(screen.getByText('+31 6 12345678')).toBeInTheDocument();
+    expect(screen.getByTestId('language-toggle')).toBeInTheDocument();
+    expect(screen.getAllByTestId('language-option')).toHaveLength(2);
   });
 });
