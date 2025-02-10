@@ -1,5 +1,5 @@
-import Container from '@/components/ui/container/Container';
 import styled from 'styled-components';
+import Container from '@/components/ui/Container/Container';
 
 export const ProfileContainer = styled.div`
   width: 100%;

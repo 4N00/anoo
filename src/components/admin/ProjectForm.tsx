@@ -5,8 +5,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ProjectUI } from '@/types/project';
-import FormInput from '../ui/form-input';
-import { Button } from '@/styles/components/Button';
+import FormInput from '@/components/ui/Input/Input';
+import Button from '@/components/ui/Button/Button';
 import { styled } from 'styled-components';
 import { useToast } from '@/context/ToastContext';
 

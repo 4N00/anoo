@@ -16,7 +16,7 @@ export const SVGFilters = styled.div`
   }
 `;
 
-export const Section = styled(Container).attrs({ as: 'section' })`
+export const Section = styled.section`
   display: flex;
   align-items: center;
   padding-top: ${({ theme }) => theme.spacing['3xl']};
@@ -24,14 +24,22 @@ export const Section = styled(Container).attrs({ as: 'section' })`
   transform-style: preserve-3d;
   perspective: 1000px;
   will-change: transform;
+  width: 100%;
 `;
 
-export const ContentWrapper = styled.div`
+export const ContentWrapper = styled(Container)`
   position: relative;
   z-index: ${({ theme }) => theme.zIndex.base + 10};
   transform: translateZ(0);
   will-change: transform;
   transform-style: preserve-3d;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 ${({ theme }) => theme.spacing.xl};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 0 ${({ theme }) => theme.spacing.lg};
+  }
 `;
 
 export const LetterContainer = styled(motion.div)`

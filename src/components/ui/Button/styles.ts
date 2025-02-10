@@ -1,10 +1,11 @@
+import React from 'react';
 import styled, { css } from 'styled-components';
 
-export interface ButtonProps {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   $variant?: 'primary' | 'secondary' | 'danger';
 }
 
-export const Button = styled.button<ButtonProps>`
+export const StyledButton = styled.button<ButtonProps>`
   position: relative;
   padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.lg}`};
   background: transparent;
