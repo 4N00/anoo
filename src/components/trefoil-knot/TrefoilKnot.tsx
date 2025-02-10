@@ -8,6 +8,9 @@ const TrefoilKnot: React.FC = () => {
   const knot = useRef<THREE.Mesh | null>(null);
   const material = useRef<THREE.ShaderMaterial | null>(null);
   const geometry = useRef<THREE.TorusKnotGeometry | null>(null);
+  const initialScale = useRef(6);
+  const targetScale = useRef(1);
+  const isAnimationComplete = useRef(false);
   
   const { scrollYProgress } = useScroll();
 
@@ -64,20 +67,21 @@ const TrefoilKnot: React.FC = () => {
 
     knot.current = new THREE.Mesh(geometry.current, material.current);
     
-    // Initial rotation for better viewing angle
-    knot.current.rotation.x = Math.PI / 4;
-    knot.current.rotation.z = Math.PI / 6;
+    knot.current.rotation.x = Math.PI / 8;
+    knot.current.rotation.z = Math.PI / 3;
+    knot.current.scale.setScalar(initialScale.current);
+    knot.current.position.x = 15; 
     
     scene.add(knot.current);
 
-    // Position camera for full view of larger knot
-    camera.position.z = 28;  // Moved camera further back
-    camera.position.y = 3;   // Slightly higher angle
+    camera.position.z = 28;
+    camera.position.y = 3;
 
     let prevScrollY = 0;
     let targetRotationY = 0;
     let currentRotationY = 0;
     let lastTime = Date.now();
+    let initialAnimationStartTime = Date.now();
 
     const animate = () => {
       if (!knot.current) return;
@@ -86,33 +90,44 @@ const TrefoilKnot: React.FC = () => {
       const deltaTime = (currentTime - lastTime) / 1000;
       lastTime = currentTime;
 
+      const initialAnimationProgress = Math.min((currentTime - initialAnimationStartTime) / 3500, 1);
+      const easeOutProgress = 1 - Math.pow(1 - initialAnimationProgress, 4); 
+      
       const currentScrollY = scrollYProgress.get();
-      
-      // Reversed direction (positive instead of negative) and slowed down more
       const parallaxY = currentScrollY * window.innerHeight * 0.01;
-      
       const rotationDelta = (currentScrollY - prevScrollY) * Math.PI;
-      targetRotationY += rotationDelta * 0.02; // Even slower rotation
-      
-      const rotationSpeed = 0.5 * deltaTime; // Even slower interpolation
+      targetRotationY += rotationDelta * 0.2;
+      const rotationSpeed = 1.2 * deltaTime;
       currentRotationY += (targetRotationY - currentRotationY) * rotationSpeed;
-      
-      knot.current.rotation.y = currentRotationY;
-      knot.current.rotation.x += rotationDelta * 0.002; // Much slower X rotation
-      knot.current.rotation.z += rotationDelta * 0.001; // Much slower Z rotation
 
-      // Even subtler scale effect
-      const scaleFactor = 1 + Math.abs(rotationDelta) * 0.1;
-      const targetScale = Math.max(0.99, Math.min(1.01, scaleFactor));
-      const currentScale = knot.current.scale.x;
-      knot.current.scale.setScalar(currentScale + (targetScale - currentScale) * rotationSpeed);
+      if (!isAnimationComplete.current && initialAnimationProgress < 1) {
+        const currentScale = initialScale.current + (targetScale.current - initialScale.current) * easeOutProgress;
+        knot.current.scale.setScalar(currentScale);
+        
+        const initialRotation = deltaTime * 1.5; 
+        const blendedRotation = (initialRotation * (1 - easeOutProgress)) + (currentRotationY * easeOutProgress);
+        knot.current.rotation.y = blendedRotation;
+        
+        if (initialAnimationProgress >= 0.99) {
+          isAnimationComplete.current = true;
+        }
+      } else {
+        knot.current.rotation.y = currentRotationY;
+        knot.current.rotation.x += rotationDelta * 0.01;
+        knot.current.rotation.z += rotationDelta * 0.005;
 
-      // Even slower floating movement
-      knot.current.position.y = Math.sin(currentRotationY * 0.05) * 0.3 + parallaxY;
-      knot.current.position.x = Math.cos(currentRotationY * 0.05) * 0.3;
+        const scaleFactor = 1 + Math.abs(rotationDelta) * 0.02;
+        const scrollTargetScale = Math.max(0.995, Math.min(1.005, scaleFactor));
+        const currentScale = knot.current.scale.x;
+        knot.current.scale.setScalar(currentScale + (scrollTargetScale - currentScale) * rotationSpeed);
+
+        const targetY = Math.sin(currentRotationY * 0.02) * 0.2 + parallaxY;
+        const targetX = Math.cos(currentRotationY * 0.02) * 0.2 + 15;
+        knot.current.position.y += (targetY - knot.current.position.y) * rotationSpeed;
+        knot.current.position.x += (targetX - knot.current.position.x) * rotationSpeed;
+      }
       
       prevScrollY = currentScrollY;
-
       renderer.render(scene, camera);
       window.requestAnimationFrame(animate);
     };
