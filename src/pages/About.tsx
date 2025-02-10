@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import ProfileSection from '../components/about/ProfileSection';
-import SkillsSection from '../components/about/SkillsSection';
+import ProfileSection from '../components/about/profile-section/ProfileSection';
+import SkillsSection from '../components/about/skills-section/SkillsSection';
 import { PageContainer, ContentWrapper } from '../styles/AboutStyles';
 import styled from 'styled-components';
 

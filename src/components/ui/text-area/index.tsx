@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import styled, { css } from 'styled-components';
 
-const InputContainer = styled.div`
+const TextAreaContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.xs};
@@ -14,12 +14,13 @@ const Label = styled.label`
   font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
 `;
 
-interface StyledInputProps {
+interface StyledTextAreaProps {
   $hasError?: boolean;
 }
 
-const StyledInput = styled.input<StyledInputProps>`
+const StyledTextArea = styled.textarea<StyledTextAreaProps>`
   width: 100%;
+  min-height: 100px;
   padding: ${({ theme }) => theme.spacing.sm};
   background: transparent;
   border: 1px solid ${({ theme }) => theme.colors.text.secondary}40;
@@ -27,6 +28,7 @@ const StyledInput = styled.input<StyledInputProps>`
   color: ${({ theme }) => theme.colors.text.primary};
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
   transition: all 0.2s ease;
+  resize: vertical;
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.text.secondary};
@@ -60,24 +62,24 @@ const ErrorMessage = styled.span`
   font-size: ${({ theme }) => theme.typography.fontSize.xs};
 `;
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   error?: string;
 }
 
-const Input = forwardRef<HTMLInputElement, InputProps>(
+const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ label, error, ...props }, ref) => {
     return (
-      <InputContainer>
+      <TextAreaContainer>
         {label && <Label>{label}</Label>}
-        <StyledInput ref={ref} $hasError={!!error} {...props} />
+        <StyledTextArea ref={ref} $hasError={!!error} {...props} />
         {error && <ErrorMessage>{error}</ErrorMessage>}
-      </InputContainer>
+      </TextAreaContainer>
     );
   }
 );
 
-Input.displayName = 'Input';
+TextArea.displayName = 'TextArea';
 
-export default Input;
-export type { InputProps }; 
+export default TextArea;
+export type { TextAreaProps }; 

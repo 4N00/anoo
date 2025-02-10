@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '@/styles/themeConfig';
-import Button from './index';
+import Button from './Button';
 
 const renderWithTheme = (component: React.ReactNode) => {
   return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);

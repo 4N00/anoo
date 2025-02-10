@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import HeroSection from '../components/HeroSection';
-import ProjectCard from '../components/ProjectCard/ProjectCard';
+import HeroSection from '../components/hero/Hero';
+import ProjectCard from '../components/project-card/ProjectCard';
 import {
   MainContainer,
   Separator,

@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import ProfileSection from '../../components/about/ProfileSection';
-import SkillsSection from '../../components/about/SkillsSection';
+import ProfileSection from '../../components/about/profile-section/ProfileSection';
+import SkillsSection from '../../components/about/skills-section/SkillsSection';
 import { PageContainer, ContentWrapper } from '../../styles/AboutStyles';
 
 const About = () => {

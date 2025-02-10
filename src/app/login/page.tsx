@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/styles/components/Button';
-import FormInput from '@/components/ui/FormInput';
+import FormInput from '@/components/ui/form-input';
 import { Container, LoginCard, Title, Form, ErrorMessage } from './styles';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
