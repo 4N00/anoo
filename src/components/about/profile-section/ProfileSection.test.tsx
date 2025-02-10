@@ -3,6 +3,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ProfileSection from './ProfileSection';
+import { LanguageProvider } from '../../../context/LanguageContext';
 
 // Declare Jest globals
 declare const jest: any;
@@ -26,19 +27,27 @@ jest.mock('./styles', () => ({
   ),
 }));
 
+const renderWithProviders = (ui: React.ReactElement) => {
+  return render(
+    <LanguageProvider>
+      {ui}
+    </LanguageProvider>
+  );
+};
+
 describe('ProfileSection', () => {
   it('renders the component with correct title', () => {
-    const { getByText } = render(<ProfileSection />);
+    const { getByText } = renderWithProviders(<ProfileSection />);
     expect(getByText('About Me')).toBeInTheDocument();
   });
 
   it('renders the profile description', () => {
-    const { getByText } = render(<ProfileSection />);
+    const { getByText } = renderWithProviders(<ProfileSection />);
     expect(getByText(/I'm a creative developer and designer/)).toBeInTheDocument();
   });
 
   it('renders all styled components', () => {
-    const { container } = render(<ProfileSection />);
+    const { container } = renderWithProviders(<ProfileSection />);
     expect(container.querySelector('div')).toBeInTheDocument(); // ProfileContainer
     expect(container.querySelector('h2')).toBeInTheDocument(); // ProfileTitle
     expect(container.querySelector('p')).toBeInTheDocument(); // ProfileText

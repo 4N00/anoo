@@ -10,6 +10,12 @@ jest.mock('next/navigation', () => ({
   usePathname: () => '/',
 }));
 
+// Mock TrefoilKnot component
+jest.mock('../components/trefoil-knot/TrefoilKnot', () => ({
+  __esModule: true,
+  default: () => <div data-testid="trefoil-knot-mock" />
+}));
+
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     <ThemeProvider theme={theme}>

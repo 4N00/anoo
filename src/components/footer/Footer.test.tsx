@@ -20,12 +20,62 @@ mockIntersectionObserver.mockImplementation(() => ({
 }));
 window.IntersectionObserver = mockIntersectionObserver;
 
-// Mock FooterLink component
+// Mock all styled components
 jest.mock('./styles', () => ({
+  FooterContainer: ({ children, ...props }: React.PropsWithChildren) => (
+    <footer data-testid="footer-container" {...props}>
+      {children}
+    </footer>
+  ),
+  ContentWrapper: ({ children, ...props }: React.PropsWithChildren) => (
+    <div data-testid="content-wrapper" {...props}>
+      {children}
+    </div>
+  ),
+  TopNavigation: ({ children, ...props }: React.PropsWithChildren) => (
+    <div data-testid="top-navigation" {...props}>
+      {children}
+    </div>
+  ),
+  ContactInfo: ({ children, ...props }: React.PropsWithChildren) => (
+    <div data-testid="contact-info" {...props}>
+      {children}
+    </div>
+  ),
+  NavigationGroup: ({ children, ...props }: React.PropsWithChildren) => (
+    <div data-testid="navigation-group" {...props}>
+      {children}
+    </div>
+  ),
+  LinkColumn: ({ children, ...props }: React.PropsWithChildren) => (
+    <div data-testid="link-column" {...props}>
+      {children}
+    </div>
+  ),
   FooterLink: ({ children, href, ...props }: React.PropsWithChildren<{ href: string }>) => (
     <a href={href} data-testid="footer-link" {...props}>
       {children}
     </a>
+  ),
+  LargeTextSection: ({ children, ...props }: React.PropsWithChildren) => (
+    <div data-testid="large-text-section" {...props}>
+      {children}
+    </div>
+  ),
+  LargeText: ({ children, ...props }: React.PropsWithChildren) => (
+    <h1 data-testid="large-text" {...props}>
+      {children}
+    </h1>
+  ),
+  FooterInfo: ({ children, ...props }: React.PropsWithChildren) => (
+    <div data-testid="footer-info" {...props}>
+      {children}
+    </div>
+  ),
+  SmallText: ({ children, ...props }: React.PropsWithChildren) => (
+    <div data-testid="small-text" {...props}>
+      {children}
+    </div>
   ),
 }));
 

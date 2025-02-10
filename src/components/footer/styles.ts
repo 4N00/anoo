@@ -90,7 +90,6 @@ export const ContentWrapper = styled.div`
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 2rem;
-
 `;
 
 export const TopNavigation = styled.div`
@@ -100,7 +99,6 @@ export const TopNavigation = styled.div`
   padding: 2rem 0;
   border-bottom: 1px solid #000000;
   margin-bottom: 5rem;
-
   width: 100%;
 `;
 
@@ -109,14 +107,12 @@ export const ContactInfo = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 0.5rem;
-
 `;
 
 export const NavigationGroup = styled.div`
   display: flex;
   gap: 5rem;
 `;
-
 
 export const LinkColumn = styled.div`
   display: flex;
