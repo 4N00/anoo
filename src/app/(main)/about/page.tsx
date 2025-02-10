@@ -1,59 +1,40 @@
 'use client';
 
 import React from 'react';
-import { useLanguage } from '@/context/LanguageContext';
-import {
-  Container,
-  Title,
-  Description,
-  Section,
-  SectionTitle,
-  SectionContent,
-  List,
-  ListItem,
-  Highlight,
-} from '@/styles/AboutStyles';
+import ProfileSection from '@/components/about/profile-section/ProfileSection';
+import SkillsSection from '@/components/about/skills-section/SkillsSection';
+import { PageContainer, ContentWrapper } from '@/styles/AboutStyles';
 
-export default function About() {
-  const { t } = useLanguage();
 
-  const experienceItems = ['experience1', 'experience2', 'experience3'] as const;
+const About = () => {
+
+  const skills = [
+    { name: 'HTML', level: 90 },
+    { name: 'CSS', level: 85 },
+    { name: 'Sass/Scss', level: 80 },
+    { name: 'Animation (CSS/JS)', level: 75 },
+    { name: 'C#', level: 70 },
+    { name: 'JavaScript', level: 85 },
+    { name: 'React', level: 85 },
+    { name: 'UI/UX', level: 90 },
+    { name: 'Adobe Photoshop', level: 85 },
+    { name: 'Adobe Illustrator', level: 90 },
+    { name: 'Adobe XD', level: 75 },
+    { name: 'Wordpress', level: 80 },
+    { name: 'Headless CMS', level: 70 },
+    { name: 'Unity', level: 85 },
+    { name: 'Three.js', level: 65 },
+    { name: 'Humor', level: 105 },
+  ];
 
   return (
-    <Container>
-      <Title>{t('about.title')}</Title>
-      <Description>{t('about.description')}</Description>
-
-      <Section>
-        <SectionTitle>{t('about.skills.title')}</SectionTitle>
-        <SectionContent>
-          <List>
-            <ListItem>
-              <Highlight>{t('about.skills.frontend.title')}:</Highlight>
-              {t('about.skills.frontend.content')}
-            </ListItem>
-            <ListItem>
-              <Highlight>{t('about.skills.backend.title')}:</Highlight>
-              {t('about.skills.backend.content')}
-            </ListItem>
-            <ListItem>
-              <Highlight>{t('about.skills.tools.title')}:</Highlight>
-              {t('about.skills.tools.content')}
-            </ListItem>
-          </List>
-        </SectionContent>
-      </Section>
-
-      <Section>
-        <SectionTitle>{t('about.experience.title')}</SectionTitle>
-        <SectionContent>
-          <List>
-            {experienceItems.map((key) => (
-              <ListItem key={key}>{t(`about.experience.items.${key}`)}</ListItem>
-            ))}
-          </List>
-        </SectionContent>
-      </Section>
-    </Container>
+    <PageContainer>
+      <ContentWrapper>
+        <ProfileSection />
+        <SkillsSection skills={skills} />
+      </ContentWrapper>
+    </PageContainer>
   );
-} 
+};
+
+export default About;

@@ -102,7 +102,7 @@ export const SkillLevel = styled(motion.div)<SkillLevelProps>`
       position: absolute;
       top: 0;
       left: 100%;
-      width: ${($level - 100) * 1.2}%; /* Make overflow 20% larger for emphasis */
+      width: ${($level - 100) * 2}%; /* Make overflow 20% larger for emphasis */
       height: 100%;
       background: #ff3333;
       animation: pulse 2s ease-in-out infinite;
