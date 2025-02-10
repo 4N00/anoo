@@ -87,4 +87,4 @@ export const Button = styled.button`
     cursor: not-allowed;
     transform: none;
   }
-`; 
+`;

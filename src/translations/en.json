@@ -5,7 +5,9 @@
     "about": "About",
     "contact": "Contact",
     "admin": "Admin",
-    "services": "Services"
+    "services": "Services",
+    "login": "Login",
+    "logout": "Logout"
   },
   "hero": {
     "greeting": "HI,",
@@ -58,5 +60,15 @@
   "theme": {
     "light": "Light Mode",
     "dark": "Dark Mode"
+  },
+  "login": {
+    "title": "Login",
+    "error": "Invalid email or password",
+    "form": {
+      "email": "Email",
+      "password": "Password",
+      "submit": "Login",
+      "submitting": "Logging in..."
+    }
   }
 } 

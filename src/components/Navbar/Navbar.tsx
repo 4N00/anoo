@@ -162,18 +162,24 @@ const Navbar = () => {
                 <MenuItem href="/" onClick={() => setIsMenuOpen(false)}>
                   {t('navigation.home')}
                 </MenuItem>
-                <MenuItem href="/projects" onClick={() => setIsMenuOpen(false)}>
-                  {t('navigation.projects')}
-                </MenuItem>
                 <MenuItem href="/about" onClick={() => setIsMenuOpen(false)}>
                   {t('navigation.about')}
                 </MenuItem>
                 <MenuItem href="/contact" onClick={() => setIsMenuOpen(false)}>
                   {t('navigation.contact')}
                 </MenuItem>
-                {user && (
-                  <MenuItem href="/admin" onClick={() => setIsMenuOpen(false)}>
-                    {t('navigation.admin')}
+                {user ? (
+                  <>
+                    <MenuItem href="/admin" onClick={() => setIsMenuOpen(false)}>
+                      {t('navigation.admin')}
+                    </MenuItem>
+                    <MenuItem href="/api/auth/logout" onClick={() => setIsMenuOpen(false)}>
+                      {t('navigation.logout')}
+                    </MenuItem>
+                  </>
+                ) : (
+                  <MenuItem href="/login" onClick={() => setIsMenuOpen(false)}>
+                    {t('navigation.login')}
                   </MenuItem>
                 )}
               </MenuContent>
