@@ -31,6 +31,11 @@ export const theme = {
     info: '#3B82F6',
     border: '#E2E8F0',
     disabled: '#E2E8F0',
+    card: {
+      background: '#FFFFFF',
+      border: '#E2E8F0',
+      shadow: 'rgba(0, 0, 0, 0.1)',
+    },
   },
   typography: {
     fontSize: {
@@ -107,6 +112,28 @@ export const theme = {
     lg: '1024px',
     xl: '1280px',
     '2xl': '1536px',
+  },
+  fonts: {
+    primary: 'Inter, sans-serif',
+    secondary: 'Josefin Sans, sans-serif',
+  },
+  zIndex: {
+    base: 0,
+    above: 1,
+    below: -1,
+    navbar: 100,
+    modal: 1000,
+    toast: 2000,
+  },
+  layout: {
+    maxWidth: '1400px',
+    contentWidth: '1200px',
+    headerHeight: '64px',
+  },
+  grid: {
+    columns: 12,
+    gap: '1rem',
+    container: '1400px',
   },
 } as const;
 

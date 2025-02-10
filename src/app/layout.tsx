@@ -3,7 +3,6 @@
 import { Inter } from 'next/font/google';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ProjectsProvider } from '../context/ProjectsContext';
-import { ThemeProvider } from '../styles/theme';
 import { AuthProvider } from '../context/AuthContext';
 import { ToastProvider } from '../context/ToastContext';
 import { BackgroundProvider } from '../context/BackgroundContext';
@@ -11,8 +10,9 @@ import { LanguageProvider } from '../context/LanguageContext';
 import Navbar from '../components/navbar/Navbar';
 import PageFooter from '../components/footer/Footer';
 import { AnimatePresence } from 'framer-motion';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import GlobalStyles from '../styles/GlobalStyles';
+import { theme } from '../styles/theme';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -70,10 +70,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={`${inter.className} ${inter.variable}`}>
         <QueryClientProvider client={getQueryClient()}>
-          <ThemeProvider>
+          <ThemeProvider theme={theme}>
             <GlobalStyles />
             <ToastProvider>
               <AuthProvider>
+
                 <ProjectsProvider>
                   <BackgroundProvider>
                     <LanguageProvider>
