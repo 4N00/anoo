@@ -17,7 +17,6 @@ import {
 } from '@/styles/HomeStyles';
 import { ProjectUI } from '@/types/project';
 import { motion } from 'framer-motion';
-import { featuredProjects as importedFeatured, projects as importedProjects } from '@/data/projects';
 
 const COLORS = ['#FFFFFF', '#F2FCE2', '#FEF7CD', '#E5DEFF'] as const;
 
@@ -25,6 +24,25 @@ export default function Home() {
   const { t } = useLanguage();
   const [currentColor, setCurrentColor] = useState<(typeof COLORS)[number]>(COLORS[0]);
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
+  const [projects, setProjects] = useState<ProjectUI[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('/api/projects');
+        if (!response.ok) throw new Error('Failed to fetch projects');
+        const data = await response.json();
+        setProjects(data);
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,6 +69,9 @@ export default function Home() {
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const featuredProjects = projects.filter(project => project.featured);
+  const regularProjects = projects.filter(project => !project.featured);
   
   return (
     <>
@@ -81,7 +102,9 @@ export default function Home() {
             </HeaderSubtitle>
           </Header>
           <ProjectGrid>
-            {importedFeatured.map((project: ProjectUI) => (
+            {loading ? (
+              <div>Loading...</div>
+            ) : featuredProjects.map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}
           </ProjectGrid>
@@ -103,7 +126,9 @@ export default function Home() {
             </HeaderSubtitle>
           </Header>
           <ProjectGrid>
-            {importedProjects.map((project: ProjectUI) => (
+            {loading ? (
+              <div>Loading...</div>
+            ) : regularProjects.map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}
           </ProjectGrid>
