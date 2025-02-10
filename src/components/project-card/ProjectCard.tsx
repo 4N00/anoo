@@ -1,43 +1,48 @@
+'use client';
+
 import React from 'react';
-import { ProjectUI } from '@/types/project';
 import {
   ProjectCardWrapper,
-  ProjectImage,
+  ProjectImageWrapper,
   ProjectInfo,
+  ProjectHeader,
   ProjectTitle,
-  TagsContainer,
-  Description,
-  LinksContainer,
-  LinkButton
+  ProjectCategory,
+  ProjectDescription,
+  ProjectImage,
 } from './styles';
+import { ProjectUI } from '@/types/project';
+import AnimateOnScroll from '../ui/animate-on-scroll/AnimateOnScroll';
 
-export interface ProjectCardProps {
+interface ProjectCardProps {
   project: ProjectUI;
+  index?: number;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+const ProjectCard = ({ project, index = 0 }: ProjectCardProps) => {
   return (
-    <ProjectCardWrapper>
-      <ProjectImage src={project.imageUrl} alt={project.title} />
-      <ProjectInfo>
-        <ProjectTitle>{project.title}</ProjectTitle>
-        <TagsContainer>{project.tags.join(' • ')}</TagsContainer>
-        <Description>{project.description}</Description>
-        <LinksContainer>
-          {project.githubUrl && (
-            <LinkButton href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-              GitHub
-            </LinkButton>
-          )}
-          {project.liveUrl && (
-            <LinkButton href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-              Live Demo
-            </LinkButton>
-          )}
-        </LinksContainer>
-      </ProjectInfo>
-    </ProjectCardWrapper>
+    <AnimateOnScroll delay={index * 0.1}>
+      <ProjectCardWrapper 
+        data-testid="project-card"
+        $featured={project.featured}
+      >
+        <ProjectImageWrapper>
+          <ProjectImage 
+            src={project.imageUrl} 
+            alt={project.title}
+            loading="lazy"
+          />
+        </ProjectImageWrapper>
+        <ProjectInfo>
+          <ProjectHeader>
+            <ProjectTitle>{project.title}</ProjectTitle>
+            <ProjectCategory>{project.tags.slice(0, 2).join(' / ')}</ProjectCategory>
+          </ProjectHeader>
+          <ProjectDescription>{project.description}</ProjectDescription>
+        </ProjectInfo>
+      </ProjectCardWrapper>
+    </AnimateOnScroll>
   );
 };
 
-export default ProjectCard; 
+export default ProjectCard;

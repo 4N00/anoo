@@ -5,7 +5,7 @@ interface ProjectContainerProps {
   $featured?: boolean;
 }
 
-export const ProjectContainer = styled.div<ProjectContainerProps>`
+export const ProjectContainer = styled.div`
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
@@ -27,15 +27,22 @@ export const ProjectGrid = styled.div<ProjectContainerProps>`
   }
 `;
 
-export const ProjectCardWrapper = styled.article`
+export const ProjectCardWrapper = styled(motion.div)<ProjectContainerProps>`
   position: relative;
-  background: ${({ theme }) => theme.colors.card.background};
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
   overflow: hidden;
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
   transition: transform 0.3s ease;
+  grid-column: ${({ $featured }) => $featured ? 'span 2' : 'span 1'};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    grid-column: span 1;
+  }
 
   &:hover {
-    transform: translateY(-4px);
+    transform: scale(1.02);
   }
 `;
 
@@ -49,14 +56,28 @@ export const ProjectImageWrapper = styled.div`
 `;
 
 export const ProjectImage = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: auto;
-  aspect-ratio: 16/9;
+  height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
+
+  ${ProjectCardWrapper}:hover & {
+    transform: scale(1.05);
+  }
 `;
 
 export const ProjectInfo = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   padding: ${({ theme }) => theme.spacing.lg};
+  color: ${({ theme }) => theme.colors.text.contrast};
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  z-index: 1;
 `;
 
 export const ProjectHeader = styled.div`
@@ -67,10 +88,10 @@ export const ProjectHeader = styled.div`
 `;
 
 export const ProjectTitle = styled.h3`
-  font-family: ${({ theme }) => theme.fonts.heading};
-  font-size: ${({ theme }) => theme.typography.fontSize.xl};
-  color: ${({ theme }) => theme.colors.text.primary};
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  font-size: ${({ theme }) => theme.typography.fontSize.lg};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  margin: 0;
+  color: ${({ theme }) => theme.colors.text.contrast};
 `;
 
 export const ProjectCategory = styled.span`
@@ -79,38 +100,9 @@ export const ProjectCategory = styled.span`
   opacity: 0.8;
 `;
 
-export const TagsContainer = styled.div`
-  font-family: ${({ theme }) => theme.fonts.mono};
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  color: ${({ theme }) => theme.colors.text.secondary};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-`;
-
-export const Description = styled.p`
+export const ProjectDescription = styled.p`
   font-size: ${({ theme }) => theme.typography.fontSize.md};
-  color: ${({ theme }) => theme.colors.text.secondary};
-  line-height: ${({ theme }) => theme.typography.lineHeight.relaxed};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-`;
-
-export const LinksContainer = styled.div`
-  display: flex;
-  gap: ${({ theme }) => theme.spacing.md};
-`;
-
-export const LinkButton = styled.a`
-  display: inline-flex;
-  align-items: center;
-  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.md}`};
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  color: ${({ theme }) => theme.colors.text.primary};
-  background: transparent;
-  border: 1px solid ${({ theme }) => theme.colors.text.primary};
-  border-radius: ${({ theme }) => theme.borderRadius.sm};
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.text.primary};
-    color: ${({ theme }) => theme.colors.background.primary};
-  }
+  margin: 0;
+  color: ${({ theme }) => theme.colors.text.contrast};
+  opacity: 0.9;
 `;

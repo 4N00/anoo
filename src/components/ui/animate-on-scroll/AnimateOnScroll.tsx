@@ -1,49 +1,38 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { AnimatedElement } from './styles';
+import React, { useEffect, useRef } from 'react';
+import { motion, useInView, useAnimation } from 'framer-motion';
 
-interface AnimateOnScrollProps {
+export interface AnimateOnScrollProps {
   children: React.ReactNode;
-  className?: string;
+  delay?: number;
 }
 
-const AnimateOnScroll: React.FC<AnimateOnScrollProps> = ({ children, className }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const elementRef = useRef<HTMLDivElement>(null);
+const AnimateOnScroll: React.FC<AnimateOnScrollProps> = ({ children, delay = 0 }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true });
+  const controls = useAnimation();
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
+    if (isInView) {
+      controls.start({
+        y: 0,
+        opacity: 1,
+        transition: {
+          duration: 0.5,
+          delay
         }
-      },
-      {
-        threshold: 0.1,
-      }
-    );
-
-    if (elementRef.current) {
-      observer.observe(elementRef.current);
+      });
     }
-
-    return () => {
-      if (elementRef.current) {
-        observer.unobserve(elementRef.current);
-      }
-    };
-  }, []);
+  }, [isInView, controls, delay]);
 
   return (
-    <AnimatedElement
-      ref={elementRef}
-      className={className}
-      $isVisible={isVisible}
+    <motion.div
+      ref={ref}
+      initial={{ y: 50, opacity: 0 }}
+      animate={controls}
     >
       {children}
-    </AnimatedElement>
+    </motion.div>
   );
 };
 
-export default AnimateOnScroll;
-export type { AnimateOnScrollProps }; 
+export default AnimateOnScroll; 
