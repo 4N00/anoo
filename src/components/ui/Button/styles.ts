@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-interface ButtonProps {
+export interface ButtonProps {
   $variant?: 'primary' | 'secondary' | 'danger';
 }
 
