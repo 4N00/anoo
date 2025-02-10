@@ -1,14 +1,16 @@
 {
   "navigation": {
     "home": "Home",
-    "projects": "Projecten",
     "about": "Over mij",
     "contact": "Contact",
     "admin": "Admin",
-    "services": "Diensten"
+    "services": "Diensten",
+    "login": "Inloggen",
+    "logout": "Uitloggen"
   },
   "hero": {
     "greeting": "HEY,",
+
     "introduction": "IK BEN",
     "name": "ANOO.",
     "subtitle": "Scroll om mijn werk te bekijken - neem contact op als je mijn werk waardeert.",
@@ -21,7 +23,7 @@
   },
   "contact": {
     "title": "Neem Contact Op",
-    "subtitle": "Laten we samen iets geweldigs creëren",
+    "subtitle": "Laten we samen iets moois creëren",
     "form": {
       "name": "Jouw Naam",
       "email": "Jouw E-mail",
@@ -31,11 +33,11 @@
     },
     "info": {
       "title": "Contactgegevens",
-      "email": "E-mail",
-      "phone": "Telefoon",
+      "email": "info@anoo.nl",
+      "phone": "+31 6 12 34 56 78",
       "company": "Wat is de naam van je bedrijf?",
       "location": "Locatie",
-      "availability": "Beschikbaar voor freelance opdrachten"
+      "availability": "Let's go!"
     }
   },
   "projects": {

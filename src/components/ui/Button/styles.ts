@@ -7,6 +7,9 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 export const StyledButton = styled.button<ButtonProps>`
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
   padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.lg}`};
   background: transparent;
   color: ${({ theme }) => theme.colors.text.primary};
@@ -20,6 +23,11 @@ export const StyledButton = styled.button<ButtonProps>`
   outline: none;
   letter-spacing: 0.5px;
   z-index: 1;
+
+  svg {
+    width: 1em;
+    height: 1em;
+  }
 
   &:after {
     content: '';

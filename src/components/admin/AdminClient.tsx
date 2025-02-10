@@ -1,11 +1,9 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { styled } from 'styled-components';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
-import { supabase } from '@/lib/supabase';
-import { AuthChangeEvent, Session } from '@supabase/supabase-js';
 import { useAuth } from '@/context/AuthContext';
 
 const AdminContainer = styled.div`
@@ -31,82 +29,29 @@ interface AdminClientProps {
 const AdminClient: React.FC<AdminClientProps> = ({ children }) => {
   const router = useRouter();
   const { showToast } = useToast();
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [isAuthorized, setIsAuthorized] = React.useState(false);
-  const { user, isAdmin, loading } = useAuth();
+  const { user, isAdmin, isLoading } = useAuth();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
-        
-        if (userError || !user) {
-          throw new Error('Not authenticated');
-        }
-
-        const { data: userData, error: roleError } = await supabase
-          .from('users')
-          .select('role')
-          .eq('id', user.id)
-          .single();
-
-        if (roleError || !userData || userData.role !== 'ADMIN') {
-          throw new Error('Admin access required');
-        }
-
-        setIsAuthorized(true);
-      } catch (error) {
-        console.error('Auth check error:', error);
-        showToast('Admin access required', 'error');
-        router.replace('/login');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkAuth();
-
-    // Subscribe to auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session: Session | null) => {
-      if (event === 'SIGNED_OUT') {
-        setIsAuthorized(false);
-        router.replace('/login');
-      } else if (event === 'SIGNED_IN' && session) {
-        checkAuth();
-      }
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [router, showToast]);
-
-  useEffect(() => {
-    if (!loading && (!user || !isAdmin)) {
-      router.push('/login');
+  React.useEffect(() => {
+    // Only redirect if we're done loading and either no user or not admin
+    if (!isLoading && (!user || !isAdmin)) {
+      console.log('Redirecting to login. User:', !!user, 'IsAdmin:', isAdmin);
+      showToast('Admin access required', 'error');
+      router.replace('/login');
     }
-  }, [user, isAdmin, loading, router]);
+  }, [user, isAdmin, isLoading, router, showToast]);
 
   // Show loading state while checking auth
   if (isLoading) {
-    return (
-      <LoadingContainer>
-        Checking authentication...
-      </LoadingContainer>
-    );
+    return <LoadingContainer>Checking authentication...</LoadingContainer>;
   }
 
-  // Show loading state while redirecting
-  if (!isAuthorized) {
-    return (
-      <LoadingContainer>
-        Redirecting to login...
-      </LoadingContainer>
-    );
+  // If we have a user and they're an admin, show the content
+  if (user && isAdmin) {
+    return <AdminContainer>{children}</AdminContainer>;
   }
 
-  // Only render children if authorized
-  return <AdminContainer>{children}</AdminContainer>;
+  // Show loading while redirecting
+  return <LoadingContainer>Redirecting to login...</LoadingContainer>;
 };
 
 export default AdminClient;

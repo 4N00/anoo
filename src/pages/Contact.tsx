@@ -157,11 +157,11 @@ const Contact: React.FC = () => {
         <ContactInfoTitle>{t('contact.info.title')}</ContactInfoTitle>
         <ContactInfoItem>
           <strong>{t('contact.info.email')}</strong>
-          <a href="mailto:info@anoo.nl">info@anoo.nl</a>
+          <a href="mailto:info@anoo.nl"></a>
         </ContactInfoItem>
         <ContactInfoItem>
           <strong>{t('contact.info.phone')}</strong>
-          <a href="tel:+31625135338">+31 625 135 338</a>
+          <a href="tel:+31625135338"></a>
         </ContactInfoItem>
         <ContactInfoItem>
           <strong>{t('contact.info.location')}</strong>

@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { NavbarContainer, NavbarContent, Logo, HamburgerButton, Backdrop, MenuOverlay, MenuContent, MenuItem, BottomBar, LanguageToggle, LanguageOption, ThemeToggle } from './styles';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/context/ToastContext';
+import { signOut } from '@/lib/supabase';
 
 const overlayVariants = {
   closed: {
@@ -53,6 +56,8 @@ const Navbar = () => {
   const { language, setLanguage, t } = useLanguage();
   const { user } = useAuth();
   const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const router = useRouter();
+  const { showToast } = useToast();
 
   const hamburgerVariants = {
     hover: {
@@ -126,6 +131,17 @@ const Navbar = () => {
     setIsDarkTheme(!isDarkTheme);
   };
 
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      setIsMenuOpen(false);
+      router.push('/');
+      showToast('Successfully logged out', 'success');
+    } catch (error) {
+      showToast('Failed to logout', 'error');
+    }
+  };
+
   return (
     <>
       <NavbarContainer $isMenuOpen={isMenuOpen}>
@@ -173,7 +189,7 @@ const Navbar = () => {
                     <MenuItem href="/admin" onClick={() => setIsMenuOpen(false)}>
                       {t('navigation.admin')}
                     </MenuItem>
-                    <MenuItem href="/api/auth/logout" onClick={() => setIsMenuOpen(false)}>
+                    <MenuItem href="#" onClick={handleLogout}>
                       {t('navigation.logout')}
                     </MenuItem>
                   </>

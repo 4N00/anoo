@@ -39,19 +39,19 @@ const PageFooter = () => {
           <SmallText>{t('footer.collaborate')}</SmallText>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5rem' }}>
             <ContactInfo>
-              <FooterLink href="mailto:info@anoo.nl">{t('contact.info.email')} info@anoo.nl</FooterLink>
-              <FooterLink href="tel:+31625135338">{t('contact.info.phone')} +31 625 135 338</FooterLink>
+              <FooterLink href="mailto:info@anoo.nl">{t('contact.info.email')}</FooterLink>
+              <FooterLink href="tel:+31625135338">{t('contact.info.phone')}</FooterLink>
             </ContactInfo>
 
             <NavigationGroup>
               <LinkColumn>
-                <FooterLink href="/projects">{t('navigation.projects')}</FooterLink>
+                <FooterLink href="/">{t('navigation.home')}</FooterLink>
                 <FooterLink href="/about">{t('navigation.about')}</FooterLink>
-                <FooterLink href="/services">{t('navigation.services')}</FooterLink>
                 <FooterLink href="/contact">{t('navigation.contact')}</FooterLink>
               </LinkColumn>
             </NavigationGroup>
           </div>
+
         </TopNavigation>
 
         <LargeTextSection>

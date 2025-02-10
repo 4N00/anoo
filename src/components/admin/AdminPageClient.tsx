@@ -2,9 +2,11 @@
 
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
+import { Plus } from 'lucide-react';
 import { ProjectUI } from '@/types/project';
 import ProjectList from './ProjectList';
 import ProjectForm from './ProjectForm';
+import { StyledButton } from '@/components/ui/Button/styles';
 
 const AdminPageContainer = styled.div`
   padding: 2rem;
@@ -22,20 +24,6 @@ const Header = styled.header`
 const Title = styled.h1`
   font-size: ${({ theme }) => theme.typography.fontSize['3xl']};
   color: ${({ theme }) => theme.colors.text.primary};
-`;
-
-const AddButton = styled.button`
-  padding: 0.75rem 1.5rem;
-  background-color: ${({ theme }) => theme.colors.primary.main};
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.primary.dark};
-  }
 `;
 
 interface AdminPageClientProps {
@@ -81,7 +69,10 @@ const AdminPageClient: React.FC<AdminPageClientProps> = ({ initialProjects }) =>
     <AdminPageContainer>
       <Header>
         <Title>Project Management</Title>
-        <AddButton onClick={handleAddProject}>Add Project</AddButton>
+        <StyledButton onClick={handleAddProject} $variant="secondary">
+          <Plus size={20} />
+          New Project
+        </StyledButton>
       </Header>
 
       <ProjectList 

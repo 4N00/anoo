@@ -1,11 +1,12 @@
 {
   "navigation": {
     "home": "Home",
-    "projects": "Projects",
     "about": "About",
     "contact": "Contact",
     "admin": "Admin",
-    "services": "Services"
+    "services": "Services",
+    "login": "Login",
+    "logout": "Logout"
   },
   "hero": {
     "greeting": "HI,",
@@ -31,11 +32,12 @@
     },
     "info": {
       "title": "Contact Information",
-      "email": "Email",
-      "phone": "Phone",
+      "email": "info@anoo.nl",
+      "phone": "+31 6 12 34 56 78",
       "company": "What is the name of your company?",
       "location": "Location",
-      "availability": "Available for freelance opportunities"
+      "availability": "Let's go!"
+
     }
   },
   "projects": {
