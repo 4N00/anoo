@@ -1,70 +1,43 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
-import { NextResponse, type NextRequest } from 'next/server';
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-export async function middleware(request: NextRequest) {
-  // Only run on admin routes
-  if (!request.nextUrl.pathname.startsWith('/admin')) {
-    return NextResponse.next();
-  }
-
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
+export async function middleware(req: NextRequest) {
+  // Create a response with the appropriate CORS headers
+  const res = NextResponse.next({
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     },
   });
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value;
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          });
-        },
-        remove(name: string, options: CookieOptions) {
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          });
-        },
-      },
-    }
-  );
-
   try {
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const supabase = createMiddlewareClient({ req, res });
 
-    if (userError || !user) {
-      return NextResponse.redirect(new URL('/login', request.url));
+    // Refresh the session
+    const { data: { session }, error } = await supabase.auth.getSession();
+
+    // If there's no session and we're trying to access protected routes, redirect to login
+    if ((!session || error) && (req.nextUrl.pathname.startsWith('/admin') || req.nextUrl.pathname.startsWith('/api/projects'))) {
+      const redirectUrl = new URL('/login', req.url);
+      return NextResponse.redirect(redirectUrl);
     }
 
-    const { data: userData, error: roleError } = await supabase
-      .from('users')
-      .select('role')
-      .eq('id', user.id)
-      .single();
-
-    if (roleError || !userData || userData.role !== 'ADMIN') {
-      await supabase.auth.signOut();
-      return NextResponse.redirect(new URL('/login', request.url));
-    }
+    return res;
   } catch (error) {
-    console.error('Error in middleware:', error);
-    return NextResponse.redirect(new URL('/login', request.url));
+    console.error('Middleware error:', error);
+    // In case of error, redirect to login
+    const redirectUrl = new URL('/login', req.url);
+    return NextResponse.redirect(redirectUrl);
   }
-
-  return response;
 }
 
-// Ensure the middleware is only called for relevant paths
+// Specify which routes should be protected
 export const config = {
-  matcher: ['/admin/:path*']
+  matcher: [
+    '/admin/:path*',
+    '/api/projects/:path*',
+    '/login'
+  ]
 };

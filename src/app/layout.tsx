@@ -11,7 +11,7 @@ import { LanguageProvider } from '../context/LanguageContext';
 import Navbar from '../components/navbar/Navbar';
 import PageFooter from '../components/footer/Footer';
 import { AnimatePresence } from 'framer-motion';
-import styled, { createGlobalStyle } from 'styled-components';
+import styled from 'styled-components';
 import GlobalStyles from '../styles/GlobalStyles';
 
 const inter = Inter({
@@ -50,12 +50,6 @@ const MainContent = styled.div`
   padding-top: 64px; /* Navbar height */
 `;
 
-const GlobalStyle = createGlobalStyle`
-  body {
-    transition: background-color 0.6s ease;
-  }
-`;
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -77,7 +71,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.className} ${inter.variable}`}>
         <QueryClientProvider client={getQueryClient()}>
           <ThemeProvider>
-            <GlobalStyle />
             <GlobalStyles />
             <ToastProvider>
               <AuthProvider>
