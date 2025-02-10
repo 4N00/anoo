@@ -7,10 +7,12 @@ import { ProjectUI } from '@/types/project';
 import ProjectList from './ProjectList';
 import ProjectForm from './ProjectForm';
 import { StyledButton } from '@/components/ui/Button/styles';
+import { useProjects } from '@/context/ProjectsContext';
+import Modal from '@/components/ui/Modal/Modal';
 
 const AdminPageContainer = styled.div`
   padding: 2rem;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 `;
 
@@ -26,12 +28,10 @@ const Title = styled.h1`
   color: ${({ theme }) => theme.colors.text.primary};
 `;
 
-interface AdminPageClientProps {
-  initialProjects: ProjectUI[];
-}
+interface AdminPageClientProps {}
 
-const AdminPageClient: React.FC<AdminPageClientProps> = ({ initialProjects }) => {
-  const [projects, setProjects] = useState(initialProjects);
+const AdminPageClient: React.FC<AdminPageClientProps> = () => {
+  const { projects, refreshProjects } = useProjects();
   const [showForm, setShowForm] = useState(false);
   const [editingProject, setEditingProject] = useState<ProjectUI | null>(null);
 
@@ -50,19 +50,13 @@ const AdminPageClient: React.FC<AdminPageClientProps> = ({ initialProjects }) =>
     setEditingProject(null);
   };
 
-  const handleProjectSaved = (savedProject: ProjectUI) => {
-    if (editingProject) {
-      setProjects(projects.map(p => 
-        p.id === savedProject.id ? savedProject : p
-      ));
-    } else {
-      setProjects([savedProject, ...projects]);
-    }
+  const handleProjectSaved = async () => {
+    await refreshProjects();
     handleCloseForm();
   };
 
-  const handleProjectDeleted = (projectId: string) => {
-    setProjects(projects.filter(p => p.id !== projectId));
+  const handleProjectDeleted = async () => {
+    await refreshProjects();
   };
 
   return (
@@ -81,13 +75,13 @@ const AdminPageClient: React.FC<AdminPageClientProps> = ({ initialProjects }) =>
         onDelete={handleProjectDeleted}
       />
 
-      {showForm && (
+      <Modal isOpen={showForm} onClose={handleCloseForm}>
         <ProjectForm
           project={editingProject}
           onSave={handleProjectSaved}
           onClose={handleCloseForm}
         />
-      )}
+      </Modal>
     </AdminPageContainer>
   );
 };

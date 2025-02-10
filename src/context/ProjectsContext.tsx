@@ -1,11 +1,13 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Project } from '@/types/project';
+import { Project, ProjectUI, toProjectUI } from '@/types/project';
+import { supabase } from '@/lib/supabase';
 
 interface ProjectsContextType {
-  projects: Project[];
+  projects: ProjectUI[];
   setProjects: React.Dispatch<React.SetStateAction<Project[]>>;
+  refreshProjects: () => Promise<void>;
 }
 
 const ProjectsContext = createContext<ProjectsContextType | undefined>(undefined);
@@ -17,23 +19,32 @@ interface ProjectsProviderProps {
 export const ProjectsProvider: React.FC<ProjectsProviderProps> = ({ children }) => {
   const [projects, setProjects] = useState<Project[]>([]);
 
-  useEffect(() => {
-    // Fetch projects from API
-    const fetchProjects = async () => {
-      try {
-        const response = await fetch('/api/projects');
-        const data = await response.json();
-        setProjects(data);
-      } catch (error) {
-        console.error('Error fetching projects:', error);
-      }
-    };
+  const fetchProjects = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .order('created_at', { ascending: false });
 
+      if (error) throw error;
+      setProjects(data || []);
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+    }
+  };
+
+  useEffect(() => {
     fetchProjects();
   }, []);
 
   return (
-    <ProjectsContext.Provider value={{ projects, setProjects }}>
+    <ProjectsContext.Provider 
+      value={{ 
+        projects: projects.map(toProjectUI),
+        setProjects,
+        refreshProjects: fetchProjects
+      }}
+    >
       {children}
     </ProjectsContext.Provider>
   );

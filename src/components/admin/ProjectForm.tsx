@@ -4,11 +4,12 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ProjectUI } from '@/types/project';
+import { ProjectUI, toProjectUI } from '@/types/project';
 import FormInput from '@/components/ui/Input/Input';
 import Button from '@/components/ui/Button/Button';
 import { styled } from 'styled-components';
 import { useToast } from '@/context/ToastContext';
+import { supabase } from '@/lib/supabase';
 
 // Form input type with tags as string
 type ProjectFormInput = {
@@ -134,43 +135,45 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSave, onClose }) =
   const handleFormSubmit = async (data: ProjectFormInput) => {
     try {
       console.log('Submitting data:', data);
-      // Format the data before sending to API
       const formattedTags = data.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
       const formattedData = {
         ...(project ? { id: project.id } : {}),
         title: data.title,
         description: data.description,
-        imageUrl: data.imageUrl,
+        image_url: data.imageUrl,
         tags: formattedTags,
         featured: data.featured,
-        githubUrl: data.githubUrl || null,
-        liveUrl: data.liveUrl || null,
+        github_url: data.githubUrl || null,
+        live_url: data.liveUrl || null,
+        version: 1,
       };
       console.log('Formatted data:', formattedData);
 
-      const response = await fetch(project ? `/api/projects/${project.id}` : '/api/projects', {
-        method: project ? 'PATCH' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formattedData),
-      });
-
-      const responseData = await response.json();
-      console.log('Response from server:', responseData);
-
-      if (!response.ok) {
-        console.error('Server error details:', responseData);
-        throw new Error(responseData.error || 'Failed to save project');
+      let response;
+      if (project) {
+        response = await supabase
+          .from('projects')
+          .update(formattedData)
+          .eq('id', project.id)
+          .select()
+          .single();
+      } else {
+        response = await supabase
+          .from('projects')
+          .insert([formattedData])
+          .select()
+          .single();
       }
 
-      // Check if we have a valid project response
-      if (!responseData.id) {
-        console.error('Invalid response format:', responseData);
-        throw new Error('Invalid response from server');
+      if (response.error) {
+        throw response.error;
       }
 
-      onSave(responseData);
+      if (!response.data) {
+        throw new Error('No data returned from server');
+      }
+
+      onSave(toProjectUI(response.data));
       showToast('Project saved successfully', 'success');
     } catch (error) {
       console.error('Form submission error:', error);
