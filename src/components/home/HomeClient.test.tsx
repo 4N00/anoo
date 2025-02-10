@@ -22,7 +22,7 @@ jest.mock('@/hooks/useProjects', () => ({
 }));
 
 // Mock components
-jest.mock('@/components/HeroSection', () => {
+jest.mock('@/components/hero/Hero', () => {
   return function MockHeroSection() {
     return <div data-testid="hero-section">Hero Section</div>;
   };

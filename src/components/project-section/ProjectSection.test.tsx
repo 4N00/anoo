@@ -4,11 +4,15 @@ import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
 import 'jest-styled-components';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '@/test-utils/test-utils';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '@/styles/themeConfig';
 import ProjectSection from './ProjectSection';
 import { ProjectUI } from '@/types/project';
+
+declare const describe: any;
+declare const it: any;
+declare const expect: any;
 
 const renderWithTheme = (component: React.ReactNode) => {
   return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);

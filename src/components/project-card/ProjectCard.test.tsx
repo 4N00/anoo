@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
 import 'jest-styled-components';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '@/test-utils/test-utils';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '@/styles/themeConfig';
 import ProjectCard from './ProjectCard';
