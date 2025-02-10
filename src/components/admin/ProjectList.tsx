@@ -15,7 +15,7 @@ import {
 import { GripVertical, Clock, User } from 'lucide-react';
 import { ProjectUI } from '@/types/project';
 import { useToast } from '@/context/ToastContext';
-import Button from '@/components/ui/Button/Button';
+import Button from '@/components/ui/button/Button';
 
 const ListContainer = styled.div`
   display: flex;

@@ -1,11 +1,9 @@
 import React from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
-import { theme } from '../styles/themeConfig';
-import { BackgroundProvider } from '../context/BackgroundContext';
-
-// Declare Jest globals
-declare const jest: any;
+import { theme } from '@/styles/theme';
+import { LanguageProvider } from '@/context/LanguageContext';
+import { BackgroundProvider } from '@/context/BackgroundContext';
 
 // Mock usePathname for BackgroundProvider
 jest.mock('next/navigation', () => ({
@@ -15,7 +13,11 @@ jest.mock('next/navigation', () => ({
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     <ThemeProvider theme={theme}>
-      <BackgroundProvider>{children}</BackgroundProvider>
+      <LanguageProvider>
+        <BackgroundProvider>
+          {children}
+        </BackgroundProvider>
+      </LanguageProvider>
     </ThemeProvider>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyledContainer } from '@/components/ui/Container/styles';
+import { StyledContainer } from '@/components/ui/container/styles';
 
 export interface ContainerProps {
   children: React.ReactNode;

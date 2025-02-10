@@ -1,82 +1,113 @@
+/**
+ * @jest-environment jsdom
+ */
+import '@testing-library/jest-dom';
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider } from 'styled-components';
-import { theme } from '@/styles/themeConfig';
-import Modal from './index';
+import { theme } from '@/styles/theme';
+import Modal from './Modal';
 
-const renderWithTheme = (component: React.ReactNode) => {
-  return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
+const renderWithProviders = (ui: React.ReactElement) => {
+  return render(
+    <ThemeProvider theme={theme}>
+      {ui}
+    </ThemeProvider>
+  );
 };
 
 describe('Modal', () => {
+  const onCloseMock = jest.fn();
+  const testContent = 'Test Modal Content';
+
+  beforeEach(() => {
+    onCloseMock.mockClear();
+  });
+
   it('renders when isOpen is true', () => {
-    const content = 'Modal Content';
-    renderWithTheme(
-      <Modal isOpen={true} onClose={() => {}}>
-        {content}
+    renderWithProviders(
+      <Modal isOpen={true} onClose={onCloseMock}>
+        {testContent}
       </Modal>
     );
-    expect(screen.getByText(content)).toBeInTheDocument();
+
+    expect(screen.getByText(testContent)).toBeInTheDocument();
   });
 
   it('does not render when isOpen is false', () => {
-    const content = 'Modal Content';
-    renderWithTheme(
-      <Modal isOpen={false} onClose={() => {}}>
-        {content}
+    renderWithProviders(
+      <Modal isOpen={false} onClose={onCloseMock}>
+        {testContent}
       </Modal>
     );
-    expect(screen.queryByText(content)).not.toBeInTheDocument();
+
+    expect(screen.queryByText(testContent)).not.toBeInTheDocument();
   });
 
-  it('calls onClose when clicking the overlay', async () => {
-    const onClose = jest.fn();
-    renderWithTheme(
-      <Modal isOpen={true} onClose={onClose}>
-        Content
+  it('calls onClose when clicking outside the modal', () => {
+    renderWithProviders(
+      <Modal isOpen={true} onClose={onCloseMock}>
+        {testContent}
       </Modal>
     );
 
-    const overlay = screen.getByRole('dialog').parentElement;
-    if (overlay) {
-      await userEvent.click(overlay);
-      expect(onClose).toHaveBeenCalledTimes(1);
-    }
+    fireEvent.click(screen.getByTestId('modal-overlay'));
+    expect(onCloseMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not call onClose when clicking inside the modal', () => {
+    renderWithProviders(
+      <Modal isOpen={true} onClose={onCloseMock}>
+        {testContent}
+      </Modal>
+    );
+
+    fireEvent.click(screen.getByText(testContent));
+    expect(onCloseMock).not.toHaveBeenCalled();
+  });
+
+  it('calls onClose when clicking the close button', () => {
+    renderWithProviders(
+      <Modal isOpen={true} onClose={onCloseMock}>
+        {testContent}
+      </Modal>
+    );
+
+    fireEvent.click(screen.getByLabelText('Close modal'));
+    expect(onCloseMock).toHaveBeenCalledTimes(1);
   });
 
   it('calls onClose when pressing Escape key', () => {
-    const onClose = jest.fn();
-    renderWithTheme(
-      <Modal isOpen={true} onClose={onClose}>
-        Content
+    renderWithProviders(
+      <Modal isOpen={true} onClose={onCloseMock}>
+        {testContent}
       </Modal>
     );
 
     fireEvent.keyDown(document, { key: 'Escape' });
-    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onCloseMock).toHaveBeenCalledTimes(1);
   });
 
   it('applies custom className', () => {
     const testClass = 'custom-class';
-    renderWithTheme(
-      <Modal isOpen={true} onClose={() => {}} className={testClass}>
-        Content
+    renderWithProviders(
+      <Modal isOpen={true} onClose={onCloseMock} className={testClass}>
+        {testContent}
       </Modal>
     );
     expect(screen.getByRole('dialog')).toHaveClass(testClass);
   });
 
   it('prevents event propagation when clicking modal content', async () => {
-    const onClose = jest.fn();
-    renderWithTheme(
-      <Modal isOpen={true} onClose={onClose}>
+    renderWithProviders(
+      <Modal isOpen={true} onClose={onCloseMock}>
         <div>Content</div>
       </Modal>
     );
 
     const modalContent = screen.getByRole('dialog');
     await userEvent.click(modalContent);
-    expect(onClose).not.toHaveBeenCalled();
+    expect(onCloseMock).not.toHaveBeenCalled();
   });
 }); 

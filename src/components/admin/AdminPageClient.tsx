@@ -6,9 +6,9 @@ import { Plus } from 'lucide-react';
 import { ProjectUI } from '@/types/project';
 import ProjectList from './ProjectList';
 import ProjectForm from './ProjectForm';
-import { StyledButton } from '@/components/ui/Button/styles';
+import { StyledButton } from '@/components/ui/button/styles';
 import { useProjects } from '@/context/ProjectsContext';
-import Modal from '@/components/ui/Modal/Modal';
+import Modal from '@/components/ui/modal/Modal';
 
 const AdminPageContainer = styled.div`
   padding: 2rem;
