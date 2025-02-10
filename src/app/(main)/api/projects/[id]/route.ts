@@ -98,7 +98,7 @@ export async function PATCH(
     return NextResponse.json(toProjectUI(project));
   } catch (error) {
     if (error instanceof z.ZodError) {
-      console.error('Validation error:', error.errors); // Add logging
+      console.error('Validation error:', error.errors);
       return NextResponse.json(
         { error: 'Invalid project data', details: error.errors },
         { status: 400 }
@@ -150,4 +150,4 @@ export async function DELETE(
     console.error('Error deleting project:', error);
     return NextResponse.json({ error: 'Failed to delete project' }, { status: 500 });
   }
-}
+} 

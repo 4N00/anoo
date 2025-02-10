@@ -34,14 +34,18 @@ const projectSchema = z.object({
 });
 
 type ProjectFormData = z.infer<typeof projectSchema>;
+type Project = ProjectFormData & { 
+  id: string;
+  tags: string[];
+};
 
 export default function Admin() {
   const { t } = useLanguage();
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
-  const [editingProject, setEditingProject] = useState(null);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
 
   const {
     register,
@@ -103,18 +107,18 @@ export default function Admin() {
     }
   };
 
-  const handleEdit = (project) => {
+  const handleEdit = (project: Project) => {
     setEditingProject(project);
     Object.keys(project).forEach((key) => {
       if (key === 'tags') {
         setValue(key, project[key].join(', '));
       } else {
-        setValue(key, project[key]);
+        setValue(key as keyof ProjectFormData, project[key as keyof Project]);
       }
     });
   };
 
-  const handleDelete = async (projectId) => {
+  const handleDelete = async (projectId: string) => {
     if (!window.confirm(t('admin.deleteConfirm'))) return;
 
     try {
@@ -241,4 +245,4 @@ export default function Admin() {
       </ProjectList>
     </Container>
   );
-}
+} 

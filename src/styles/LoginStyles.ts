@@ -1,28 +1,21 @@
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
 
 export const Container = styled.div`
-  max-width: 800px;
+  max-width: 400px;
   margin: 0 auto;
   padding: ${({ theme }) => theme.spacing.xl};
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 export const Title = styled.h1`
   font-size: ${({ theme }) => theme.typography.fontSize['3xl']};
   font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
   color: ${({ theme }) => theme.colors.text.primary};
   text-align: center;
-`;
-
-export const Description = styled.p`
-  font-size: ${({ theme }) => theme.typography.fontSize.lg};
-  color: ${({ theme }) => theme.colors.text.secondary};
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
-  text-align: center;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
 `;
 
 export const Form = styled.form`
@@ -63,38 +56,10 @@ export const Input = styled.input<{ error?: boolean }>`
   }
 `;
 
-export const TextArea = styled.textarea<{ error?: boolean }>`
-  padding: ${({ theme }) => theme.spacing.md};
-  border: 2px solid ${({ theme, error }) =>
-    error ? theme.colors.error : theme.colors.primary.light};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  font-size: ${({ theme }) => theme.typography.fontSize.md};
-  background-color: ${({ theme }) => theme.colors.background.primary};
-  color: ${({ theme }) => theme.colors.text.primary};
-  min-height: 150px;
-  resize: vertical;
-  transition: all ${({ theme }) => theme.transitions.fast};
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary.main};
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary.light}40;
-  }
-`;
-
 export const ErrorMessage = styled.span`
   color: ${({ theme }) => theme.colors.error};
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
   margin-top: ${({ theme }) => theme.spacing.xs};
-`;
-
-export const SuccessMessage = styled.span`
-  color: ${({ theme }) => theme.colors.success};
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  text-align: center;
-  padding: ${({ theme }) => theme.spacing.sm};
-  background-color: ${({ theme }) => theme.colors.success}20;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
 `;
 
 export const Button = styled.button`
@@ -122,4 +87,4 @@ export const Button = styled.button`
     cursor: not-allowed;
     transform: none;
   }
-`;
+`; 

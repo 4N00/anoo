@@ -81,9 +81,9 @@ export async function POST(
     }
 
     const json = await request.json();
-    console.log('Received data:', json); // Add logging
+    console.log('Received data:', json);
     const validatedData = projectSchema.parse(json);
-    console.log('Validated data:', validatedData); // Add logging
+    console.log('Validated data:', validatedData);
 
     const { data: project, error } = await supabase
       .from('projects')
@@ -104,7 +104,7 @@ export async function POST(
       .single();
 
     if (error) {
-      console.error('Database error:', error); // Add logging
+      console.error('Database error:', error);
       throw error;
     }
     if (!project) throw new Error('Failed to create project');
@@ -112,7 +112,7 @@ export async function POST(
     return NextResponse.json(project);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      console.error('Validation error:', error.errors); // Add logging
+      console.error('Validation error:', error.errors);
       return NextResponse.json(
         { error: 'Invalid project data', details: error.errors },
         { status: 400 }
@@ -122,4 +122,4 @@ export async function POST(
     console.error('Error creating project:', error);
     return NextResponse.json({ error: 'Failed to create project' }, { status: 500 });
   }
-}
+} 
