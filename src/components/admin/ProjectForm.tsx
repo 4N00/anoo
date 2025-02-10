@@ -39,7 +39,8 @@ const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding: 2rem;
+  padding: 1rem;
+  min-width: 50vw;
 `;
 
 const FormHeader = styled.div`
