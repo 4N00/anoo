@@ -5,7 +5,7 @@ interface ProjectContainerProps {
   $featured?: boolean;
 }
 
-export const ProjectContainer = styled.div`
+export const ProjectContainer = styled.div<ProjectContainerProps>`
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;

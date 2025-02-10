@@ -7,8 +7,8 @@ import ProjectList from '@/components/admin/ProjectList';
 import ProjectForm from '@/components/admin/ProjectForm';
 import { useToast } from '@/context/ToastContext';
 import { Search, Filter, SortAsc, Plus, User } from 'lucide-react';
-import Modal from '@/components/ui/modal';
 import Button from '@/components/ui/button/Button';
+import Modal from '@/components/ui/modal/Modal';
 
 const AdminContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.lg};
@@ -123,16 +123,6 @@ const IconButton = styled.button`
   }
 `;
 
-const AddButton = styled(Button)`
-  height: 32px;
-  padding: 0 ${({ theme }) => theme.spacing.md};
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
-`;
 
 interface AdminProps {
   initialProjects: ProjectUI[];
