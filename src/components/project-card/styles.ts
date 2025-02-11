@@ -109,7 +109,12 @@ export const ProjectDescription = styled.p`
 `;
 
 export const BlurImage = styled(Image)`
-  position: relative;
-  z-index: 1;
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
   transition: opacity 0.5s ease-in-out;
+  transform: translateZ(0);
+  will-change: opacity;
 `;

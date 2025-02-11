@@ -4,21 +4,9 @@ import React, { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import ProjectCard from '../project-card/ProjectCard';
 import { ProjectContainer, ProjectGrid } from '../project-card/styles';
-import { HeaderText } from '@/app/styles';
 import { ProjectUI } from '@/types/project';
+import { SectionTitle } from './styles';
 
-const containerVariants = {
-  initial: {
-    opacity: 0,
-  },
-  animate: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-};
 
 interface ProjectSectionProps {
   projects: ProjectUI[];
@@ -35,14 +23,15 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(({ projects 
       className={className}
       initial="initial"
       animate="animate"
-      variants={containerVariants}
       style={{ position: 'relative' }}
       data-testid="motion-section"
       data-cy="project-section"
     >
       {featuredProjects.length > 0 && (
         <ProjectContainer $featured>
-          <HeaderText>FEATURED</HeaderText>
+          <SectionTitle>
+            FEATURED
+          </SectionTitle>
           <ProjectGrid $featured>
             {featuredProjects.map((project, index) => (
               <ProjectCard 
@@ -57,7 +46,7 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(({ projects 
 
       {nonFeaturedProjects.length > 0 && (
         <ProjectContainer>
-          <HeaderText>PROJECTS</HeaderText>
+          <SectionTitle>PROJECTS</SectionTitle>
           <ProjectGrid>
             {nonFeaturedProjects.map((project, index) => (
               <ProjectCard 

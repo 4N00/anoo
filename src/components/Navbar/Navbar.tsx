@@ -146,7 +146,22 @@ const Navbar = () => {
     <>
       <NavbarContainer $isMenuOpen={isMenuOpen}>
         <NavbarContent>
-          <Logo href="/" $isMenuOpen={isMenuOpen}>anoo.nl</Logo>
+          <Logo 
+            href="/" 
+            $isMenuOpen={isMenuOpen}
+            style={{
+              display: 'block',
+              fontSize: '1.5rem',
+              fontWeight: 700,
+              contain: 'content',
+              contentVisibility: 'auto',
+              containIntrinsicSize: '0 2rem',
+              textRendering: 'optimizeLegibility',
+            }}
+            prefetch={false}
+          >
+            anoo.nl
+          </Logo>
           <HamburgerButton 
             $isOpen={isMenuOpen} 
             onClick={() => setIsMenuOpen(!isMenuOpen)}

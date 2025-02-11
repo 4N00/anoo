@@ -242,11 +242,22 @@ export const NavbarContent = styled.div`
 `;
 
 export const Logo = styled(Link)<{ $isMenuOpen: boolean }>`
+  font-family: system-ui, -apple-system, sans-serif;
   font-size: 1.5rem;
-  font-weight: bold;
-  color: ${({ $isMenuOpen, theme }) => $isMenuOpen ? 'white' : theme.colors.text.primary};
+  font-weight: 700;
+  color: ${({ theme, $isMenuOpen }) => 
+    $isMenuOpen ? theme.colors.text.contrast : theme.colors.text.primary};
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 0.3s ease;
+  will-change: color;
+  contain: content;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 2rem;
+  text-rendering: optimizeLegibility;
+  
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary.main};
+  }
 `;
 
 interface HamburgerButtonProps {

@@ -31,20 +31,15 @@ export const Header = styled.div<HeaderProps>`
 `;
 
 export const HeaderText = styled.span`
-  font-family: ${({ theme }) => theme.fonts.mono};
-  font-size: ${({ theme }) => theme.typography.fontSize.xs};
-  text-transform: uppercase;
-  letter-spacing: ${({ theme }) => theme.typography.letterSpacing.wide};
-  color: ${({ theme }) => theme.colors.text.secondary};
-  opacity: 0.8;
-  display: block;
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
-
-  &:before {
-    content: '•';
-    margin-right: ${({ theme }) => theme.spacing.xs};
-    opacity: 0.6;
-  }
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.text.primary};
+  margin-bottom: 2rem;
+  display: inline-block;
+  contain: content;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 3rem;
+  font-display: block;
 `;
 
 export const HeaderTitle = styled.h2`
@@ -149,13 +144,13 @@ export const Background = styled.div<{ $color: string }>`
   pointer-events: none;
 `;
 
-export const MainContainer = styled.div`
-  color: ${({ theme }) => theme.colors.text.primary};
-  position: relative;
-  z-index: 1;
+export const MainContainer = styled.main`
+  width: 100%;
   min-height: 100vh;
-  background: transparent;
-  isolation: isolate;
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
 `;
 
 export const ProjectNumber = styled.span`
