@@ -49,10 +49,10 @@ export const ProjectCardWrapper = styled(motion.div)<ProjectContainerProps>`
 export const ProjectImageWrapper = styled.div`
   position: relative;
   width: 100%;
-  padding-top: 56.25%; /* 16:9 aspect ratio */
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
   overflow: hidden;
-  background: ${({ theme }) => theme.colors.background.dark};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
+  background: ${({ theme }) => theme.colors.background.secondary};
 `;
 
 export const ProjectImage = styled.img`
