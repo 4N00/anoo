@@ -2,13 +2,7 @@ import { MetadataRoute } from 'next';
 import { siteConfig } from '@/config/metadata';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Get all projects (you'll need to implement this based on your data fetching method)
-  const projects = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/projects`)
-    .then((res) => res.json())
-    .catch(() => []);
-
-  // Base routes that are always present
-  const routes = [
+  const baseRoutes = [
     {
       url: siteConfig.url,
       lastModified: new Date(),
@@ -29,13 +23,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Add project routes
-  const projectRoutes = projects.map((project: any) => ({
-    url: `${siteConfig.url}/project/${project.slug}`,
-    lastModified: new Date(project.updatedAt),
-    changeFrequency: 'weekly' as const,
-    priority: 0.9,
-  }));
-
-  return [...routes, ...projectRoutes];
+  return [...baseRoutes];
 } 

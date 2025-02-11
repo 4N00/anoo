@@ -12,6 +12,8 @@ import {
   Label,
   BackgroundText
 } from './styles';
+import { generateWebPageSchema } from '@/lib/schema';
+import { siteConfig } from '@/config/metadata';
 
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,53 +29,67 @@ const Contact = () => {
   };
 
   return (
-    <Container>
-      <BackgroundText>{t('contact.title').toUpperCase()}.</BackgroundText>
-      <Content>
-        <Form onSubmit={handleSubmit}>
-          <div>
-            <Label>{t('contact.form.name').toUpperCase()}</Label>
-            <FormInput 
-              type="text" 
-              placeholder={t('contact.form.name').toUpperCase()} 
-              required 
-            />
-          </div>
-          <div>
-            <Label>{t('contact.form.email').toUpperCase()}</Label>
-            <FormInput 
-              type="email" 
-              placeholder={t('contact.form.email').toUpperCase()} 
-              required 
-            />
-          </div>
-          <div>
-            <Label>{t('contact.info.phone').toUpperCase()}</Label>
-            <FormInput 
-              type="tel" 
-              placeholder={t('contact.info.phone').toUpperCase()} 
-            />
-          </div>
-          <div>
-            <Label>COMPANY</Label>
-            <FormInput 
-              type="text" 
-              placeholder={t('contact.info.company').toUpperCase()} 
-            />
-          </div>
-          <div>
-            <Label>{t('contact.form.message').toUpperCase()}</Label>
-            <FormTextarea 
-              placeholder={t('contact.form.message').toUpperCase()} 
-              required 
-            />
-          </div>
-          <SubmitButton type="submit" disabled={isSubmitting}>
-            {t('contact.form.send').toUpperCase()} <span>:)</span> {t('contact.form.click_to_send').toUpperCase()}
-          </SubmitButton>
-        </Form>
-      </Content>
-    </Container>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            generateWebPageSchema(
+              'Contact Anoo - Get in Touch',
+              'Contact Anoo for web development projects and collaborations',
+              `${siteConfig.url}/contact`
+            )
+          )
+        }}
+      />
+      <Container>
+        <BackgroundText>{t('contact.title').toUpperCase()}.</BackgroundText>
+        <Content>
+          <Form onSubmit={handleSubmit}>
+            <div>
+              <Label>{t('contact.form.name').toUpperCase()}</Label>
+              <FormInput 
+                type="text" 
+                placeholder={t('contact.form.name').toUpperCase()} 
+                required 
+              />
+            </div>
+            <div>
+              <Label>{t('contact.form.email').toUpperCase()}</Label>
+              <FormInput 
+                type="email" 
+                placeholder={t('contact.form.email').toUpperCase()} 
+                required 
+              />
+            </div>
+            <div>
+              <Label>{t('contact.info.phone').toUpperCase()}</Label>
+              <FormInput 
+                type="tel" 
+                placeholder={t('contact.info.phone').toUpperCase()} 
+              />
+            </div>
+            <div>
+              <Label>COMPANY</Label>
+              <FormInput 
+                type="text" 
+                placeholder={t('contact.info.company').toUpperCase()} 
+              />
+            </div>
+            <div>
+              <Label>{t('contact.form.message').toUpperCase()}</Label>
+              <FormTextarea 
+                placeholder={t('contact.form.message').toUpperCase()} 
+                required 
+              />
+            </div>
+            <SubmitButton type="submit" disabled={isSubmitting}>
+              {t('contact.form.send').toUpperCase()} <span>:)</span> {t('contact.form.click_to_send').toUpperCase()}
+            </SubmitButton>
+          </Form>
+        </Content>
+      </Container>
+    </>
   );
 };
 

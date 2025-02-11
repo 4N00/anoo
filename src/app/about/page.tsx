@@ -4,6 +4,8 @@ import React from 'react';
 import { PageContainer, ContentWrapper } from './styles';
 import ProfileSection from '@/components/about/profile-section/ProfileSection';
 import SkillsSection from '@/components/about/skills-section/SkillsSection';
+import { generateWebPageSchema, generatePersonSchema } from '@/lib/schema';
+import { siteConfig } from '@/config/metadata';
 
 const About = () => {
   const skills = [
@@ -26,12 +28,27 @@ const About = () => {
   ];
 
   return (
-    <PageContainer>
-      <ContentWrapper>
-        <ProfileSection />
-        <SkillsSection skills={skills} />
-      </ContentWrapper>
-    </PageContainer>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            generateWebPageSchema(
+              'About Anoo - Creative Developer',
+              'Learn more about Anoo, a creative developer specializing in modern web development',
+              `${siteConfig.url}/about`
+            ),
+            generatePersonSchema()
+          ])
+        }}
+      />
+      <PageContainer>
+        <ContentWrapper>
+          <ProfileSection />
+          <SkillsSection skills={skills} />
+        </ContentWrapper>
+      </PageContainer>
+    </>
   );
 };
 

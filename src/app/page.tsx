@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { toProjectUI } from '@/types/project';
 import HomeClient from '@/components/home/HomeClient';
+import { generateWebPageSchema, generatePersonSchema } from '@/lib/schema';
 
 // This function runs at build time in production
 export async function generateStaticParams() {
@@ -25,7 +26,24 @@ async function getProjects() {
 export default async function Home() {
   const projects = await getProjects();
 
-  return <HomeClient initialProjects={projects} />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            generateWebPageSchema(
+              'Anoo - Creative Developer Portfolio',
+              'Portfolio showcasing creative development work and projects by Anoo',
+              'https://anoo.nl'
+            ),
+            generatePersonSchema()
+          ])
+        }}
+      />
+      <HomeClient initialProjects={projects} />
+    </>
+  );
 }
 
 // Force static rendering
