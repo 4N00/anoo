@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-undef
 const crypto = require('crypto');
+const path = require('path');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -7,6 +8,16 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
     removeConsole: process.env.NODE_ENV === 'production',
+  },
+  experimental: {
+    optimizeCss: true,
+    optimizeServerReact: true,
+    serverMinification: true,
+    turbotrace: {
+      logLevel: 'error',
+      contextDirectory: path.resolve('.'),
+      processDependencies: true,
+    },
   },
   images: {
     remotePatterns: [
@@ -17,14 +28,18 @@ const nextConfig = {
         pathname: '**',
       },
     ],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    deviceSizes: [640, 750, 828, 1080, 1200],
+    imageSizes: [16, 32, 48, 64, 96, 128],
+    minimumCacheTTL: 31536000,
+    formats: ['image/webp', 'image/avif'],
   },
   // Configure page extensions for hybrid rendering
   pageExtensions: ['tsx', 'ts'],
   // Static pages will be generated at build time
   // Dynamic pages (admin) will be server-rendered
   output: 'standalone',
+  poweredByHeader: false,
+  compress: true,
   // Configure headers for security and caching
   async headers() {
     return [
@@ -42,7 +57,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            value: 'public, max-age=31536000, stale-while-revalidate=86400',
           },
           {
             key: 'X-Content-Type-Options',
@@ -55,6 +70,33 @@ const nextConfig = {
           {
             key: 'X-XSS-Protection',
             value: '1; mode=block',
+          },
+        ],
+      },
+      {
+        source: '/_next/image/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
           },
         ],
       },
