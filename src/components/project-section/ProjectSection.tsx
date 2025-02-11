@@ -38,6 +38,7 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(({ projects 
       variants={containerVariants}
       style={{ position: 'relative' }}
       data-testid="motion-section"
+      data-cy="project-section"
     >
       {featuredProjects.length > 0 && (
         <ProjectContainer $featured>

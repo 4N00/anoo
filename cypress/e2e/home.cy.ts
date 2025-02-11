@@ -1,4 +1,4 @@
-describe('Admin login test', () => {
+describe('Homepage test', () => {
   before(() => {
     // Disable all uncaught exception handling
     Cypress.on('uncaught:exception', () => false);
@@ -8,21 +8,17 @@ describe('Admin login test', () => {
     // Configure long timeout
     Cypress.config('defaultCommandTimeout', 10000);
 
-    // Visit login page
-    cy.visit('/login', {
+    // Visit homepage
+    cy.visit('/', {
       failOnStatusCode: false
     });
   });
 
-  it('should login and redirect to admin dashboard', () => {
-    // Type credentials
-    cy.get('[data-cy="email-input"]').type(Cypress.env('ADMIN_EMAIL'));
-    cy.get('[data-cy="password-input"]').type(Cypress.env('ADMIN_PASSWORD'));
+  it('should display projects section', () => {
+    // Check if projects section exists
+    cy.get('[data-cy="project-section"]').should('exist');
     
-    // Click login button
-    cy.get('[data-cy="login-button"]').click();
-
-    // Verify redirect to admin page
-    cy.url().should('include', '/admin');
+    // Check if at least one project card is displayed
+    cy.get('[data-cy="project-card"]').should('have.length.at.least', 1);
   });
 }); 

@@ -24,6 +24,7 @@ const ProjectCard = ({ project, index = 0 }: ProjectCardProps) => {
     <AnimateOnScroll delay={index * 0.1}>
       <ProjectCardWrapper 
         data-testid="project-item"
+        data-cy="project-card"
         $featured={project.featured}
       >
         <ProjectImageWrapper>

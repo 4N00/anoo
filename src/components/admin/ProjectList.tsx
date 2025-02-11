@@ -158,7 +158,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit, onDelete, o
   const regularProjects = projects.filter((p) => !p.featured);
 
   return (
-    <ListContainer>
+    <ListContainer data-cy="admin-projects-table">
       <DragDropContext onDragEnd={handleDragEnd}>
         {featuredProjects.length > 0 && (
           <>
@@ -177,11 +177,12 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit, onDelete, o
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           $isDragging={snapshot.isDragging}
+                          data-cy="admin-project-row"
                         >
                           <DragHandle {...provided.dragHandleProps}>
                             <GripVertical />
                           </DragHandle>
-                          <ProjectTitle>{project.title}</ProjectTitle>
+                          <ProjectTitle data-cy="project-title">{project.title}</ProjectTitle>
                           <MetaItem>
                             <User />
                             Admin
@@ -225,11 +226,12 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onEdit, onDelete, o
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       $isDragging={snapshot.isDragging}
+                      data-cy="admin-project-row"
                     >
                       <DragHandle {...provided.dragHandleProps}>
                         <GripVertical />
                       </DragHandle>
-                      <ProjectTitle>{project.title}</ProjectTitle>
+                      <ProjectTitle data-cy="project-title">{project.title}</ProjectTitle>
                       <MetaItem>
                         <User />
                         Admin
