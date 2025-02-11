@@ -1,39 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { forwardRef } from 'react';
 import { ContactInfo, ContentWrapper, FooterContainer, FooterInfo, FooterLink, LargeText, LargeTextSection, LinkColumn, NavigationGroup, SmallText, TopNavigation } from './styles';
 import { useLanguage } from '@/context/LanguageContext';
 
-
-const PageFooter = () => {
-  const textRef = useRef<HTMLHeadingElement>(null);
+const PageFooter = forwardRef<HTMLDivElement>((props, ref) => {
   const { t } = useLanguage();
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      },
-      {
-        threshold: 0.1,
-      }
-    );
-
-    if (textRef.current) {
-      observer.observe(textRef.current);
-    }
-
-    return () => {
-      if (textRef.current) {
-        observer.unobserve(textRef.current);
-      }
-    };
-  }, []);
+  const currentYear = new Date().getFullYear();
 
   return (
-    <FooterContainer>
+    <FooterContainer ref={ref}>
       <ContentWrapper>
         <TopNavigation>
           <SmallText>{t('footer.collaborate')}</SmallText>
@@ -51,11 +25,10 @@ const PageFooter = () => {
               </LinkColumn>
             </NavigationGroup>
           </div>
-
         </TopNavigation>
 
         <LargeTextSection>
-          <LargeText ref={textRef}>
+          <LargeText>
             {t('about.closing')}
           </LargeText>
         </LargeTextSection>
@@ -67,6 +40,8 @@ const PageFooter = () => {
       </ContentWrapper>
     </FooterContainer>
   );
-};
+});
+
+PageFooter.displayName = 'PageFooter';
 
 export default PageFooter;

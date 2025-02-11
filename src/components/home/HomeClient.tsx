@@ -9,6 +9,7 @@ import { ProjectUI } from '@/types/project';
 import { debounce } from '@/utils/helpers';
 import { useBackground } from '@/context/BackgroundContext';
 import Container from '../ui/container/Container';
+import { MainContainer } from '@/app/styles';
 
 interface HomeClientProps {
   initialProjects: ProjectUI[];
@@ -112,10 +113,12 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
 
   return (
     <Container>
+      <MainContainer>
         <motion.div style={{ opacity }}>
           <HeroSection />
         </motion.div>
         <ProjectSection ref={projectsRef} projects={projects} />
+      </MainContainer>
     </Container>
   );
 };

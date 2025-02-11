@@ -12,7 +12,7 @@ declare const it: any;
 declare const expect: any;
 
 // Mock the styled components
-jest.mock('@/styles/AboutStyles', () => ({
+jest.mock('@/app/about/styles', () => ({
   SectionContainer: ({ children, ...props }: React.PropsWithChildren<any>) => (
     <div {...stripAllProps(props)}>{children}</div>
   ),

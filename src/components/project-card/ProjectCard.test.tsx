@@ -1,3 +1,4 @@
+/// <reference types="jest" />
 /// <reference types="@types/jest" />
 /// <reference types="@testing-library/jest-dom" />
 import '@testing-library/jest-dom';
@@ -31,6 +32,24 @@ const mockProject: ProjectUI = {
   updatedAt: new Date(),
   version: 1,
 };
+
+// Mock framer-motion
+jest.mock('framer-motion', () => ({
+  motion: {
+    div: ({ children, ...props }: React.PropsWithChildren<any>) => {
+      const { 
+        whileInView: _whileInView,
+        viewport: _viewport,
+        initial: _initial,
+        animate: _animate, 
+        transition: _transition,
+        ...rest 
+      } = props;
+      return <div {...rest}>{children}</div>;
+    }
+  },
+  AnimatePresence: ({ children }: React.PropsWithChildren<any>) => <>{children}</>,
+}));
 
 describe('ProjectCard', () => {
   it('renders project title and description', () => {

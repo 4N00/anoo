@@ -8,9 +8,22 @@ const MOTION_PROPS = [
   'variants',
   'transition',
   'viewport',
+  'whileTap',
+  'exit'
 ];
 
-const STYLED_PROPS = ['$isOpen', '$variant', '$featured', 'as'];
+const STYLED_PROPS = [
+  '$isOpen',
+  '$variant',
+  '$featured',
+  '$isMenuOpen',
+  '$isActive',
+  '$status',
+  '$isDragging',
+  '$isDraggingOver',
+  '$color',
+  'as'
+];
 
 export const stripMotionProps = (props: AnyProps) => {
   const rest = { ...props };

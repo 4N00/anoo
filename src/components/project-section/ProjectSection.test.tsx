@@ -33,7 +33,7 @@ jest.mock('../project-card/styles', () => ({
   ),
 }));
 
-jest.mock('@/styles/HomeStyles', () => ({
+jest.mock('@/app/styles', () => ({
   HeaderText: ({ children, ...props }: React.PropsWithChildren<any>) => (
     <h2 data-testid="header-text" {...props}>{children}</h2>
   ),

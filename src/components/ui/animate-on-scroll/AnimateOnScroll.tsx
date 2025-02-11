@@ -1,44 +1,29 @@
-import React, { useEffect, useRef } from 'react';
-import { motion, useInView, useAnimation } from 'framer-motion';
+import React, { forwardRef } from 'react';
+import { motion } from 'framer-motion';
 
-export interface AnimateOnScrollProps {
+interface AnimateOnScrollProps {
   children: React.ReactNode;
   delay?: number;
   className?: string;
 }
 
-const AnimateOnScroll: React.FC<AnimateOnScrollProps> = ({ 
-  children, 
-  delay = 0,
-  className 
-}) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true });
-  const controls = useAnimation();
+const AnimateOnScroll = forwardRef<HTMLDivElement, AnimateOnScrollProps>(
+  ({ children, delay = 0, className }, ref) => {
+    return (
+      <motion.div
+        ref={ref}
+        className={className}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay }}
+      >
+        {children}
+      </motion.div>
+    );
+  }
+);
 
-  useEffect(() => {
-    if (isInView) {
-      controls.start({
-        y: 0,
-        opacity: 1,
-        transition: {
-          duration: 0.5,
-          delay
-        }
-      });
-    }
-  }, [isInView, controls, delay]);
-
-  return (
-    <motion.div
-      ref={ref}
-      className={className}
-      initial={{ y: 50, opacity: 0 }}
-      animate={controls}
-    >
-      {children}
-    </motion.div>
-  );
-};
+AnimateOnScroll.displayName = 'AnimateOnScroll';
 
 export default AnimateOnScroll; 
