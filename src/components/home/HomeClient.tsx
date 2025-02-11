@@ -6,9 +6,9 @@ import HeroSection from '@/components/hero/Hero';
 import ProjectSection from '@/components/project-section/ProjectSection';
 import { useProjects } from '@/hooks/useProjects';
 import { ProjectUI } from '@/types/project';
-import { MainContainer } from '@/styles/HomeStyles';
 import { debounce } from '@/utils/helpers';
 import { useBackground } from '@/context/BackgroundContext';
+import Container from '../ui/container/Container';
 
 interface HomeClientProps {
   initialProjects: ProjectUI[];
@@ -111,12 +111,12 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
   }, [setBackgroundColor]);
 
   return (
-    <MainContainer>
-      <motion.div style={{ opacity }}>
-        <HeroSection />
-      </motion.div>
-      <ProjectSection ref={projectsRef} projects={projects} />
-    </MainContainer>
+    <Container>
+        <motion.div style={{ opacity }}>
+          <HeroSection />
+        </motion.div>
+        <ProjectSection ref={projectsRef} projects={projects} />
+    </Container>
   );
 };
 

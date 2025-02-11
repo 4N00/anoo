@@ -6,7 +6,7 @@ import { Container, LoginCard, Title, Form, ErrorMessage } from './styles';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
 import { useAuth } from '@/context/AuthContext';
-import { FormInput } from '@/styles/ContactStyles';
+import { FormInput } from '@/app/contact/styles';
 import Button from '@/components/ui/button/Button';
 
 export default function LoginPage() {

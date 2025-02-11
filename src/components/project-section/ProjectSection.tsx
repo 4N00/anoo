@@ -4,7 +4,7 @@ import React, { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import ProjectCard from '../project-card/ProjectCard';
 import { ProjectContainer, ProjectGrid } from '../project-card/styles';
-import { HeaderText } from '@/styles/HomeStyles';
+import { HeaderText } from '@/app/styles';
 import { ProjectUI } from '@/types/project';
 
 const containerVariants = {

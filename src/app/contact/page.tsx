@@ -11,7 +11,7 @@ import {
   SubmitButton,
   Label,
   BackgroundText
-} from '../../styles/ContactStyles';
+} from './styles';
 
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);

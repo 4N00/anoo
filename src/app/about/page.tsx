@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { PageContainer, ContentWrapper } from '../../styles/AboutStyles';
+import { PageContainer, ContentWrapper } from './styles';
 import ProfileSection from '@/components/about/profile-section/ProfileSection';
 import SkillsSection from '@/components/about/skills-section/SkillsSection';
 
