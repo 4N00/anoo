@@ -7,9 +7,17 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ProjectUI, toProjectUI } from '@/types/project';
 import FormInput from '@/components/ui/input/Input';
 import Button from '@/components/ui/button/Button';
-import { styled } from 'styled-components';
 import { useToast } from '@/context/ToastContext';
 import { supabase } from '@/lib/supabase';
+import {
+  FormContainer,
+  FormHeader,
+  FormTitle,
+  InputGroup,
+  Label,
+  CheckboxContainer,
+  ButtonContainer
+} from './styles';
 
 // Form input type with tags as string
 type ProjectFormInput = {
@@ -35,51 +43,6 @@ const projectValidationSchema = z.object({
     .transform(str => str.trim())
     .refine(str => str === '' || /^https?:\/\//.test(str), 'Must be a valid URL if provided'),
 });
-
-const FormContainer = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1rem;
-  min-width: 50vw;
-`;
-
-const FormHeader = styled.div`
-  padding: ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.lg} 0;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.text.secondary}20;
-`;
-
-const FormTitle = styled.h2`
-  font-size: ${({ theme }) => theme.typography.fontSize.xl};
-  color: ${({ theme }) => theme.colors.text.primary};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-`;
-
-const InputGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
-
-const Label = styled.label`
-  color: ${({ theme }) => theme.colors.text.primary};
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-`;
-
-const CheckboxContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  gap: ${({ theme }) => theme.spacing.md};
-  justify-content: flex-end;
-  margin-top: ${({ theme }) => theme.spacing.xl};
-`;
 
 interface ProjectFormProps {
   project: ProjectUI | null;
