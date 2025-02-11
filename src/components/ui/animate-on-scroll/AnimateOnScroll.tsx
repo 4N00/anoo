@@ -17,6 +17,7 @@ const AnimateOnScroll = forwardRef<HTMLDivElement, AnimateOnScrollProps>(
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay }}
+        data-testid="animate-scroll"
       >
         {children}
       </motion.div>

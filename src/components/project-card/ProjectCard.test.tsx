@@ -36,19 +36,8 @@ const mockProject: ProjectUI = {
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: React.PropsWithChildren<any>) => {
-      const { 
-        whileInView: _whileInView,
-        viewport: _viewport,
-        initial: _initial,
-        animate: _animate, 
-        transition: _transition,
-        ...rest 
-      } = props;
-      return <div {...rest}>{children}</div>;
-    }
+    div: ({ children, ...props }: React.PropsWithChildren<any>) => <div {...props}>{children}</div>,
   },
-  AnimatePresence: ({ children }: React.PropsWithChildren<any>) => <>{children}</>,
 }));
 
 describe('ProjectCard', () => {
@@ -67,6 +56,6 @@ describe('ProjectCard', () => {
     renderWithTheme(<ProjectCard project={mockProject} />);
     const image = screen.getByAltText(mockProject.title);
     expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute('src', mockProject.imageUrl);
+    expect(image).toHaveAttribute('src', expect.stringContaining(encodeURIComponent(mockProject.imageUrl)));
   });
 }); 

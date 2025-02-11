@@ -53,7 +53,6 @@ const ProjectCard = ({ project, index = 0, priority = false, featured = false }:
             quality={priority ? 90 : 75}
             priority={priority}
             loading={priority ? 'eager' : 'lazy'}
-            fetchPriority={priority ? 'high' : 'low'}
             sizes={featured 
               ? "(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
               : "(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
@@ -64,7 +63,7 @@ const ProjectCard = ({ project, index = 0, priority = false, featured = false }:
               opacity: isLoaded ? 1 : 0,
               transition: 'opacity 0.5s ease-in-out',
             }}
-            onLoadingComplete={() => {
+            onLoad={() => {
               setIsLoaded(true);
             }}
           />
