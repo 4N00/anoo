@@ -66,6 +66,7 @@ export default function LoginPage() {
             required
             autoComplete="email"
             disabled={isProcessing}
+            data-cy="email-input"
           />
           <FormInput
             type="password"
@@ -75,8 +76,9 @@ export default function LoginPage() {
             required
             autoComplete="current-password"
             disabled={isProcessing}
+            data-cy="password-input"
           />
-          <Button type="submit" $variant="primary" disabled={isProcessing}>
+          <Button type="submit" $variant="primary" disabled={isProcessing} data-cy="login-button">
             {isProcessing ? 'Logging in...' : 'Log In'}
           </Button>
           {error && <ErrorMessage>{error}</ErrorMessage>}
