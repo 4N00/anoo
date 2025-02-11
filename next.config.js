@@ -4,6 +4,16 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+        port: '',
+        pathname: '**',
+      },
+    ],
+  },
   // Configure page extensions for hybrid rendering
   pageExtensions: ['tsx', 'ts'],
   // Static pages will be generated at build time

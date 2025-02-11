@@ -1,18 +1,7 @@
-'use client';
-
+import { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ProjectsProvider } from '../context/ProjectsContext';
-import { ThemeProvider } from '../styles/theme';
-import { AuthProvider } from '../context/AuthContext';
-import { ToastProvider } from '../context/ToastContext';
-import { BackgroundProvider } from '../context/BackgroundContext';
-import { LanguageProvider } from '../context/LanguageContext';
-import { AnimatePresence } from 'framer-motion';
-import styled, { createGlobalStyle } from 'styled-components';
-import GlobalStyles from '../styles/GlobalStyles';
-import PageFooter from '@/components/footer/Footer';
-import Navbar from '@/components/navbar/Navbar';
+import RootLayoutClient from '@/components/layout/RootLayoutClient';
+import FontLoader from '@/components/layout/FontLoader';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -20,82 +9,57 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-// Create a client
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      // Don't refetch on window focus to prevent hydration mismatches
-      refetchOnWindowFocus: false,
-      // Disable retries to prevent unnecessary server/client differences
-      retry: false,
-      // Start with empty cache on server
-      initialData: typeof window === 'undefined' ? undefined : undefined,
-    },
-  },
-});
-
-// Ensure the same instance is used
-const getQueryClient = () => {
-  if (typeof window === 'undefined') {
-    return queryClient;
-  }
-  // @ts-ignore - window._queryClient is fine for this use case
-  window._queryClient = window._queryClient ?? queryClient;
-  // @ts-ignore
-  return window._queryClient;
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#ffffff',
 };
 
-const MainContent = styled.div`
-  position: relative;
-  padding-top: 64px; /* Navbar height */
-`;
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    transition: background-color 0.6s ease;
-  }
-`;
+export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://anoo.nl'),
+  title: 'Anoo - Creative Developer Portfolio',
+  description: 'Portfolio showcasing creative development work and projects by Anoo. Specializing in React, TypeScript, and modern web development.',
+  keywords: 'developer, portfolio, react, typescript, web development',
+  robots: 'index, follow',
+  manifest: '/manifest.json',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: '/',
+    title: 'Anoo - Creative Developer Portfolio',
+    description: 'Portfolio showcasing creative development work and projects by Anoo.',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Anoo Portfolio',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Anoo - Creative Developer Portfolio',
+    description: 'Portfolio showcasing creative development work and projects by Anoo.',
+    images: ['/og-image.jpg'],
+  },
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.variable}>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link 
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Josefin+Sans:wght@400;500;600;700&display=swap" 
-          rel="stylesheet"
-          media="print"
-          onLoad={(e) => {
-            const link = e.currentTarget;
-            link.media = 'all';
-          }}
-        />
         <style>{`* { cursor: none !important; }`}</style>
       </head>
-      <body className={`${inter.className} ${inter.variable}`}>
-        <QueryClientProvider client={getQueryClient()}>
-          <ThemeProvider>
-            <GlobalStyle />
-            <GlobalStyles />
-            <ToastProvider>
-              <AuthProvider>
-                <ProjectsProvider>
-                  <BackgroundProvider>
-                    <LanguageProvider>
-                      <Navbar />
-                      <MainContent>
-                        <AnimatePresence mode="wait">{children}</AnimatePresence>
-                      </MainContent>
-                      <PageFooter />
-                    </LanguageProvider>
-                  </BackgroundProvider>
-                </ProjectsProvider>
-              </AuthProvider>
-            </ToastProvider>
-          </ThemeProvider>
-        </QueryClientProvider>
+      <body className={inter.className}>
+        <FontLoader />
+        <RootLayoutClient>{children}</RootLayoutClient>
       </body>
     </html>
   );
