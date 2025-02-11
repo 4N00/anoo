@@ -44,6 +44,18 @@ const nextConfig = {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
           },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
         ],
       },
     ];
@@ -58,11 +70,12 @@ const nextConfig = {
       // Split chunks more aggressively
       config.optimization.splitChunks = {
         chunks: 'all',
-        minSize: 20000,
+        minSize: 10000,
         maxSize: 244000,
         minChunks: 1,
         maxAsyncRequests: 30,
         maxInitialRequests: 30,
+        enforceSizeThreshold: 50000,
         cacheGroups: {
           default: false,
           vendors: false,
@@ -75,7 +88,7 @@ const nextConfig = {
           },
           lib: {
             test(module) {
-              return module.size() > 160000 &&
+              return module.size() > 80000 &&
                 /node_modules[/\\]/.test(module.identifier());
             },
             name(module) {
@@ -91,6 +104,7 @@ const nextConfig = {
             name: 'commons',
             minChunks: 2,
             priority: 20,
+            reuseExistingChunk: true,
           },
           shared: {
             name(module, chunks) {
@@ -102,11 +116,12 @@ const nextConfig = {
             priority: 10,
             minChunks: 2,
             reuseExistingChunk: true,
+            enforce: true,
           },
         },
       };
 
-      // Compress images
+      // Compress images more aggressively
       config.module.rules.push({
         test: /\.(jpe?g|png|svg|gif|ico|webp)$/,
         use: [
@@ -115,25 +130,32 @@ const nextConfig = {
             options: {
               mozjpeg: {
                 progressive: true,
-                quality: 65,
+                quality: 60,
               },
               optipng: {
                 enabled: true,
+                optimizationLevel: 7,
               },
               pngquant: {
-                quality: [0.65, 0.90],
+                quality: [0.60, 0.80],
                 speed: 4,
               },
               gifsicle: {
                 interlaced: false,
+                optimizationLevel: 3,
               },
               webp: {
-                quality: 75,
+                quality: 70,
+                method: 6,
               },
             },
           },
         ],
       });
+
+      // Minify JavaScript more aggressively
+      config.optimization.minimize = true;
+      config.optimization.concatenateModules = true;
     }
     return config;
   },

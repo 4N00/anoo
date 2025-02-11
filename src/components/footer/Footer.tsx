@@ -1,6 +1,19 @@
 import React, { forwardRef } from 'react';
 import { ContactInfo, ContentWrapper, FooterContainer, FooterInfo, FooterLink, LargeText, LargeTextSection, LinkColumn, NavigationGroup, SmallText, TopNavigation } from './styles';
 import { useLanguage } from '@/context/LanguageContext';
+import { motion } from 'framer-motion';
+
+const textVariants = {
+  initial: { y: 100, opacity: 0 },
+  animate: { 
+    y: 0, 
+    opacity: 1,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+    }
+  }
+};
 
 const PageFooter = forwardRef<HTMLDivElement>((props, ref) => {
   const { t } = useLanguage();
@@ -28,9 +41,15 @@ const PageFooter = forwardRef<HTMLDivElement>((props, ref) => {
         </TopNavigation>
 
         <LargeTextSection>
-          <LargeText>
-            {t('about.closing')}
-          </LargeText>
+          <motion.div
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <LargeText as={motion.h2} variants={textVariants}>
+              {t('about.closing')}
+            </LargeText>
+          </motion.div>
         </LargeTextSection>
 
         <FooterInfo>

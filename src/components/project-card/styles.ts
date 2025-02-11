@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 interface ProjectContainerProps {
   $featured?: boolean;
@@ -105,4 +106,10 @@ export const ProjectDescription = styled.p`
   margin: 0;
   color: ${({ theme }) => theme.colors.text.contrast};
   opacity: 0.9;
+`;
+
+export const BlurImage = styled(Image)`
+  position: relative;
+  z-index: 1;
+  transition: opacity 0.5s ease-in-out;
 `;

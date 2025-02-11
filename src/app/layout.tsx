@@ -1,7 +1,15 @@
 import { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
-import RootLayoutClient from '@/components/layout/RootLayoutClient';
-import FontLoader from '@/components/layout/FontLoader';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+
+const RootLayoutClient = dynamic(() => import('@/components/layout/RootLayoutClient'), {
+  ssr: true
+});
+
+const FontLoader = dynamic(() => import('@/components/layout/FontLoader'), {
+  ssr: false
+});
 
 const inter = Inter({
   subsets: ['latin'],
@@ -58,8 +66,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <style>{`* { cursor: none !important; }`}</style>
       </head>
       <body className={inter.className}>
-        <FontLoader />
-        <RootLayoutClient>{children}</RootLayoutClient>
+        <Suspense fallback={null}>
+          <FontLoader />
+        </Suspense>
+        <Suspense fallback={<div style={{ minHeight: '100vh' }} />}>
+          <RootLayoutClient>{children}</RootLayoutClient>
+        </Suspense>
       </body>
     </html>
   );
