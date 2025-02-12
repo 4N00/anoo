@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { supabase } from '../../lib/supabase';
+import { supabase } from '@/lib/supabase';
 import { Container, LoginCard, Title, Form, ErrorMessage } from './styles';
 import { useRouter } from 'next/navigation';
-import { useToast } from '../../context/ToastContext';
-import { useAuth } from '../../context/AuthContext';
-import { FormInput } from '../contact/styles';
-import { Button } from '../../components/ui';
+import { useToast } from '@/context/ToastContext';
+import { useAuth } from '@/context/AuthContext';
+import { FormInput } from '@/app/contact/styles';
+import { Button } from '@/components/ui';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');

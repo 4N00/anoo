@@ -1,17 +1,17 @@
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ProjectsProvider } from '../../context/ProjectsContext';
-import { ThemeProvider } from '../../styles/theme';
-import { AuthProvider } from '../../context/AuthContext';
-import { ToastProvider } from '../../context/ToastContext';
-import { BackgroundProvider } from '../../context/BackgroundContext';
-import { LanguageProvider } from '../../context/LanguageContext';
+import { ProjectsProvider } from '@/context/ProjectsContext';
+import { ThemeProvider } from '@/styles/theme';
+import { AuthProvider } from '@/context/AuthContext';
+import { ToastProvider } from '@/context/ToastContext';
+import { BackgroundProvider } from '@/context/BackgroundContext';
+import { LanguageProvider } from '@/context/LanguageContext';
 import { AnimatePresence } from 'framer-motion';
 import styled, { createGlobalStyle } from 'styled-components';
-import GlobalStyles from '../../styles/GlobalStyles';
-import PageFooter from "../../components/footer/Footer";
-import Navbar from "../../components/navbar/Navbar";
+import GlobalStyles from '@/styles/GlobalStyles';
+import PageFooter from "@/components/footer/Footer";
+import Navbar from "@/components/navbar/Navbar";
 
 // Create a client
 const queryClient = new QueryClient({

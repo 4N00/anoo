@@ -10,8 +10,34 @@
   NEXT_TELEMETRY_DISABLED = "1"
   NEXT_SHARP_PATH = "/tmp/node_modules/sharp"
 
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  bundle = true
+  minify = true
+
+[build.processing.html]
+  pretty_urls = true
+
+[build.processing.images]
+  compress = true
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Cache configuration
+[[plugins]]
+  package = "netlify-plugin-cache"
+  [plugins.inputs]
+    paths = [
+      ".next/cache",          # Next.js build cache
+      "node_modules/.cache"   # Node modules cache
+    ]
 
 # Handle robots.txt and sitemap.xml first
 [[redirects]]
@@ -32,4 +58,4 @@
 
 [functions]
   node_bundler = "esbuild"
-  included_files = ["node_modules/sharp/**/*"] 
+  included_files = ["node_modules/sharp/**/*"]

@@ -19,6 +19,9 @@ const nextConfig = {
     },
     swcMinify: true,
   },
+  // Enable build caching
+  cache: true,
+  output: 'standalone',
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -67,12 +70,9 @@ const nextConfig = {
     ];
   },
   webpack: (config) => {
-    config.resolve = {
-      ...config.resolve,
-      alias: {
-        ...config.resolve.alias,
-        '@': join(__dirname, 'src'),
-      },
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': join(__dirname, 'src'),
     };
     return config;
   },
