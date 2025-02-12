@@ -10,21 +10,12 @@ const config = {
   compiler: {
     styledComponents: true,
   },
-  experimental: {
-    turbotrace: {
-      memoryLimit: 4096,
-      logLevel: 'error'
-    },
-    swcMinify: true,
-  },
   images: {
     domains: ['ognrjtlftwwrjgfdpzmy.supabase.co'],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: '**',
-        port: '',
-        pathname: '**',
       },
     ],
   },
@@ -38,22 +29,24 @@ const config = {
     };
     return config;
   },
+  // Production optimizations
   poweredByHeader: false,
-  generateEtags: true,
-  compress: true,
-  trailingSlash: false,
-  // Optimize build performance
-  onDemandEntries: {
-    maxInactiveAge: 25 * 1000,
-    pagesBufferLength: 2,
-  },
+  reactStrictMode: true,
+  swcMinify: true,
+  // Build optimizations
   typescript: {
     ignoreBuildErrors: true, // Temporarily ignore TS errors during build
   },
   eslint: {
-    ignoreDuringBuilds: true, // Temporarily ignore ESLint errors during build
+    ignoreDuringBuilds: true
   },
-  swcMinify: true,
+  experimental: {
+    // Configure turbotrace properly
+    turbotrace: {
+      enabled: true,
+      memoryLimit: 4096
+    }
+  },
   // Ignore certain patterns during build
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'].filter(ext => !ext.includes('test')),
   output: 'standalone'
