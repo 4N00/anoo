@@ -8,6 +8,7 @@
   NEXT_PRIVATE_OUTPUT_TRACE_TO_CONSOLE = "1"
   NODE_VERSION = "20.11.0"
   NEXT_TELEMETRY_DISABLED = "1"
+  NEXT_SHARP_PATH = "/tmp/node_modules/sharp"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
@@ -30,4 +31,5 @@
   status = 200
 
 [functions]
-  node_bundler = "esbuild" 
+  node_bundler = "esbuild"
+  included_files = ["node_modules/sharp/**/*"] 

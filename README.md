@@ -1,6 +1,4 @@
-# Anoo Portfolio
-
-A modern portfolio website built with Next.js 14, TypeScript, and Styled Components.
+# Anoo's Portfolio
 
 ## Features
 
@@ -15,7 +13,6 @@ A modern portfolio website built with Next.js 14, TypeScript, and Styled Compone
 - 📱 Responsive design
 - ⚡ Hybrid rendering (SSG + SSR)
 - 🎭 Framer Motion animations
-- 🎨 Custom cursor and scroll animations
 
 ## Demo Admin Access
 
@@ -123,6 +120,35 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [Resend](https://resend.com/) - Email service
 - [Jest](https://jestjs.io/) - Unit testing
 - [Cypress](https://www.cypress.io/) - E2E testing
+
+## Framework & Build
+
+This project is built with:
+- [Next.js 14](https://nextjs.org/) - React Framework
+- [Node.js 20.11.0](https://nodejs.org/) - JavaScript Runtime
+- [TypeScript](https://www.typescriptlang.org/) - Type Safety
+- [Styled Components](https://styled-components.com/) - Styling
+
+## Project Structure
+
+```
+src/
+├── app/                 # Next.js App Router pages
+├── components/          # React components
+├── context/            # React context providers
+├── hooks/              # Custom React hooks
+├── lib/                # Utility libraries
+├── styles/             # Global styles and themes
+├── translations/       # Language files
+└── types/              # TypeScript types
+```
+
+## Build Configuration
+- Build Command: `npm run build`
+- Output Directory: `.next`
+- Node Version: 20.11.0
+- Framework: Next.js 14
+- Deployment Platform: Netlify
 
 ## License
 
