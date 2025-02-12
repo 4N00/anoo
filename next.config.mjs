@@ -53,7 +53,10 @@ const config = {
   eslint: {
     ignoreDuringBuilds: true, // Temporarily ignore ESLint errors during build
   },
-  swcMinify: true
+  swcMinify: true,
+  // Ignore certain patterns during build
+  pageExtensions: ['tsx', 'ts', 'jsx', 'js'].filter(ext => !ext.includes('test')),
+  output: 'standalone'
 };
 
 export default config; 
