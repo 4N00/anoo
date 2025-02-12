@@ -5,8 +5,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ProjectUI, toProjectUI } from '@/types/project';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Input, Button } from '@/components/ui';
 import { useToast } from '@/context/ToastContext';
 import { supabase } from '@/lib/supabase';
 import {
