@@ -11,10 +11,8 @@ const config = {
     styledComponents: true,
   },
   experimental: {
-    turbotrace: {
-      memoryLimit: 4096,
-      logLevel: 'error'
-    },
+    // Disable turbotrace as it's causing the path collection issue
+    turbotrace: false,
     swcMinify: true,
   },
   images: {
@@ -56,7 +54,19 @@ const config = {
   swcMinify: true,
   // Ignore certain patterns during build
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'].filter(ext => !ext.includes('test')),
-  output: 'standalone'
+  output: 'standalone',
+  // Minimize traced files
+  modularizeImports: {
+    '@mui/material': {
+      transform: '@mui/material/{{member}}',
+    },
+    '@mui/icons-material': {
+      transform: '@mui/icons-material/{{member}}',
+    },
+    'framer-motion': {
+      transform: 'framer-motion/{{member}}',
+    },
+  }
 };
 
 export default config; 
