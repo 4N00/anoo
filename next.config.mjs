@@ -18,7 +18,6 @@ const config = {
     },
     swcMinify: true,
   },
-  // Remove output: 'export' since we're using middleware
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -44,6 +43,8 @@ const config = {
   poweredByHeader: false,
   generateEtags: true,
   compress: true,
+  trailingSlash: false,
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/_next' : '',
 };
 
 export default config; 

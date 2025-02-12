@@ -4,12 +4,32 @@
 
 [build.environment]
   NEXT_USE_NETLIFY_EDGE = "true"
-  NEXT_PRIVATE_TARGET = "server"
-  NODE_VERSION = "20.11.0"
   NEXT_TELEMETRY_DISABLED = "1"
+  NODE_VERSION = "20.11.0"
+  NEXT_PRIVATE_TARGET = "server"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+  from = "http://anoo.nl/*"
+  to = "https://www.anoo.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://anoo.nl/*"
+  to = "https://www.anoo.nl/:splat"
+  status = 301
+  force = true
 
 [[redirects]]
   from = "/*"
@@ -20,7 +40,7 @@
 [functions]
   node_bundler = "esbuild"
   included_files = ["node_modules/sharp/**/*"]
-  external_node_modules = ["@swc/core"]
+  external_node_modules = ["@swc/core", "typescript"]
 
 [build.processing]
   skip_processing = true
