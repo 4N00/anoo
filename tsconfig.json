@@ -45,10 +45,7 @@
       {
         "name": "next"
       }
-    ],
-
-    // Test types
-    "types": ["jest", "@testing-library/jest-dom"]
+    ]
   },
   "include": [
     "next-env.d.ts",
@@ -63,6 +60,11 @@
     ".next",
     "out",
     "cypress.config.ts",
-    "cypress"
+    "cypress",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "src/test-utils/**/*",
+    "jest.config.ts",
+    "jest.setup.ts"
   ]
 }

@@ -7,17 +7,18 @@ on:
     branches: [ main ]
 
 jobs:
-  protect-main:
+  check-branch:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && github.event.pull_request == null
     steps:
       - name: Block direct commits to main
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
-          echo "❌ Direct commits to main branch are not allowed"
+          echo "❌ Direct commits to main branch are not allowed. Please create a pull request instead."
           exit 1
 
   build-and-test:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref != 'refs/heads/main')
     steps:
       - uses: actions/checkout@v4
       
