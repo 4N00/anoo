@@ -11,7 +11,7 @@ import { AnimatePresence } from 'framer-motion';
 import styled, { createGlobalStyle } from 'styled-components';
 import GlobalStyles from '@/styles/GlobalStyles';
 import PageFooter from "@/components/footer/Footer";
-import Navbar from '@/components/navbar/Navbar';
+import Navbar from '../navbar/Navbar';
 
 // Create a client
 const queryClient = new QueryClient({
