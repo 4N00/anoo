@@ -10,7 +10,6 @@
   },
   "hero": {
     "greeting": "HEY,",
-
     "introduction": "IK BEN",
     "name": "ANOO.",
     "subtitle": "Scroll om mijn werk te bekijken - neem contact op als je mijn werk waardeert.",
@@ -25,11 +24,25 @@
     "title": "Neem Contact Op",
     "subtitle": "Laten we samen iets moois creëren",
     "form": {
-      "name": "Jouw Naam",
-      "email": "Jouw E-mail",
-      "message": "Jouw Bericht",
+      "name": "Naam",
+      "namePlaceholder": "Wat is je naam?",
+      "email": "E-mail",
+      "emailPlaceholder": "Wat is je e-mailadres?",
+      "phone": "Telefoon",
+      "phonePlaceholder": "Wat is je telefoonnummer?",
+      "company": "Bedrijf",
+      "companyPlaceholder": "Wat is de naam van je bedrijf?",
+      "message": "Bericht",
+      "messagePlaceholder": "Vertel me over je project of idee...",
       "send": "Verstuur Jouw Bericht",
-      "click_to_send": "Klik om te Versturen"
+      "click_to_send": "Klik om te Versturen",
+      "sending": "Versturen...",
+      "success": "Bericht succesvol verzonden!",
+      "error": "Bericht versturen mislukt. Probeer het opnieuw.",
+      "nameRequired": "Naam is verplicht",
+      "emailRequired": "E-mail is verplicht",
+      "emailInvalid": "Voer een geldig e-mailadres in",
+      "messageRequired": "Bericht is verplicht"
     },
     "info": {
       "title": "Contactgegevens",
