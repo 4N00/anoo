@@ -5,8 +5,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ProjectUI, toProjectUI } from '@/types/project';
-import FormInput from '@/components/ui/input/Input';
-import Button from '@/components/ui/button/Button';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { useToast } from '@/context/ToastContext';
 import { supabase } from '@/lib/supabase';
 import {
@@ -153,7 +153,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSave, onClose }) =
       <FormContainer onSubmit={handleSubmit(handleFormSubmit)}>
         <InputGroup>
           <Label>Title</Label>
-          <FormInput
+          <Input
             {...register('title')}
             placeholder="Project Title"
             error={errors.title?.message}
@@ -162,7 +162,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSave, onClose }) =
 
         <InputGroup>
           <Label>Description</Label>
-          <FormInput
+          <Input
             {...register('description')}
             placeholder="Project Description"
             error={errors.description?.message}
@@ -171,7 +171,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSave, onClose }) =
 
         <InputGroup>
           <Label>Image URL</Label>
-          <FormInput
+          <Input
             {...register('imageUrl')}
             placeholder="Image URL"
             error={errors.imageUrl?.message}
@@ -180,7 +180,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSave, onClose }) =
 
         <InputGroup>
           <Label>Tags</Label>
-          <FormInput
+          <Input
             {...register('tags')}
             placeholder="Tags (comma separated, e.g., React, TypeScript, Next.js)"
             error={errors.tags?.message}
@@ -194,7 +194,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSave, onClose }) =
 
         <InputGroup>
           <Label>GitHub URL (optional)</Label>
-          <FormInput
+          <Input
             {...register('githubUrl')}
             placeholder="GitHub URL (leave empty if none)"
             error={errors.githubUrl?.message}
@@ -203,7 +203,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSave, onClose }) =
 
         <InputGroup>
           <Label>Live URL (optional)</Label>
-          <FormInput
+          <Input
             {...register('liveUrl')}
             placeholder="Live URL (leave empty if none)"
             error={errors.liveUrl?.message}

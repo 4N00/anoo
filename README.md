@@ -71,13 +71,6 @@ The project employs a comprehensive testing approach:
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js 18.17.0 or later
-- npm or yarn
-- Supabase account
-- Resend account for email functionality
-
 ### Installation
 
 1. Clone the repository:
