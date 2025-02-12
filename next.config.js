@@ -7,27 +7,12 @@ const nextConfig = {
     styledComponents: true,
   },
   experimental: {
-    optimizeCss: true,
+    optimizeCss: false,
     turbotrace: {
-      memoryLimit: 4096
-    }
-  },
-  webpack: (config, { dev }) => {
-    config.resolve = {
-      ...config.resolve,
-      fallback: {
-        ...config.resolve.fallback,
-        fs: false,
-        path: false,
-      },
-    };
-
-    // Enable webpack caching in production
-    if (!dev) {
-      config.cache = true;
-    }
-
-    return config;
+      memoryLimit: 4096,
+      logLevel: 'error'
+    },
+    swcMinify: true,
   },
   images: {
     unoptimized: true,
@@ -79,6 +64,7 @@ const nextConfig = {
   poweredByHeader: false,
   generateEtags: true,
   compress: true,
+  swcMinify: true,
 };
 
 module.exports = nextConfig;
