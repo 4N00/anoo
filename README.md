@@ -11,7 +11,7 @@
 - 📧 Contact form with Resend email integration
 - 🧪 Testing with Jest and Cypress
 - 📱 Responsive design
-- ⚡ Hybrid rendering (SSG + SSR)
+- ⚡ Hybrid rendering (ISR + SSR)
 - 🎭 Framer Motion animations
 
 ## Demo Admin Access
@@ -33,12 +33,10 @@ Password: admin
 The application uses a hybrid rendering approach for optimal performance and
 security:
 
-- **Static Site Generation (SSG)**
-
-  - Public-facing pages (home, about, contact) are statically generated at build
-    time
+- **Incremental Static Regeneration (ISR)**
+  - Public-facing pages (home, about, contact) use ISR
   - Static data is revalidated every hour
-  - Enhanced with client-side interactivity where needed
+  - Enhanced with client-side interactivity
   - Optimized for performance and SEO
 
 - **Server-Side Rendering (SSR)**
@@ -52,7 +50,6 @@ security:
 The project employs a comprehensive testing approach:
 
 - **End-to-End Testing (Cypress)**
-
   - Tests complete user flows and critical paths
   - Covers authentication and authorization
   - Tests responsive design across different viewports
@@ -148,7 +145,7 @@ src/
 - Output Directory: `.next`
 - Node Version: 20.11.0
 - Framework: Next.js 14
-- Deployment Platform: Netlify
+- Deployment Platform: Vercel
 
 ## License
 
