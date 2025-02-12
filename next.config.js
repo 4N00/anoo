@@ -10,7 +10,7 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   experimental: {
-    optimizeCss: true,
+    optimizeCss: false,
     optimizeServerReact: true,
     serverMinification: true,
     turbotrace: {
@@ -32,6 +32,7 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128],
     minimumCacheTTL: 31536000,
     formats: ['image/webp', 'image/avif'],
+    domains: ['ognrjtlftwwrjgfdpzmy.supabase.co'],
   },
   // Configure page extensions for hybrid rendering
   pageExtensions: ['tsx', 'ts'],
