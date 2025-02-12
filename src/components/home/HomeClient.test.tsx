@@ -5,6 +5,7 @@ import '@testing-library/jest-dom';
 import HomeClient from './HomeClient';
 import type { ProjectUI } from '@/types/project';
 import { render } from '@/test-utils/test-utils';
+import { lightTheme } from '@/styles/themeConfig';
 
 // Declare Jest globals
 declare const jest: any;
@@ -19,6 +20,16 @@ jest.mock('@/hooks/useProjects', () => ({
   useProjects: () => ({
     fetchMoreProjects: mockFetchMoreProjects,
   }),
+}));
+
+// Mock theme context
+jest.mock('@/styles/theme', () => ({
+  useTheme: () => ({
+    theme: lightTheme,
+    isDark: false,
+    toggleTheme: jest.fn()
+  }),
+  ThemeProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>
 }));
 
 // Mock components
@@ -59,6 +70,17 @@ jest.mock('@/components/trefoil-knot/TrefoilKnot', () => {
     return <div data-testid="trefoil-knot">Trefoil Knot</div>;
   };
 });
+
+// Mock BackgroundContext
+jest.mock('@/context/BackgroundContext', () => ({
+  BackgroundProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  useBackground: () => ({
+    backgroundColor: '#f5f5f5',
+    setBackgroundColor: jest.fn(),
+    showTrefoil: true,
+    setShowTrefoil: jest.fn(),
+  }),
+}));
 
 describe('HomeClient', () => {
   const mockInitialProjects: ProjectUI[] = [

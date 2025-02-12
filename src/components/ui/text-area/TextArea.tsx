@@ -11,7 +11,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     return (
       <TextAreaContainer>
         {label && <Label>{label}</Label>}
-        <StyledTextArea ref={ref} className={className} {...props} />
+        <StyledTextArea ref={ref} className={className} $hasError={!!error} {...props} />
         {error && <ErrorMessage>{error}</ErrorMessage>}
       </TextAreaContainer>
     );

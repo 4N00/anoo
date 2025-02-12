@@ -1,33 +1,32 @@
+/// <reference types="@types/jest" />
+/// <reference types="@testing-library/jest-dom" />
+import '@testing-library/jest-dom';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { ThemeProvider } from 'styled-components';
-import { theme } from '@/styles/themeConfig';
+import { render, screen } from '@/test-utils/test-utils';
 import AnimateOnScroll from './AnimateOnScroll';
 
-const renderWithTheme = (component: React.ReactNode) => {
-  return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
-};
+declare const describe: any;
+declare const it: any;
+declare const expect: any;
 
 describe('AnimateOnScroll', () => {
   it('renders children correctly', () => {
-    const testText = 'Test Content';
-    renderWithTheme(
+    render(
       <AnimateOnScroll>
-        <div>{testText}</div>
+        <div>Test content</div>
       </AnimateOnScroll>
     );
-
-    expect(screen.getByText(testText)).toBeInTheDocument();
+    expect(screen.getByText('Test content')).toBeInTheDocument();
   });
 
   it('applies custom className', () => {
-    const testClass = 'custom-class';
-    const { container } = renderWithTheme(
-      <AnimateOnScroll className={testClass}>
-        <div>Content</div>
+    const customClass = 'custom-class';
+    render(
+      <AnimateOnScroll className={customClass}>
+        <div>Test content</div>
       </AnimateOnScroll>
     );
-
-    expect(container.firstChild).toHaveClass(testClass);
+    const element = screen.getByTestId('animate-scroll');
+    expect(element).toHaveClass(customClass);
   });
 }); 

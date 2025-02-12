@@ -5,28 +5,23 @@ import '@testing-library/jest-dom';
 import 'jest-styled-components';
 import React from 'react';
 import { render, screen } from '@/test-utils/test-utils';
-import { ThemeProvider } from 'styled-components';
-import { theme } from '@/styles/themeConfig';
 import ProjectCard from './ProjectCard';
 import { ProjectUI } from '@/types/project';
 
+declare const jest: any;
 declare const describe: any;
 declare const it: any;
 declare const expect: any;
-
-const renderWithTheme = (component: React.ReactNode) => {
-  return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
-};
 
 const mockProject: ProjectUI = {
   id: '1',
   title: 'Test Project',
   description: 'Test Description',
-  imageUrl: 'https://example.com/image.jpg',
+  imageUrl: '/test-image.jpg',
   tags: ['React', 'TypeScript'],
-  featured: false,
+  liveUrl: 'https://test.com',
   githubUrl: 'https://github.com/test',
-  liveUrl: 'https://example.com',
+  featured: false,
   displayOrder: 1,
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -42,20 +37,22 @@ jest.mock('framer-motion', () => ({
 
 describe('ProjectCard', () => {
   it('renders project title and description', () => {
-    renderWithTheme(<ProjectCard project={mockProject} />);
+    render(<ProjectCard project={mockProject} />);
     expect(screen.getByText(mockProject.title)).toBeInTheDocument();
     expect(screen.getByText(mockProject.description)).toBeInTheDocument();
   });
 
   it('renders project tags', () => {
-    renderWithTheme(<ProjectCard project={mockProject} />);
-    expect(screen.getByText(mockProject.tags.slice(0, 2).join(' / '))).toBeInTheDocument();
+    render(<ProjectCard project={mockProject} />);
+    // Tags are rendered as "React / TypeScript"
+    expect(screen.getByText(mockProject.tags.join(' / '))).toBeInTheDocument();
   });
 
   it('renders project image', () => {
-    renderWithTheme(<ProjectCard project={mockProject} />);
-    const image = screen.getByAltText(mockProject.title);
-    expect(image).toBeInTheDocument();
+    render(<ProjectCard project={mockProject} />);
+    const image = screen.getByRole('img');
+    // Next.js Image component transforms the src
     expect(image).toHaveAttribute('src', expect.stringContaining(encodeURIComponent(mockProject.imageUrl)));
+    expect(image).toHaveAttribute('alt', mockProject.title);
   });
 }); 

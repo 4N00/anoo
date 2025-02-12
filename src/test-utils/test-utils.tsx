@@ -5,9 +5,8 @@ declare const jest: any;
 import React from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
-import { theme } from '@/styles/theme';
+import { lightTheme } from '@/styles/themeConfig';
 import { LanguageProvider } from '@/context/LanguageContext';
-import { BackgroundProvider } from '@/context/BackgroundContext';
 import { ToastProvider } from '@/context/ToastContext';
 
 // Mock usePathname for BackgroundProvider
@@ -56,22 +55,56 @@ jest.mock('../components/trefoil-knot/TrefoilKnot', () => ({
   default: () => <div data-testid="trefoil-knot-mock" />
 }));
 
+// Mock theme context
+jest.mock('@/styles/theme', () => ({
+  useTheme: () => ({
+    theme: {
+      ...lightTheme,
+      colors: {
+        ...lightTheme.colors,
+        error: {
+          ...lightTheme.colors.error,
+          main: 'rgb(255, 0, 0)'
+        },
+        background: {
+          ...lightTheme.colors.background,
+          primary: 'rgb(245, 245, 245)'
+        }
+      }
+    },
+    isDark: false,
+    toggleTheme: jest.fn()
+  }),
+  ThemeProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
+// Mock BackgroundContext
+jest.mock('@/context/BackgroundContext', () => ({
+  BackgroundProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  useBackground: () => ({
+    backgroundColor: lightTheme.colors.background.primary,
+    setBackgroundColor: jest.fn(),
+    showTrefoil: true,
+    setShowTrefoil: jest.fn(),
+  }),
+}));
+
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={lightTheme}>
       <LanguageProvider>
-        <BackgroundProvider>
-          <ToastProvider>
-            {children}
-          </ToastProvider>
-        </BackgroundProvider>
+        <ToastProvider>
+          {children}
+        </ToastProvider>
       </LanguageProvider>
     </ThemeProvider>
   );
 };
 
-const customRender = (ui: React.ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
-  render(ui, { wrapper: AllTheProviders, ...options });
+const customRender = (
+  ui: React.ReactElement,
+  options?: Omit<RenderOptions, 'wrapper'>,
+) => render(ui, { wrapper: AllTheProviders, ...options });
 
 // re-export everything
 export * from '@testing-library/react';

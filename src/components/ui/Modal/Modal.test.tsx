@@ -1,21 +1,17 @@
-/**
- * @jest-environment jsdom
- */
+/// <reference types="@types/jest" />
+/// <reference types="@testing-library/jest-dom" />
+
 import '@testing-library/jest-dom';
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@/test-utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { ThemeProvider } from 'styled-components';
-import { theme } from '@/styles/theme';
 import Modal from './Modal';
 
-const renderWithProviders = (ui: React.ReactElement) => {
-  return render(
-    <ThemeProvider theme={theme}>
-      {ui}
-    </ThemeProvider>
-  );
-};
+declare const jest: any;
+declare const describe: any;
+declare const it: any;
+declare const expect: any;
+declare const beforeEach: any;
 
 describe('Modal', () => {
   const onCloseMock = jest.fn();
@@ -26,7 +22,7 @@ describe('Modal', () => {
   });
 
   it('renders when isOpen is true', () => {
-    renderWithProviders(
+    render(
       <Modal isOpen={true} onClose={onCloseMock}>
         {testContent}
       </Modal>
@@ -36,7 +32,7 @@ describe('Modal', () => {
   });
 
   it('does not render when isOpen is false', () => {
-    renderWithProviders(
+    render(
       <Modal isOpen={false} onClose={onCloseMock}>
         {testContent}
       </Modal>
@@ -46,7 +42,7 @@ describe('Modal', () => {
   });
 
   it('calls onClose when clicking outside the modal', () => {
-    renderWithProviders(
+    render(
       <Modal isOpen={true} onClose={onCloseMock}>
         {testContent}
       </Modal>
@@ -57,7 +53,7 @@ describe('Modal', () => {
   });
 
   it('does not call onClose when clicking inside the modal', () => {
-    renderWithProviders(
+    render(
       <Modal isOpen={true} onClose={onCloseMock}>
         {testContent}
       </Modal>
@@ -68,7 +64,7 @@ describe('Modal', () => {
   });
 
   it('calls onClose when clicking the close button', () => {
-    renderWithProviders(
+    render(
       <Modal isOpen={true} onClose={onCloseMock}>
         {testContent}
       </Modal>
@@ -79,7 +75,7 @@ describe('Modal', () => {
   });
 
   it('calls onClose when pressing Escape key', () => {
-    renderWithProviders(
+    render(
       <Modal isOpen={true} onClose={onCloseMock}>
         {testContent}
       </Modal>
@@ -91,7 +87,7 @@ describe('Modal', () => {
 
   it('applies custom className', () => {
     const testClass = 'custom-class';
-    renderWithProviders(
+    render(
       <Modal isOpen={true} onClose={onCloseMock} className={testClass}>
         {testContent}
       </Modal>
@@ -100,7 +96,7 @@ describe('Modal', () => {
   });
 
   it('prevents event propagation when clicking modal content', async () => {
-    renderWithProviders(
+    render(
       <Modal isOpen={true} onClose={onCloseMock}>
         <div>Content</div>
       </Modal>

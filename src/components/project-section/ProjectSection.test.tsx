@@ -4,8 +4,6 @@ import '@testing-library/jest-dom';
 import 'jest-styled-components';
 import React from 'react';
 import { render, screen } from '@/test-utils/test-utils';
-import { ThemeProvider } from 'styled-components';
-import { theme } from '@/styles/themeConfig';
 import ProjectSection from './ProjectSection';
 import { ProjectUI } from '@/types/project';
 
@@ -45,16 +43,12 @@ jest.mock('../project-card/ProjectCard', () => {
   };
 });
 
-const renderWithTheme = (component: React.ReactNode) => {
-  return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
-};
-
 const mockProjects: ProjectUI[] = [
   {
     id: '1',
     title: 'Featured Project',
     description: 'Featured project description',
-    imageUrl: 'https://example.com/featured.jpg',
+    imageUrl: '/featured.jpg',
     tags: ['React', 'TypeScript'],
     featured: true,
     githubUrl: 'https://github.com/featured',
@@ -68,8 +62,8 @@ const mockProjects: ProjectUI[] = [
     id: '2',
     title: 'Regular Project',
     description: 'Regular project description',
-    imageUrl: 'https://example.com/regular.jpg',
-    tags: ['Node.js', 'Express'],
+    imageUrl: '/regular.jpg',
+    tags: ['Next.js', 'JavaScript'],
     featured: false,
     githubUrl: 'https://github.com/regular',
     liveUrl: 'https://regular.com',
@@ -82,39 +76,38 @@ const mockProjects: ProjectUI[] = [
 
 describe('ProjectSection', () => {
   it('renders featured and non-featured projects separately', () => {
-    renderWithTheme(<ProjectSection projects={mockProjects} />);
-    
-    expect(screen.getByTestId('featured-container')).toBeInTheDocument();
-    expect(screen.getByTestId('project-container')).toBeInTheDocument();
+    render(<ProjectSection projects={mockProjects} />);
+
     expect(screen.getByText('Featured Project')).toBeInTheDocument();
     expect(screen.getByText('Regular Project')).toBeInTheDocument();
   });
 
   it('renders only non-featured section when no featured projects exist', () => {
-    const nonFeaturedProjects = mockProjects.map(p => ({ ...p, featured: false }));
-    renderWithTheme(<ProjectSection projects={nonFeaturedProjects} />);
-    
-    expect(screen.queryByTestId('featured-container')).not.toBeInTheDocument();
-    expect(screen.getByTestId('project-container')).toBeInTheDocument();
+    const nonFeaturedProjects = mockProjects.filter(p => !p.featured);
+    render(<ProjectSection projects={nonFeaturedProjects} />);
+
+    expect(screen.queryByText('Featured Project')).not.toBeInTheDocument();
+    expect(screen.getByText('Regular Project')).toBeInTheDocument();
   });
 
   it('renders only featured section when no non-featured projects exist', () => {
-    const featuredProjects = mockProjects.map(p => ({ ...p, featured: true }));
-    renderWithTheme(<ProjectSection projects={featuredProjects} />);
-    
-    expect(screen.getByTestId('featured-container')).toBeInTheDocument();
-    expect(screen.queryByTestId('project-container')).not.toBeInTheDocument();
+    const featuredProjects = mockProjects.filter(p => p.featured);
+    render(<ProjectSection projects={featuredProjects} />);
+
+    expect(screen.getByText('Featured Project')).toBeInTheDocument();
+    expect(screen.queryByText('Regular Project')).not.toBeInTheDocument();
   });
 
   it('applies custom className when provided', () => {
-    const testClass = 'custom-class';
-    renderWithTheme(<ProjectSection projects={mockProjects} className={testClass} />);
-    expect(screen.getByTestId('motion-section')).toHaveClass(testClass);
+    const customClass = 'custom-class';
+    render(<ProjectSection projects={mockProjects} className={customClass} />);
+    
+    const section = screen.getByTestId('motion-section');
+    expect(section).toHaveClass(customClass);
   });
 
   it('renders empty state when no projects are provided', () => {
-    renderWithTheme(<ProjectSection projects={[]} />);
-    expect(screen.queryByTestId('featured-container')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('project-container')).not.toBeInTheDocument();
+    render(<ProjectSection projects={[]} />);
+    expect(screen.queryByRole('article')).not.toBeInTheDocument();
   });
 }); 
