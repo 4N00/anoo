@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Container from '@/components/ui/container/Container';
+import { Container } from '@/components/ui/container';
 import { motion } from 'framer-motion';
 
 export const ProfileContainer = styled.div`

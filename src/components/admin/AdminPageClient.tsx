@@ -8,8 +8,7 @@ import ProjectList from './ProjectList';
 import ProjectForm from './ProjectForm';
 import { StyledButton } from '@/components/ui/button/styles';
 import { useProjects } from '@/context/ProjectsContext';
-import Modal from '@/components/ui/modal/Modal';
-
+import { Modal } from '@/components/ui/modal';
 const AdminPageContainer = styled.div`
   padding: 2rem;
   max-width: 1400px;
