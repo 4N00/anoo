@@ -7,12 +7,12 @@ const nextConfig = {
     styledComponents: true,
   },
   experimental: {
-    optimizeCss: false,
+    optimizeCss: true,
     turbotrace: {
       memoryLimit: 4096
     }
   },
-  webpack: (config, { dev, isServer }) => {
+  webpack: (config, { dev }) => {
     config.resolve = {
       ...config.resolve,
       fallback: {
@@ -23,7 +23,7 @@ const nextConfig = {
     };
 
     // Enable webpack caching in production
-    if (!dev && !isServer) {
+    if (!dev) {
       config.cache = true;
     }
 
@@ -76,6 +76,9 @@ const nextConfig = {
       },
     ];
   },
+  poweredByHeader: false,
+  generateEtags: true,
+  compress: true,
 };
 
 module.exports = nextConfig;
