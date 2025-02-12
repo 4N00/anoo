@@ -85,3 +85,5 @@ prisma/migrations/
 
 # Cypress environment variables
 cypress.env.json
+# Local Netlify folder
+.netlify

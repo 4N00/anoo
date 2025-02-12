@@ -35,7 +35,7 @@ export default async function Home() {
             generateWebPageSchema(
               'Anoo - Creative Developer Portfolio',
               'Portfolio showcasing creative development work and projects by Anoo',
-              'https://anoo.nl'
+              'https://www.anoo.nl'
             ),
             generatePersonSchema()
           ])
@@ -46,6 +46,6 @@ export default async function Home() {
   );
 }
 
-// Force static rendering
+// Force static generation
 export const dynamic = 'force-static';
 export const revalidate = 3600; // Revalidate every hour

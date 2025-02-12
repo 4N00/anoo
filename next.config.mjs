@@ -6,7 +6,6 @@ const __dirname = path.dirname(__filename);
 
 /** @type {import('next').NextConfig} */
 const config = {
-  reactStrictMode: true,
   distDir: '.next',
   compiler: {
     styledComponents: true,
@@ -19,7 +18,7 @@ const config = {
     swcMinify: true,
   },
   images: {
-    unoptimized: true,
+    domains: ['ognrjtlftwwrjgfdpzmy.supabase.co'],
     remotePatterns: [
       {
         protocol: 'https',
@@ -28,7 +27,6 @@ const config = {
         pathname: '**',
       },
     ],
-    domains: ['ognrjtlftwwrjgfdpzmy.supabase.co'],
   },
   webpack: (config) => {
     config.resolve = {
@@ -44,7 +42,6 @@ const config = {
   generateEtags: true,
   compress: true,
   trailingSlash: false,
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/_next' : '',
 };
 
 export default config; 

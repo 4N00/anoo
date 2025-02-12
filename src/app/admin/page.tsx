@@ -1,6 +1,10 @@
 import AdminPageClient from '@/components/admin/AdminPageClient';
 import { ProjectsProvider } from '@/context/ProjectsContext';
 
+// Force SSR for admin pages
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export default function AdminPage() {
   return (
     <ProjectsProvider>
@@ -8,6 +12,3 @@ export default function AdminPage() {
     </ProjectsProvider>
   );
 }
-
-// Force dynamic rendering for admin pages
-export const dynamic = 'force-dynamic';
