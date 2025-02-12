@@ -1,4 +1,9 @@
 // @ts-check
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -61,10 +66,18 @@ const nextConfig = {
       },
     ];
   },
+  // Configure webpack to resolve @ alias
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': join(__dirname, 'src'),
+    };
+    return config;
+  },
   poweredByHeader: false,
   generateEtags: true,
   compress: true,
   swcMinify: true,
 };
 
-module.exports = nextConfig;
+export default nextConfig;
