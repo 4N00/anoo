@@ -15,9 +15,8 @@ const textVariants = {
   }
 };
 
-const PageFooter = forwardRef<HTMLDivElement>((props, ref) => {
+const PageFooter = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useLanguage();
-  const currentYear = new Date().getFullYear();
 
   return (
     <FooterContainer ref={ref}>

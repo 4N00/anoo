@@ -1,6 +1,5 @@
 'use client';
 
-import { Inter } from 'next/font/google';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ProjectsProvider } from '../../context/ProjectsContext';
 import { ThemeProvider } from '../../styles/theme';
@@ -13,12 +12,6 @@ import styled, { createGlobalStyle } from 'styled-components';
 import GlobalStyles from '../../styles/GlobalStyles';
 import PageFooter from '@/components/footer/Footer';
 import Navbar from '@/components/navbar/Navbar';
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-});
 
 // Create a client
 const queryClient = new QueryClient({

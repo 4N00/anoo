@@ -13,16 +13,11 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "e2e": "cypress run",
-    "e2e:open": "cypress open",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate deploy",
-    "prisma:studio": "prisma studio",
-    "postinstall": "prisma generate"
+    "e2e:open": "cypress open"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^17.0.0",
     "@hookform/resolvers": "^3.3.4",
-    "@prisma/client": "^5.9.1",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.39.3",
@@ -74,7 +69,6 @@
     "jest-environment-jsdom": "^29.7.0",
     "jest-styled-components": "^7.2.0",
     "prettier": "^3.2.5",
-    "prisma": "^5.9.1",
     "typescript": "^5.3.3",
     "typescript-eslint": "^8.23.0"
   },
