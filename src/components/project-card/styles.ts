@@ -76,7 +76,6 @@ export const ProjectInfo = styled.div`
   left: 0;
   width: 100%;
   padding: ${({ theme }) => theme.spacing.lg};
-  color: ${({ theme }) => theme.colors.text.contrast};
   background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
   z-index: 1;
 `;
@@ -92,20 +91,20 @@ export const ProjectTitle = styled.h3`
   font-size: ${({ theme }) => theme.typography.fontSize.lg};
   font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
   margin: 0;
-  color: ${({ theme }) => theme.colors.text.contrast};
+  color: white;
 `;
 
 export const ProjectCategory = styled.span`
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  color: ${({ theme }) => theme.colors.text.contrast};
   opacity: 0.8;
+  color: white;
 `;
 
 export const ProjectDescription = styled.p`
   font-size: ${({ theme }) => theme.typography.fontSize.md};
   margin: 0;
-  color: ${({ theme }) => theme.colors.text.contrast};
   opacity: 0.9;
+  color: white;
 `;
 
 export const BlurImage = styled(Image)`

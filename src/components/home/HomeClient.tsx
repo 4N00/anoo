@@ -10,6 +10,7 @@ import { debounce } from '@/utils/helpers';
 import { useBackground } from '@/context/BackgroundContext';
 import Container from '../ui/container/Container';
 import { MainContainer } from '@/app/styles';
+import { useTheme } from '@/styles/theme';
 
 interface HomeClientProps {
   initialProjects: ProjectUI[];
@@ -23,6 +24,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
   const { setBackgroundColor } = useBackground();
   const { fetchMoreProjects } = useProjects();
+  const { isDark } = useTheme();
 
   const { scrollYProgress } = useScroll({
     offset: ['start', 'end start'],
@@ -89,16 +91,30 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
       // Calculate scroll percentage
       const scrollPercentage = (scrollPosition + viewportHeight) / totalHeight;
 
-      // Change background color based on scroll position
+      // Change background color based on scroll position and theme
       let newColor;
-      if (scrollPercentage < 0.3) {
-        newColor = '#FFFFFF';
-      } else if (scrollPercentage < 0.6) {
-        newColor = '#F2FCE2';
-      } else if (scrollPercentage < 0.9) {
-        newColor = '#FEF7CD';
+      if (isDark) {
+        // Dark theme colors
+        if (scrollPercentage < 0.3) {
+          newColor = '#121212';
+        } else if (scrollPercentage < 0.6) {
+          newColor = '#1a1a1a';
+        } else if (scrollPercentage < 0.9) {
+          newColor = '#242424';
+        } else {
+          newColor = '#2d2d2d';
+        }
       } else {
-        newColor = '#E5DEFF';
+        // Light theme colors
+        if (scrollPercentage < 0.3) {
+          newColor = '#FFFFFF';
+        } else if (scrollPercentage < 0.6) {
+          newColor = '#F2FCE2';
+        } else if (scrollPercentage < 0.9) {
+          newColor = '#FEF7CD';
+        } else {
+          newColor = '#E5DEFF';
+        }
       }
       setBackgroundColor(newColor);
     }, 100);
@@ -109,7 +125,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [setBackgroundColor]);
+  }, [setBackgroundColor, isDark]);
 
   return (
     <Container>

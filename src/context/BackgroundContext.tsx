@@ -21,7 +21,7 @@ const PageBackground = styled.div<{ $bgColor: string; $isHome: boolean }>`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: ${props => props.$bgColor};
+  background-color: ${({ theme, $bgColor }) => $bgColor === '#f5f5f5' ? theme.colors.background.primary : $bgColor};
   transition: background-color 0.6s ease;
   z-index: -1000;
   opacity: ${props => props.$isHome ? 1 : 0};
@@ -30,25 +30,24 @@ const PageBackground = styled.div<{ $bgColor: string; $isHome: boolean }>`
 
 export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { isDark, theme } = useTheme();
-  const [backgroundColor, setBackgroundColor] = useState(isDark ? theme.colors.background.primary : '#f5f5f5');
+  const [backgroundColor, setBackgroundColor] = useState(theme.colors.background.primary);
   const [showTrefoil, setShowTrefoil] = useState(true);
   const pathname = usePathname();
   const isHome = pathname === '/';
 
   // Reset background color when leaving home page or theme changes
   useEffect(() => {
-    const defaultBg = isDark ? theme.colors.background.primary : '#f5f5f5';
     if (!isHome) {
-      setBackgroundColor(defaultBg);
+      setBackgroundColor(theme.colors.background.primary);
       setShowTrefoil(false);
     } else {
       setShowTrefoil(true);
       // Only reset if it's the default color
-      if (backgroundColor === '#f5f5f5' || backgroundColor === theme.colors.background.primary) {
-        setBackgroundColor(defaultBg);
+      if (backgroundColor === theme.colors.background.primary) {
+        setBackgroundColor(theme.colors.background.primary);
       }
     }
-  }, [isHome, isDark, backgroundColor, theme.colors.background.primary]);
+  }, [isHome, isDark, theme.colors.background.primary, backgroundColor]);
 
   return (
     <BackgroundContext.Provider value={{ backgroundColor, setBackgroundColor, showTrefoil, setShowTrefoil }}>
