@@ -12,9 +12,21 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+# Handle robots.txt and sitemap.xml first
+[[redirects]]
+  from = "/robots.txt"
+  to = "/.netlify/functions/next/robots.txt"
+  status = 200
+
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/.netlify/functions/next/sitemap.xml"
+  status = 200
+
+# Then handle all other routes
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/.netlify/functions/next/:splat"
   status = 200
 
 [functions]
