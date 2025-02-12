@@ -124,20 +124,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [Jest](https://jestjs.io/) - Unit testing
 - [Cypress](https://www.cypress.io/) - E2E testing
 
-## Project Structure
-
-```
-src/
-├── app/                 # Next.js App Router pages
-├── components/          # React components
-├── context/            # React context providers
-├── hooks/              # Custom React hooks
-├── lib/                # Utility libraries
-├── styles/             # Global styles and themes
-├── translations/       # Language files
-└── types/              # TypeScript types
-```
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

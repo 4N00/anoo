@@ -1,0 +1,16 @@
+# These owners will be the default owners for everything in the repo
+* @4N00
+
+# Package files
+package.json @4N00
+package-lock.json @4N00
+
+# Source code
+/src/ @4N00
+
+# Configuration files
+*.config.js @4N00
+.env.* @4N00
+
+# GitHub specific files
+.github/ @4N00
