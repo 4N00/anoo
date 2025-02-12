@@ -31,15 +31,6 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Cache configuration
-[[plugins]]
-  package = "netlify-plugin-cache"
-  [plugins.inputs]
-    paths = [
-      ".next/cache",          # Next.js build cache
-      "node_modules/.cache"   # Node modules cache
-    ]
-
 # Handle robots.txt and sitemap.xml first
 [[redirects]]
   from = "/robots.txt"
