@@ -14,7 +14,7 @@ import {
 import { GripVertical, Clock, User } from 'lucide-react';
 import { ProjectUI } from '@/types/project';
 import { useToast } from '@/context/ToastContext';
-import { Button } from '@/components/ui';
+import Button from '@/components/button/Button';
 import {
   ListContainer,
   SectionTitle,
