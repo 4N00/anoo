@@ -8,9 +8,11 @@ const nextConfig = {
   },
   experimental: {
     optimizeCss: false,
+    turbotrace: {
+      memoryLimit: 4096
+    }
   },
-  output: 'standalone',
-  webpack: (config) => {
+  webpack: (config, { dev, isServer }) => {
     config.resolve = {
       ...config.resolve,
       fallback: {
@@ -19,6 +21,12 @@ const nextConfig = {
         path: false,
       },
     };
+
+    // Enable webpack caching in production
+    if (!dev && !isServer) {
+      config.cache = true;
+    }
+
     return config;
   },
   images: {
