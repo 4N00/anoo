@@ -1,20 +1,21 @@
 # Anoo Portfolio
 
-A modern portfolio website built with Next.js, TypeScript, and Styled
-Components.
+A modern portfolio website built with Next.js 14, TypeScript, and Styled Components.
 
 ## Features
 
-- 🎨 Modern and responsive design
+- 🎨 Modern and minimalist design with smooth animations
 - 🚀 Built with Next.js 14 and TypeScript
 - 💅 Styled with Styled Components
+- 🌍 Internationalization (EN/NL)
+- 🌙 Dark/Light theme support
 - 🔒 Authentication with Supabase
-- 🗄️ PostgreSQL database with Prisma ORM
+- 📧 Contact form with Resend email integration
 - 🧪 Testing with Jest and Cypress
-- 🐳 Docker support
-- 📱 Mobile-first approach
+- 📱 Responsive design
 - ⚡ Hybrid rendering (SSG + SSR)
-- 🌙 Dark mode support (coming soon)
+- 🎭 Framer Motion animations
+- 🎨 Custom cursor and scroll animations
 
 ## Demo Admin Access
 
@@ -74,8 +75,8 @@ The project employs a comprehensive testing approach:
 
 - Node.js 18.17.0 or later
 - npm or yarn
-- PostgreSQL database
 - Supabase account
+- Resend account for email functionality
 
 ### Installation
 
@@ -95,39 +96,18 @@ npm install
 3. Copy the environment variables:
 
 ```bash
-cp .env.example .env
+cp .env.example .env.local
 ```
 
-4. Update the environment variables in `.env` with your own values:
+4. Update the environment variables in `.env.local` with your own values.
 
-```env
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-
-# Database Configuration
-DATABASE_URL=your_database_url
-
-# Authentication
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your_nextauth_secret
-```
-
-5. Set up the database schema:
-
-```bash
-npm run prisma:generate
-npm run prisma:migrate
-```
-
-6. Run the development server:
+5. Run the development server:
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the
-result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Scripts
 
@@ -139,40 +119,32 @@ result.
 - `npm run test:watch` - Run Jest tests in watch mode
 - `npm run e2e` - Run Cypress E2E tests
 - `npm run e2e:open` - Open Cypress test runner
-- `npm run docker:dev` - Run development environment in Docker
-- `npm run prisma:generate` - Generate Prisma client
-- `npm run prisma:migrate` - Run database migrations
-- `npm run prisma:studio` - Open Prisma Studio
 
 ## Tech Stack
 
-- [Next.js](https://nextjs.org/) - React framework with hybrid rendering
+- [Next.js](https://nextjs.org/) - React framework
 - [TypeScript](https://www.typescriptlang.org/) - Type safety
 - [Styled Components](https://styled-components.com/) - Styling
+- [Framer Motion](https://www.framer.com/motion/) - Animations
 - [Supabase](https://supabase.io/) - Backend and authentication
-- [Prisma](https://www.prisma.io/) - Database ORM
+- [Resend](https://resend.com/) - Email service
 - [Jest](https://jestjs.io/) - Unit testing
 - [Cypress](https://www.cypress.io/) - E2E testing
-- [Docker](https://www.docker.com/) - Containerization
 
 ## Project Structure
 
 ```
 src/
-├── app/                    # Next.js App Router pages
-│   ├── admin/             # Admin panel (SSR)
-│   └── [...public]/       # Public pages (SSG)
-├── components/            # React components
-│   ├── admin/            # Admin-specific components
-│   └── ui/               # Shared UI components
-├── context/              # React context providers
-├── hooks/               # Custom React hooks
-├── lib/                 # Utility libraries
-├── styles/              # Global styles and themes
-└── types/              # TypeScript type definitions
+├── app/                 # Next.js App Router pages
+├── components/          # React components
+├── context/            # React context providers
+├── hooks/              # Custom React hooks
+├── lib/                # Utility libraries
+├── styles/             # Global styles and themes
+├── translations/       # Language files
+└── types/              # TypeScript types
 ```
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
-for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
