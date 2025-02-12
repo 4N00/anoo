@@ -18,7 +18,7 @@ const config = {
     },
     swcMinify: true,
   },
-  output: 'standalone',
+  output: 'export',
   images: {
     unoptimized: true,
     remotePatterns: [

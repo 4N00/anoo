@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  publish = "/.next"
+  publish = ".netlify/functions/server"
 
 [build.environment]
   NEXT_USE_NETLIFY_EDGE = "true"
@@ -13,10 +13,11 @@
 
 [[redirects]]
   from = "/*"
-  to = "/.netlify/functions/next/:splat"
+  to = "/.netlify/functions/server/:splat"
   status = 200
   force = true
 
 [functions]
   node_bundler = "esbuild"
   included_files = ["node_modules/sharp/**/*"]
+  external_node_modules = ["@swc/core"]
