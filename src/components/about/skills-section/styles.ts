@@ -73,7 +73,7 @@ export const SkillName = styled.div<SkillNameProps>`
 export const SkillBar = styled.div`
   width: 100%;
   height: 3.5rem;
-  background: rgba(0, 0, 0, 0.1);
+  background: #918f8f;
   overflow: visible;
   position: relative;
 `;
@@ -83,20 +83,13 @@ interface SkillLevelProps {
 }
 
 export const SkillLevel = styled(motion.div)<SkillLevelProps>`
-  width: 0%;
+  width: ${({ $level }) => $level}%;
   height: 100%;
   background: ${({ theme }) => theme.colors.text.primary};
   will-change: width;
-  animation: fillBar 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: var(--delay, 0.8s);
   position: relative;
 
-  @keyframes fillBar {
-    from { width: 0%; }
-    to { width: ${({ $level }) => Math.min($level, 100)}%; }
-  }
-
-  ${({ $level }) => $level > 100 && css`
+  ${({ $level }) => $level === 120 && css`
     &:after {
       content: '';
       position: absolute;

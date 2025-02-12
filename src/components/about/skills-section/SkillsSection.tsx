@@ -26,8 +26,14 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({ skills }) => {
               <SkillName $level={skill.level}>{skill.name}</SkillName>
               <SkillBar>
                 <SkillLevel 
-                  $level={skill.level} 
-                  style={{ '--delay': `${0.8 + index * 0.1}s` } as React.CSSProperties}
+                  $level={skill.level}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${skill.level}%` }}
+                  transition={{ 
+                    duration: 1,
+                    delay: 0.8 + index * 0.1,
+                    ease: [0.4, 0, 0.2, 1]
+                  }}
                 />
               </SkillBar>
             </SkillItem>
