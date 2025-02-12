@@ -7,6 +7,7 @@ const __dirname = path.dirname(__filename);
 /** @type {import('next').NextConfig} */
 const config = {
   reactStrictMode: true,
+  distDir: '.next',
   compiler: {
     styledComponents: true,
   },
