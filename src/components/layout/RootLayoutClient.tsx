@@ -8,10 +8,10 @@ import { ToastProvider } from '@/context/ToastContext';
 import { BackgroundProvider } from '@/context/BackgroundContext';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { AnimatePresence } from 'framer-motion';
-import styled, { createGlobalStyle } from 'styled-components';
 import GlobalStyles from '@/styles/GlobalStyles';
 import PageFooter from "@/components/footer/Footer";
-import Navbar from '../navbar/Navbar';
+import Navbar from '@/components/navbar/Navbar';
+import { MainContent } from './styles';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -35,22 +35,10 @@ const getQueryClient = () => {
   return window._queryClient;
 };
 
-const MainContent = styled.div`
-  position: relative;
-  padding-top: 64px; /* Navbar height */
-`;
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    transition: background-color 0.6s ease;
-  }
-`;
-
 export default function RootLayoutClient({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={getQueryClient()}>
       <ThemeProvider>
-        <GlobalStyle />
         <GlobalStyles />
         <ToastProvider>
           <AuthProvider>
