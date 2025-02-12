@@ -5,10 +5,8 @@ import { Plus } from 'lucide-react';
 import { ProjectUI } from '@/types/project';
 import ProjectList from './ProjectList';
 import ProjectForm from './ProjectForm';
-import { Button } from '@/components/ui/button';
+import { Button, Container, Modal } from '@/components/ui';
 import { useProjects } from '@/context/ProjectsContext';
-import { Modal } from '@/components/ui/modal';
-import { Container } from '@/components/ui/container';
 import { Header } from '@/app/styles';
 import { Title } from '@/app/login/styles';
 
