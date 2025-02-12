@@ -62,7 +62,7 @@
     "node_modules",
     ".next",
     "out",
-    "build",
-    "coverage"
+    "cypress.config.ts",
+    "cypress"
   ]
 }
