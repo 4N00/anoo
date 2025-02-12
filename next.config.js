@@ -1,7 +1,12 @@
-const path = require('path');
+/* eslint-disable no-undef */
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const config = {
   reactStrictMode: true,
   compiler: {
     styledComponents: true,
@@ -27,10 +32,18 @@ const nextConfig = {
     domains: ['ognrjtlftwwrjgfdpzmy.supabase.co'],
   },
   webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': path.join(__dirname, 'src')
+    // Explicitly resolve the src directory
+    config.resolve = {
+      ...config.resolve,
+      modules: ['src', 'node_modules'],
+      extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      alias: {
+        ...config.resolve.alias,
+        '@': path.resolve(__dirname, 'src'),
+        components: path.resolve(__dirname, 'src/components'),
+      }
     };
+
     return config;
   },
   poweredByHeader: false,
@@ -38,4 +51,4 @@ const nextConfig = {
   compress: true,
 };
 
-module.exports = nextConfig; 
+export default config;

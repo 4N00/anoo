@@ -10,7 +10,7 @@ import { LanguageProvider } from '@/context/LanguageContext';
 import { AnimatePresence } from 'framer-motion';
 import GlobalStyles from '@/styles/GlobalStyles';
 import PageFooter from "@/components/footer/Footer";
-import Navbar from '@/components/navbar/Navbar';
+import Navbar from '../navbar/Navbar';
 import { MainContent } from './styles';
 
 // Create a client
