@@ -6,8 +6,6 @@ export const ProfileContainer = styled.div`
   position: relative;
   overflow: hidden;
   padding: 12rem 0 8rem;
-  background: #f5f5f5;
-  color: #1a1a1a;
 `;
 
 export const BackgroundText = styled.div`
@@ -19,7 +17,6 @@ export const BackgroundText = styled.div`
   font-size: clamp(150px, 20vw, 300px);
   font-weight: 900;
   line-height: 0.8;
-  color: #000;
   opacity: 0.03;
   pointer-events: none;
   z-index: 0;
@@ -40,7 +37,6 @@ export const ProfileTitle = styled.h1`
   font-weight: 900;
   line-height: 0.9;
   margin-bottom: 6rem;
-  color: #1a1a1a;
   text-transform: uppercase;
   letter-spacing: -0.02em;
 `;
@@ -49,7 +45,6 @@ export const ProfileText = styled.p`
   font-size: clamp(1.25rem, 2vw, 1.5rem);
   line-height: 1.4;
   max-width: 800px;
-  color: #1a1a1a;
   margin-bottom: 3rem;
   
   &:last-child {

@@ -224,8 +224,6 @@ export const NavbarContainer = styled.nav<{ $isMenuOpen: boolean }>`
   width: 100%;
   height: 64px;
   z-index: 2000;
-
-  background: rgba(245, 245, 245, 0.01);
   backdrop-filter: ${({ $isMenuOpen }) => $isMenuOpen ? 'none' : 'blur(10px)'};
   -webkit-backdrop-filter: ${({ $isMenuOpen }) => $isMenuOpen ? 'none' : 'blur(10px)'};
 `;
@@ -300,7 +298,7 @@ export const MenuOverlay = styled(motion.div)`
   z-index: 1500;
   display: flex;
   flex-direction: column;
-  padding: 5rem 0 2rem;
+  padding: 5rem 0 0;
 `;
 
 export const Backdrop = styled(motion.div)`
@@ -373,7 +371,6 @@ export const ThemeToggle = styled.button`
     height: 20px;
   }
 `;
-
 export const LanguageToggle = styled.div`
   display: flex;
   gap: 0.5rem;

@@ -40,14 +40,14 @@ export const GlobalStyles = createGlobalStyle`
     min-height: 100vh;
     line-height: 1.5;
     font-family: ${({ theme }) => theme.fonts.body};
-    background-color: #f5f5f5;
+    background-color: ${({ theme }) => theme.colors.background.primary};
     color: ${({ theme }) => theme.colors.text.primary};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
-    transition: background-color 1.5s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   /* Typography */
@@ -234,6 +234,11 @@ export const GlobalStyles = createGlobalStyle`
     .container {
       padding: 0 1rem;
     }
+  }
+
+  /* Add smooth transitions for theme changes */
+  *, *::before, *::after {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
   }
 `;
 

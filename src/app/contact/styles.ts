@@ -3,14 +3,11 @@ import { motion } from 'framer-motion';
 
 export const Container = styled.div`
   width: 100%;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   position: relative;
   overflow: hidden;
   padding: 0;
-  background: #f5f5f5;
-  color: #1a1a1a;
   padding-top: 64px;
 `;
 
@@ -71,7 +68,6 @@ export const FormInput = styled.input`
   background: transparent;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  color: #1a1a1a;
   font-size: 1rem;
   transition: all 0.3s ease;
 
@@ -91,7 +87,6 @@ export const FormTextarea = styled.textarea`
   background: transparent;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  color: #1a1a1a;
   font-size: 1rem;
   resize: none;
   min-height: 100px;
@@ -112,7 +107,6 @@ export const SubmitButton = styled.button`
   padding: 2rem 0;
   background: transparent;
   border: none;
-  color: #1a1a1a;
   font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 500;
   text-transform: uppercase;

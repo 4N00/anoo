@@ -1,6 +1,6 @@
 import { DefaultTheme } from 'styled-components';
 
-export const theme: DefaultTheme = {
+const baseTheme = {
   colors: {
     primary: {
       main: '#0070f3',
@@ -155,6 +155,126 @@ export const theme: DefaultTheme = {
       desktop: 'repeat(12, 1fr)',
       tablet: 'repeat(8, 1fr)',
       mobile: 'repeat(4, 1fr)',
+    },
+  },
+};
+
+export const lightTheme: DefaultTheme = {
+  ...baseTheme,
+  colors: {
+    primary: {
+      main: '#0070f3',
+      light: '#3291ff',
+      dark: '#a6a6a6',
+      contrast: '#ffffff',
+    },
+    secondary: {
+      main: '#9c96a2',
+      light: '#9c4ddb',
+      dark: '#5c1e9e',
+      contrast: '#ffffff',
+    },
+    background: {
+      primary: '#f5f5f5',
+      secondary: '#f0f0f0',
+      main: '#f5f5f5',
+      dark: '#1a1a1a',
+      light: '#fafafa',
+    },
+    text: {
+      primary: '#1a1a1a',
+      secondary: '#666666',
+      muted: '#999999',
+      gray: '#4B5563',
+      contrast: '#ffffff',
+    },
+    error: {
+      main: '#ff0000',
+      light: '#ff3333',
+      dark: '#cc0000',
+      contrast: '#ffffff',
+    },
+    success: {
+      main: '#0070f3',
+      light: '#3291ff',
+      dark: '#0050af',
+      contrast: '#ffffff',
+    },
+    warning: {
+      main: '#f5a623',
+      light: '#f7b955',
+      dark: '#c48619',
+      contrast: '#ffffff',
+    },
+    info: {
+      main: '#0070f3',
+      light: '#3291ff',
+      dark: '#0050af',
+      contrast: '#ffffff',
+    },
+    card: {
+      background: '#ffffff',
+      hover: '#f5f5f5',
+    },
+  },
+};
+
+export const darkTheme: DefaultTheme = {
+  ...baseTheme,
+  colors: {
+    primary: {
+      main: '#3291ff',
+      light: '#66b3ff',
+      dark: '#0050af',
+      contrast: '#ffffff',
+    },
+    secondary: {
+      main: '#9c96a2',
+      light: '#b8b3bd',
+      dark: '#7c7782',
+      contrast: '#ffffff',
+    },
+    background: {
+      primary: '#121212',
+      secondary: '#1e1e1e',
+      main: '#121212',
+      dark: '#000000',
+      light: '#2d2d2d',
+    },
+    text: {
+      primary: '#ffffff',
+      secondary: '#a0a0a0',
+      muted: '#666666',
+      gray: '#9ca3af',
+      contrast: '#000000',
+    },
+    error: {
+      main: '#ff4444',
+      light: '#ff7777',
+      dark: '#cc0000',
+      contrast: '#ffffff',
+    },
+    success: {
+      main: '#00b300',
+      light: '#33cc33',
+      dark: '#008000',
+      contrast: '#ffffff',
+    },
+    warning: {
+      main: '#ffa500',
+      light: '#ffc966',
+      dark: '#cc8400',
+      contrast: '#000000',
+    },
+    info: {
+      main: '#3291ff',
+      light: '#66b3ff',
+      dark: '#0050af',
+      contrast: '#ffffff',
+    },
+    card: {
+      background: '#1e1e1e',
+      hover: '#2d2d2d',
     },
   },
 };

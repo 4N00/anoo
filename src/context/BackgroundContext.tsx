@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import styled from 'styled-components';
 import { usePathname } from 'next/navigation';
+import { useTheme } from '@/styles/theme';
 import TrefoilKnot from '@/components/trefoil-knot/TrefoilKnot';
 
 interface BackgroundContextType {
@@ -28,20 +29,26 @@ const PageBackground = styled.div<{ $bgColor: string; $isHome: boolean }>`
 `;
 
 export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [backgroundColor, setBackgroundColor] = useState('#f5f5f5');
+  const { isDark, theme } = useTheme();
+  const [backgroundColor, setBackgroundColor] = useState(isDark ? theme.colors.background.primary : '#f5f5f5');
   const [showTrefoil, setShowTrefoil] = useState(true);
   const pathname = usePathname();
   const isHome = pathname === '/';
 
-  // Reset background color when leaving home page
+  // Reset background color when leaving home page or theme changes
   useEffect(() => {
+    const defaultBg = isDark ? theme.colors.background.primary : '#f5f5f5';
     if (!isHome) {
-      setBackgroundColor('#f5f5f5');
+      setBackgroundColor(defaultBg);
       setShowTrefoil(false);
     } else {
       setShowTrefoil(true);
+      // Only reset if it's the default color
+      if (backgroundColor === '#f5f5f5' || backgroundColor === theme.colors.background.primary) {
+        setBackgroundColor(defaultBg);
+      }
     }
-  }, [isHome]);
+  }, [isHome, isDark, backgroundColor, theme.colors.background.primary]);
 
   return (
     <BackgroundContext.Provider value={{ backgroundColor, setBackgroundColor, showTrefoil, setShowTrefoil }}>
