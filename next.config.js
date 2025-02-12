@@ -66,11 +66,13 @@ const nextConfig = {
       },
     ];
   },
-  // Configure webpack to resolve @ alias
   webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': join(__dirname, 'src'),
+    config.resolve = {
+      ...config.resolve,
+      alias: {
+        ...config.resolve.alias,
+        '@': join(__dirname, 'src'),
+      },
     };
     return config;
   },
