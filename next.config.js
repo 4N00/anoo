@@ -1,7 +1,4 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const path = require('path');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -41,4 +38,4 @@ const nextConfig = {
   compress: true,
 };
 
-export default nextConfig; 
+module.exports = nextConfig; 
