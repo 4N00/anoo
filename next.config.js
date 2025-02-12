@@ -12,15 +12,12 @@ const nextConfig = {
     styledComponents: true,
   },
   experimental: {
-    optimizeCss: false,
     turbotrace: {
       memoryLimit: 4096,
       logLevel: 'error'
     },
     swcMinify: true,
   },
-  // Enable build caching
-  cache: true,
   output: 'standalone',
   images: {
     unoptimized: true,
@@ -34,52 +31,19 @@ const nextConfig = {
     ],
     domains: ['ognrjtlftwwrjgfdpzmy.supabase.co'],
   },
-  // Configure headers for security and caching
-  async headers() {
-    return [
-      {
-        source: '/admin/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'no-store',
-          },
-        ],
-      },
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, stale-while-revalidate=86400',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-        ],
-      },
-    ];
-  },
   webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': join(__dirname, 'src'),
+    config.resolve = {
+      ...config.resolve,
+      alias: {
+        ...config.resolve.alias,
+        '@': join(__dirname, 'src'),
+      },
     };
     return config;
   },
   poweredByHeader: false,
   generateEtags: true,
   compress: true,
-  swcMinify: true,
 };
 
 export default nextConfig;
