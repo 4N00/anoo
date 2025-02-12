@@ -8,9 +8,9 @@ import { useProjects } from '@/hooks/useProjects';
 import { ProjectUI } from '@/types/project';
 import { debounce } from '@/utils/helpers';
 import { useBackground } from '@/context/BackgroundContext';
-import { Container } from '@/components/ui';
 import { MainContainer } from '@/app/styles';
 import { useTheme } from '@/styles/theme';
+import Container from '../container/Container';
 
 interface HomeClientProps {
   initialProjects: ProjectUI[];

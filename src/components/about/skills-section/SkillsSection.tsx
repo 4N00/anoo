@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import AnimateOnScroll from '../../ui/animate-on-scroll/AnimateOnScroll';
+import AnimateOnScroll from '../../animate-on-scroll/AnimateOnScroll';
 import { SkillsContainer, SkillsGrid, SkillItem, SkillName, SkillBar, SkillLevel } from './styles';
 
 interface Skill {

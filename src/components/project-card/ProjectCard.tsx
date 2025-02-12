@@ -12,7 +12,7 @@ import {
   BlurImage,
 } from './styles';
 import { ProjectUI } from '@/types/project';
-import AnimateOnScroll from '../ui/animate-on-scroll/AnimateOnScroll';
+import AnimateOnScroll from '../animate-on-scroll/AnimateOnScroll';
 
 interface ProjectCardProps {
   project: ProjectUI;
