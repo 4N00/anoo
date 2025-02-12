@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -18,7 +17,7 @@ const config = {
     },
     swcMinify: true,
   },
-  output: 'export',
+  // Remove output: 'export' since we're using middleware
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -32,18 +31,13 @@ const config = {
     domains: ['ognrjtlftwwrjgfdpzmy.supabase.co'],
   },
   webpack: (config) => {
-    // Explicitly resolve the src directory
     config.resolve = {
       ...config.resolve,
-      modules: ['src', 'node_modules'],
-      extensions: ['.js', '.jsx', '.ts', '.tsx'],
       alias: {
         ...config.resolve.alias,
         '@': path.resolve(__dirname, 'src'),
-        components: path.resolve(__dirname, 'src/components'),
       }
     };
-
     return config;
   },
   poweredByHeader: false,
@@ -51,4 +45,4 @@ const config = {
   compress: true,
 };
 
-export default config;
+export default config; 

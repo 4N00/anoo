@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  publish = ".netlify/functions/server"
+  publish = ".next"
 
 [build.environment]
   NEXT_USE_NETLIFY_EDGE = "true"
@@ -13,7 +13,7 @@
 
 [[redirects]]
   from = "/*"
-  to = "/.netlify/functions/server/:splat"
+  to = "/.netlify/functions/next/:splat"
   status = 200
   force = true
 
