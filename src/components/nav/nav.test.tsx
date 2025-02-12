@@ -2,7 +2,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@/test-utils/test-utils';
 import '@testing-library/jest-dom';
-import Navbar from './Navbar';
+import Navbar from './nav';
 import type { User, Session } from '@supabase/supabase-js';
 import { stripMotionProps, stripAllProps } from '@/test-utils/mockHelpers';
 

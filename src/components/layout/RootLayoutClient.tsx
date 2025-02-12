@@ -10,8 +10,8 @@ import { LanguageProvider } from '@/context/LanguageContext';
 import { AnimatePresence } from 'framer-motion';
 import GlobalStyles from '@/styles/GlobalStyles';
 import PageFooter from "@/components/footer/Footer";
-import Navbar from '@/components/navbar';
 import { MainContent } from './styles';
+import Navbar from '../nav/nav';
 
 // Create a client
 const queryClient = new QueryClient({
