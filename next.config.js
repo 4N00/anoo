@@ -1,3 +1,5 @@
+// @ts-check
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -8,6 +10,17 @@ const nextConfig = {
     optimizeCss: false,
   },
   output: 'standalone',
+  webpack: (config) => {
+    config.resolve = {
+      ...config.resolve,
+      fallback: {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+      },
+    };
+    return config;
+  },
   images: {
     remotePatterns: [
       {
