@@ -12,9 +12,6 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-  [plugins.inputs]
-    framework = "next"
-    version = "14.1.0"
 
 # Handle robots.txt and sitemap.xml first
 [[redirects]]
