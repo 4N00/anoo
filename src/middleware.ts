@@ -20,6 +20,22 @@ export async function middleware(request: NextRequest) {
     response.headers.set(key, value);
   });
 
+  // Add cache control for static assets
+  const url = request.nextUrl.pathname;
+  if (
+    url.includes('/images/') ||
+    url.includes('/icons/') ||
+    url.includes('.svg') ||
+    url.includes('.png') ||
+    url.includes('.jpg') ||
+    url.includes('.ico')
+  ) {
+    response.headers.set(
+      'Cache-Control',
+      'public, max-age=31536000, immutable'
+    );
+  }
+
   // Only run auth check on admin routes
   if (!request.nextUrl.pathname.startsWith('/admin')) {
     return response;

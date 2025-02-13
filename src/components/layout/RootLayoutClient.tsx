@@ -17,6 +17,8 @@ import ErrorBoundary from '@/components/error-boundary/ErrorBoundary';
 import ErrorFallback from '@/components/error-boundary/ErrorFallback';
 
 // Create a client
+const isDev = process.env.NODE_ENV === 'development';
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -32,10 +34,15 @@ const getQueryClient = () => {
   if (typeof window === 'undefined') {
     return queryClient;
   }
-  // @ts-ignore - window._queryClient is fine for this use case
-  window._queryClient = window._queryClient ?? queryClient;
-  // @ts-ignore
-  return window._queryClient;
+  
+  if (isDev) {
+    // @ts-ignore - window._queryClient is fine for this use case
+    window._queryClient = window._queryClient ?? queryClient;
+    // @ts-ignore
+    return window._queryClient;
+  }
+  
+  return queryClient;
 };
 
 interface RootLayoutClientProps {
