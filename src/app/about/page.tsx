@@ -6,6 +6,7 @@ import ProfileSection from '@/components/about/profile-section/ProfileSection';
 import SkillsSection from '@/components/about/skills-section/SkillsSection';
 import { generateWebPageSchema, generatePersonSchema } from '@/lib/schema';
 import { siteConfig } from '@/config/metadata';
+import LavaLamp from '@/components/lava-lamp/LavaLamp';
 
 const About = () => {
   const skills = [
@@ -42,6 +43,7 @@ const About = () => {
           ])
         }}
       />
+      <LavaLamp />
       <PageContainer>
         <ContentWrapper>
           <ProfileSection />

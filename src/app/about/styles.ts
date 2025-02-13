@@ -223,7 +223,7 @@ export const SkillLevel = styled.div`
 
 export const PageContainer = styled.div`
   min-height: 100vh;
-  background: ${({ theme }) => theme.colors.background.primary};
+  background: transparent;
 `;
 
 export const ContentWrapper = styled(motion.div)`

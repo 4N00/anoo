@@ -5,12 +5,15 @@ import styled from 'styled-components';
 import { usePathname } from 'next/navigation';
 import { useTheme } from '@/styles/theme';
 import TrefoilKnot from '@/components/trefoil-knot/TrefoilKnot';
+import LavaLamp from '@/components/lava-lamp/LavaLamp';
 
 interface BackgroundContextType {
   backgroundColor: string;
   setBackgroundColor: (color: string) => void;
   showTrefoil: boolean;
   setShowTrefoil: (show: boolean) => void;
+  showMagnatic: boolean;
+  setShowMagnatic: (show: boolean) => void;
 }
 
 const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined);
@@ -32,8 +35,10 @@ export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children
   const { isDark, theme } = useTheme();
   const [backgroundColor, setBackgroundColor] = useState(theme.colors.background.primary);
   const [showTrefoil, setShowTrefoil] = useState(true);
+  const [showMagnatic, setShowMagnatic] = useState(true);
   const pathname = usePathname();
   const isHome = pathname === '/';
+  const isAbout = pathname === '/about';
 
   // Reset background color when leaving home page or theme changes
   useEffect(() => {
@@ -49,10 +54,19 @@ export const BackgroundProvider: React.FC<{ children: ReactNode }> = ({ children
     }
   }, [isHome, isDark, theme.colors.background.primary, backgroundColor]);
 
+  useEffect(() => {
+    if (isAbout) {
+      setShowMagnatic(false);
+    } else {
+      setShowMagnatic(true);
+    }
+  }, [isAbout]);
+
   return (
-    <BackgroundContext.Provider value={{ backgroundColor, setBackgroundColor, showTrefoil, setShowTrefoil }}>
+    <BackgroundContext.Provider value={{ backgroundColor, setBackgroundColor, showTrefoil, setShowTrefoil, showMagnatic, setShowMagnatic }}>
       <PageBackground $bgColor={backgroundColor} $isHome={isHome} />
       {showTrefoil && <TrefoilKnot />}
+      {showMagnatic && <LavaLamp />}
       {children}
     </BackgroundContext.Provider>
   );
