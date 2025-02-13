@@ -2,7 +2,6 @@
 
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
-import { useScroll } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { Container, EffectContainer } from './styles';
 
@@ -24,58 +23,72 @@ const fragmentShader = `
     uv = uv * 2.0 - 1.0;
     uv.x *= resolution.x / resolution.y;
     
-    // Create three sets of organic moving shapes
+    // Create multiple organic moving shapes
     float t1 = time * 0.08;
     float t2 = time * 0.06;
     float t3 = time * 0.04;
     
-    // Left side shapes
+    // Top cluster
     vec2 c1 = vec2(
-      sin(t1) * 0.4 - 0.8 + cos(t2) * 0.2,
-      cos(t1) * 0.4 + sin(t3) * 0.2
+      sin(t1) * 0.4 - 0.2,
+      cos(t1) * 0.3 + 0.6
     );
     
     vec2 c2 = vec2(
-      sin(t2 + 2.0) * 0.45 - 0.8 + cos(t3) * 0.2,
-      cos(t2 + 1.0) * 0.45 + sin(t1) * 0.2
+      sin(t2 + 2.0) * 0.35 + 0.2,
+      cos(t2 + 1.0) * 0.35 + 0.7
     );
 
-    // Center shapes
+    // Middle cluster
     vec2 c3 = vec2(
-      sin(t3 + 4.0) * 0.35 + cos(t1) * 0.2,
-      cos(t3 + 3.0) * 0.35 + sin(t2) * 0.2
+      sin(t3 + 4.0) * 0.35 - 0.3,
+      cos(t3 + 3.0) * 0.35
     );
 
     vec2 c4 = vec2(
-      sin(t1 + 3.0) * 0.42 + cos(t2) * 0.2,
-      cos(t1 + 2.0) * 0.42 + sin(t3) * 0.2
+      sin(t1 + 3.0) * 0.32 + 0.3,
+      cos(t1 + 2.0) * 0.32 - 0.1
     );
 
-    // Right side shapes
+    // Bottom cluster
     vec2 c5 = vec2(
-      sin(t2) * 0.4 + 0.8 + cos(t3) * 0.2,
-      cos(t2) * 0.4 + sin(t1) * 0.2
+      sin(t2) * 0.4 - 0.1,
+      cos(t2) * 0.3 - 0.7
     );
     
     vec2 c6 = vec2(
-      sin(t3 + 2.0) * 0.45 + 0.8 + cos(t1) * 0.2,
-      cos(t3 + 1.0) * 0.45 + sin(t2) * 0.2
+      sin(t3 + 2.0) * 0.35 + 0.2,
+      cos(t3 + 1.0) * 0.35 - 0.6
+    );
+
+    // Additional middle shapes
+    vec2 c7 = vec2(
+      sin(t1 + 5.0) * 0.3 - 0.4,
+      cos(t1 + 4.0) * 0.3 + 0.2
+    );
+
+    vec2 c8 = vec2(
+      sin(t2 + 6.0) * 0.35 + 0.4,
+      cos(t2 + 3.0) * 0.35 - 0.3
     );
     
     // Create smooth blending between shapes
-    float d1 = sdSphere(uv, c1, 0.5);
-    float d2 = sdSphere(uv, c2, 0.45);
-    float d3 = sdSphere(uv, c3, 0.48);
-    float d4 = sdSphere(uv, c4, 0.47);
-    float d5 = sdSphere(uv, c5, 0.5);
-    float d6 = sdSphere(uv, c6, 0.45);
+    float d1 = sdSphere(uv, c1, 0.35);
+    float d2 = sdSphere(uv, c2, 0.3);
+    float d3 = sdSphere(uv, c3, 0.33);
+    float d4 = sdSphere(uv, c4, 0.32);
+    float d5 = sdSphere(uv, c5, 0.35);
+    float d6 = sdSphere(uv, c6, 0.3);
+    float d7 = sdSphere(uv, c7, 0.32);
+    float d8 = sdSphere(uv, c8, 0.31);
     
-    // Blend all shapes together
-    float leftBlob = smin(d1, d2, 0.6);
-    float centerBlob = smin(d3, d4, 0.6);
-    float rightBlob = smin(d5, d6, 0.6);
+    // Blend shapes within clusters
+    float topCluster = smin(d1, d2, 0.5);
+    float middleCluster = smin(smin(d3, d4, 0.5), smin(d7, d8, 0.5), 0.5);
+    float bottomCluster = smin(d5, d6, 0.5);
     
-    float d = smin(smin(leftBlob, centerBlob, 0.8), rightBlob, 0.8);
+    // Blend clusters with less interaction between them
+    float d = min(min(topCluster, middleCluster), bottomCluster);
     
     // Create gradient colors with more variation
     vec3 color1 = vec3(1.0, 0.4, 0.7); // Pink
@@ -113,7 +126,6 @@ const LavaLamp = () => {
   const cameraRef = useRef<THREE.Camera>();
   const rendererRef = useRef<THREE.WebGLRenderer>();
   const uniformsRef = useRef<any>();
-  const { scrollY } = useScroll();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -132,12 +144,14 @@ const LavaLamp = () => {
     cameraRef.current = camera;
     rendererRef.current = renderer;
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    const container = mountRef.current.parentElement;
+    const containerHeight = container?.offsetHeight || window.innerHeight;
+    renderer.setSize(window.innerWidth, containerHeight);
     mountRef.current.appendChild(renderer.domElement);
 
     uniformsRef.current = {
       time: { value: 0 },
-      resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
+      resolution: { value: new THREE.Vector2(window.innerWidth, containerHeight) }
     };
 
     const material = new THREE.ShaderMaterial({
@@ -165,9 +179,10 @@ const LavaLamp = () => {
     const handleResize = () => {
       if (!uniformsRef.current || !renderer) return;
       
+      const newContainerHeight = container?.offsetHeight || window.innerHeight;
       uniformsRef.current.resolution.value.x = window.innerWidth;
-      uniformsRef.current.resolution.value.y = window.innerHeight;
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      uniformsRef.current.resolution.value.y = newContainerHeight;
+      renderer.setSize(window.innerWidth, newContainerHeight);
     };
 
     window.addEventListener('resize', handleResize);
@@ -180,17 +195,6 @@ const LavaLamp = () => {
       renderer.dispose();
     };
   }, [pathname]);
-
-  useEffect(() => {
-    if (pathname !== '/') return;
-    if (!uniformsRef.current) return;
-
-    const unsubscribe = scrollY.onChange((latest) => {
-      uniformsRef.current.time.value += latest * 0.0001;
-    });
-
-    return () => unsubscribe();
-  }, [scrollY, pathname]);
 
   if (pathname !== '/') return null;
 

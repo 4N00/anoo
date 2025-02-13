@@ -31,6 +31,7 @@ export const Copyright = styled.p`
 
 export const FooterContainer = styled.footer`
   border-top: 1px solid ${({ theme }) => theme.colors.background.secondary};
+  z-index: 999;
 `;
 
 export const FooterContent = styled.div`
