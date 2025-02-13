@@ -23,75 +23,72 @@ const fragmentShader = `
     uv = uv * 2.0 - 1.0;
     uv.x *= resolution.x / resolution.y;
     
-    // Animation speeds
+    // Create multiple organic moving shapes
     float t1 = time * 0.08;
     float t2 = time * 0.06;
     float t3 = time * 0.04;
     
-    // Movement ranges
-    float moveRange1 = 0.25;  // Primary movement range
-    float moveRange2 = 0.2;   // Secondary range
+    // Top cluster
+    vec2 c1 = vec2(
+      sin(t1) * 0.4 - 0.2,
+      cos(t1) * 0.3 + 0.6
+    );
     
-    // Shape sizes
-    float size1 = 0.1;  // Primary size
-    float size2 = 0.05;   // Secondary size
+    vec2 c2 = vec2(
+      sin(t2 + 2.0) * 0.35 + 0.2,
+      cos(t2 + 1.0) * 0.35 + 0.7
+    );
+
+    // Middle cluster
+    vec2 c3 = vec2(
+      sin(t3 + 4.0) * 0.35 - 0.3,
+      cos(t3 + 3.0) * 0.35
+    );
+
+    vec2 c4 = vec2(
+      sin(t1 + 3.0) * 0.32 + 0.3,
+      cos(t1 + 2.0) * 0.32 - 0.1
+    );
+
+    // Bottom cluster
+    vec2 c5 = vec2(
+      sin(t2) * 0.4 - 0.1,
+      cos(t2) * 0.3 - 0.7
+    );
     
-    // Blend amount between shapes in same clump
-    float blendAmount = 0.58;  // Increased for more merging in center
+    vec2 c6 = vec2(
+      sin(t3 + 2.0) * 0.35 + 0.2,
+      cos(t3 + 1.0) * 0.35 - 0.6
+    );
+
+    // Additional middle shapes
+    vec2 c7 = vec2(
+      sin(t1 + 5.0) * 0.3 - 0.4,
+      cos(t1 + 4.0) * 0.3 + 0.2
+    );
+
+    vec2 c8 = vec2(
+      sin(t2 + 6.0) * 0.35 + 0.4,
+      cos(t2 + 3.0) * 0.35 - 0.3
+    );
     
-    // Top clump (y: 0.6)
-    vec2 c1_1 = vec2(sin(t1) * moveRange1 - 0.2, cos(t1) * moveRange1 + 0.6);
-    vec2 c1_2 = vec2(sin(t2 + 1.0) * moveRange2, cos(t2 + 1.0) * moveRange2 + 0.6);
-    vec2 c1_3 = vec2(sin(t3 + 2.0) * moveRange1 + 0.2, cos(t3 + 2.0) * moveRange1 + 0.55);
-    vec2 c1_4 = vec2(sin(t1 + 3.0) * moveRange2 - 0.1, cos(t1 + 3.0) * moveRange2 + 0.65);
-    vec2 c1_5 = vec2(sin(t2 + 4.0) * moveRange1 + 0.1, cos(t2 + 4.0) * moveRange1 + 0.5);
-    vec2 c1_6 = vec2(sin(t3 + 5.0) * moveRange2 + 0.3, cos(t3 + 5.0) * moveRange2 + 0.6);
+    // Create smooth blending between shapes
+    float d1 = sdSphere(uv, c1, 0.35);
+    float d2 = sdSphere(uv, c2, 0.3);
+    float d3 = sdSphere(uv, c3, 0.33);
+    float d4 = sdSphere(uv, c4, 0.32);
+    float d5 = sdSphere(uv, c5, 0.35);
+    float d6 = sdSphere(uv, c6, 0.3);
+    float d7 = sdSphere(uv, c7, 0.32);
+    float d8 = sdSphere(uv, c8, 0.31);
     
-    // Middle clump (y: 0.0)
-    vec2 c2_1 = vec2(sin(t3) * moveRange1 - 0.1, cos(t3) * moveRange1);
-    vec2 c2_2 = vec2(sin(t1 + 2.0) * moveRange2 + 0.2, cos(t1 + 2.0) * moveRange2);
-    vec2 c2_3 = vec2(sin(t2 + 3.0) * moveRange1, cos(t2 + 3.0) * moveRange1 - 0.05);
-    vec2 c2_4 = vec2(sin(t3 + 4.0) * moveRange2 - 0.2, cos(t3 + 4.0) * moveRange2 + 0.05);
-    vec2 c2_5 = vec2(sin(t1 + 5.0) * moveRange1 + 0.1, cos(t1 + 5.0) * moveRange1 - 0.1);
-    vec2 c2_6 = vec2(sin(t2 + 6.0) * moveRange2 + 0.3, cos(t2 + 6.0) * moveRange2);
+    // Blend shapes within clusters
+    float topCluster = smin(d1, d2, 0.5);
+    float middleCluster = smin(smin(d3, d4, 0.5), smin(d7, d8, 0.5), 0.5);
+    float bottomCluster = smin(d5, d6, 0.5);
     
-    // Bottom clump (y: -0.6)
-    vec2 c3_1 = vec2(sin(t2) * moveRange1 + 0.2, cos(t2) * moveRange1 - 0.6);
-    vec2 c3_2 = vec2(sin(t3 + 3.0) * moveRange2, cos(t3 + 3.0) * moveRange2 - 0.6);
-    vec2 c3_3 = vec2(sin(t1 + 4.0) * moveRange1 - 0.2, cos(t1 + 4.0) * moveRange1 - 0.55);
-    vec2 c3_4 = vec2(sin(t2 + 5.0) * moveRange2 + 0.1, cos(t2 + 5.0) * moveRange2 - 0.65);
-    vec2 c3_5 = vec2(sin(t3 + 6.0) * moveRange1 - 0.1, cos(t3 + 6.0) * moveRange1 - 0.5);
-    vec2 c3_6 = vec2(sin(t1 + 7.0) * moveRange2 - 0.3, cos(t1 + 7.0) * moveRange2 - 0.6);
-    
-    // Calculate distances for each clump
-    float d1_1 = sdSphere(uv, c1_1, size1);
-    float d1_2 = sdSphere(uv, c1_2, size2);
-    float d1_3 = sdSphere(uv, c1_3, size1);
-    float d1_4 = sdSphere(uv, c1_4, size2);
-    float d1_5 = sdSphere(uv, c1_5, size1);
-    float d1_6 = sdSphere(uv, c1_6, size2);
-    
-    float d2_1 = sdSphere(uv, c2_1, size1);
-    float d2_2 = sdSphere(uv, c2_2, size2);
-    float d2_3 = sdSphere(uv, c2_3, size1);
-    float d2_4 = sdSphere(uv, c2_4, size2);
-    float d2_5 = sdSphere(uv, c2_5, size1);
-    float d2_6 = sdSphere(uv, c2_6, size2);
-    
-    float d3_1 = sdSphere(uv, c3_1, size1);
-    float d3_2 = sdSphere(uv, c3_2, size2);
-    float d3_3 = sdSphere(uv, c3_3, size1);
-    float d3_4 = sdSphere(uv, c3_4, size2);
-    float d3_5 = sdSphere(uv, c3_5, size1);
-    float d3_6 = sdSphere(uv, c3_6, size2);
-    
-    // Blend shapes within each clump
-    float clump1 = smin(smin(smin(smin(smin(d1_1, d1_2, blendAmount), d1_3, blendAmount), d1_4, blendAmount), d1_5, blendAmount), d1_6, blendAmount);
-    float clump2 = smin(smin(smin(smin(smin(d2_1, d2_2, blendAmount), d2_3, blendAmount), d2_4, blendAmount), d2_5, blendAmount), d2_6, blendAmount);
-    float clump3 = smin(smin(smin(smin(smin(d3_1, d3_2, blendAmount), d3_3, blendAmount), d3_4, blendAmount), d3_5, blendAmount), d3_6, blendAmount);
-    
-    // Combine all clumps with minimal interaction
-    float d = min(min(clump1, clump2), clump3);
+    // Blend clusters with less interaction between them
+    float d = min(min(topCluster, middleCluster), bottomCluster);
     
     // Create gradient colors with more variation
     vec3 color1 = vec3(1.0, 0.4, 0.7); // Pink
@@ -147,14 +144,12 @@ const LavaLamp = () => {
     cameraRef.current = camera;
     rendererRef.current = renderer;
 
-    const container = mountRef.current.parentElement;
-    const containerHeight = container?.offsetHeight || window.innerHeight;
-    renderer.setSize(window.innerWidth, containerHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
     mountRef.current.appendChild(renderer.domElement);
 
     uniformsRef.current = {
       time: { value: 0 },
-      resolution: { value: new THREE.Vector2(window.innerWidth, containerHeight) }
+      resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
     };
 
     const material = new THREE.ShaderMaterial({
@@ -182,10 +177,9 @@ const LavaLamp = () => {
     const handleResize = () => {
       if (!uniformsRef.current || !renderer) return;
       
-      const newContainerHeight = container?.offsetHeight || window.innerHeight;
       uniformsRef.current.resolution.value.x = window.innerWidth;
-      uniformsRef.current.resolution.value.y = newContainerHeight;
-      renderer.setSize(window.innerWidth, newContainerHeight);
+      uniformsRef.current.resolution.value.y = window.innerHeight;
+      renderer.setSize(window.innerWidth, window.innerHeight);
     };
 
     window.addEventListener('resize', handleResize);
