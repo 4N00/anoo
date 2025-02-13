@@ -2,6 +2,7 @@ import { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 
 const RootLayoutClient = dynamic(() => import('@/components/layout/RootLayoutClient'), {
   ssr: true
@@ -101,6 +102,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Suspense fallback={<div style={{ minHeight: '100vh' }} />}>
           <RootLayoutClient>{children}</RootLayoutClient>
         </Suspense>
+        <Analytics />
       </body>
     </html>
   );
