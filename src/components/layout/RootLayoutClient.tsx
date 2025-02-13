@@ -15,6 +15,11 @@ import Navbar from '../nav/nav';
 import React, { useEffect } from 'react';
 import ErrorBoundary from '@/components/error-boundary/ErrorBoundary';
 import ErrorFallback from '@/components/error-boundary/ErrorFallback';
+import dynamic from 'next/dynamic';
+
+const LavaLamp = dynamic(() => import('@/components/lava-lamp/LavaLamp'), {
+  ssr: false
+});
 
 // Create a client
 const isDev = process.env.NODE_ENV === 'development';
@@ -83,6 +88,7 @@ const RootLayoutClient: React.FC<RootLayoutClientProps> = ({ children }) => {
             <ProjectsProvider>
               <BackgroundProvider>
                 <LanguageProvider>
+                  <LavaLamp />
                   <Navbar />
                   <MainContent>
                     <ErrorBoundary fallback={<ErrorFallback />}>

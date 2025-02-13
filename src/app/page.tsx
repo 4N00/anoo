@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase';
 import { toProjectUI } from '@/types/project';
 import HomeClient from '@/components/home/HomeClient';
 import { generateWebPageSchema, generatePersonSchema } from '@/lib/schema';
+import LavaLamp from '@/components/lava-lamp/LavaLamp';
 
 // This function runs at build time in production
 export async function generateStaticParams() {
@@ -23,11 +24,12 @@ async function getProjects() {
   return (projects || []).map(toProjectUI);
 }
 
-export default async function Home() {
+const Home = async () => {
   const projects = await getProjects();
 
   return (
     <>
+      <LavaLamp />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -44,7 +46,9 @@ export default async function Home() {
       <HomeClient initialProjects={projects} />
     </>
   );
-}
+};
+
+export default Home;
 
 // Force static rendering
 export const dynamic = 'force-static';

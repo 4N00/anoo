@@ -24,39 +24,40 @@ const fragmentShader = `
     uv = uv * 2.0 - 1.0;
     uv.x *= resolution.x / resolution.y;
     
-    // Create organic moving shapes
-    float t1 = time * 0.1;
-    float t2 = time * 0.08;
-    float t3 = time * 0.06;
-    float t4 = time * 0.07;
+    // Create organic moving shapes with constrained movement
+    float t1 = time * 0.08;
+    float t2 = time * 0.06;
+    float t3 = time * 0.04;
+    float t4 = time * 0.05;
     
+    // Constrain movement to stay more visible on screen
     vec2 c1 = vec2(
-      sin(t1) * 0.6 + cos(t2) * 0.4,
-      cos(t1) * 0.6 + sin(t3) * 0.4
+      sin(t1) * 0.4 + cos(t2) * 0.2,
+      cos(t1) * 0.4 + sin(t3) * 0.2
     );
     
     vec2 c2 = vec2(
-      sin(t2 + 2.0) * 0.7 + cos(t3) * 0.4,
-      cos(t2 + 1.0) * 0.7 + sin(t1) * 0.4
+      sin(t2 + 2.0) * 0.45 + cos(t3) * 0.2,
+      cos(t2 + 1.0) * 0.45 + sin(t1) * 0.2
     );
     
     vec2 c3 = vec2(
-      sin(t3 + 4.0) * 0.65 + cos(t1) * 0.4,
-      cos(t3 + 3.0) * 0.65 + sin(t2) * 0.4
+      sin(t3 + 4.0) * 0.35 + cos(t1) * 0.2,
+      cos(t3 + 3.0) * 0.35 + sin(t2) * 0.2
     );
 
     vec2 c4 = vec2(
-      sin(t4 + 3.0) * 0.68 + cos(t2) * 0.4,
-      cos(t4 + 2.0) * 0.68 + sin(t3) * 0.4
+      sin(t4 + 3.0) * 0.42 + cos(t2) * 0.2,
+      cos(t4 + 2.0) * 0.42 + sin(t3) * 0.2
     );
     
-    // Create smooth blending between shapes
-    float d1 = sdSphere(uv, c1, 0.45);
-    float d2 = sdSphere(uv, c2, 0.4);
-    float d3 = sdSphere(uv, c3, 0.43);
-    float d4 = sdSphere(uv, c4, 0.42);
+    // Create smooth blending between shapes with larger base size
+    float d1 = sdSphere(uv, c1, 0.5);
+    float d2 = sdSphere(uv, c2, 0.45);
+    float d3 = sdSphere(uv, c3, 0.48);
+    float d4 = sdSphere(uv, c4, 0.47);
     
-    float d = smin(smin(smin(d1, d2, 0.5), d3, 0.5), d4, 0.5);
+    float d = smin(smin(smin(d1, d2, 0.6), d3, 0.6), d4, 0.6);
     
     // Create gradient colors
     vec3 color1 = vec3(1.0, 0.4, 0.7); // Pink
@@ -64,19 +65,19 @@ const fragmentShader = `
     vec3 color3 = vec3(1.0, 0.3, 0.5); // Another pink shade
     vec3 color4 = vec3(1.0, 0.5, 0.3); // Coral
     
-    // Mix colors based on position and time
+    // Mix colors based on position and time with slower color transitions
     vec3 color = mix(
       mix(
-        mix(color1, color2, sin(uv.x + time * 0.07) * 0.5 + 0.5),
+        mix(color1, color2, sin(uv.x + time * 0.05) * 0.5 + 0.5),
         color3,
-        sin(uv.y + time * 0.1) * 0.5 + 0.5
+        sin(uv.y + time * 0.07) * 0.5 + 0.5
       ),
       color4,
-      sin(length(uv) + time * 0.08) * 0.5 + 0.5
+      sin(length(uv) + time * 0.06) * 0.5 + 0.5
     );
     
-    // Create smooth falloff
-    float shape = smoothstep(0.0, 0.2, -d);
+    // Create smooth falloff with wider edge
+    float shape = smoothstep(0.0, 0.25, -d);
     
     gl_FragColor = vec4(color, shape * 0.8);
   }
@@ -100,7 +101,8 @@ const LavaLamp = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!pathname?.includes('/about')) return;
+    // Show on home page (root path)
+    if (pathname !== '/') return;
     if (!mountRef.current) return;
 
     const scene = new THREE.Scene();
@@ -164,7 +166,7 @@ const LavaLamp = () => {
   }, [pathname]);
 
   useEffect(() => {
-    if (!pathname?.includes('/about')) return;
+    if (pathname !== '/') return;
     if (!uniformsRef.current) return;
 
     const unsubscribe = scrollY.onChange((latest) => {
@@ -174,7 +176,7 @@ const LavaLamp = () => {
     return () => unsubscribe();
   }, [scrollY, pathname]);
 
-  if (!pathname?.includes('/about')) return null;
+  if (pathname !== '/') return null;
 
   return (
     <EffectContainer>
