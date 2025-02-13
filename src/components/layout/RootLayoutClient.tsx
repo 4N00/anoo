@@ -12,7 +12,7 @@ import GlobalStyles from '@/styles/GlobalStyles';
 import PageFooter from "@/components/footer/Footer";
 import { MainContent } from './styles';
 import Navbar from '../nav/nav';
-import React from 'react';
+import React, { useEffect } from 'react';
 import ErrorBoundary from '@/components/error-boundary/ErrorBoundary';
 import ErrorFallback from '@/components/error-boundary/ErrorFallback';
 
@@ -43,6 +43,18 @@ interface RootLayoutClientProps {
 }
 
 const RootLayoutClient: React.FC<RootLayoutClientProps> = ({ children }) => {
+  useEffect(() => {
+    const handleError = (event: globalThis.ErrorEvent) => {
+      if (event.error?.message?.includes('message port closed')) {
+        // Ignore message port errors from extensions
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('error', handleError);
+    return () => window.removeEventListener('error', handleError);
+  }, []);
+
   return (
     <QueryClientProvider client={getQueryClient()}>
       <ThemeProvider>
