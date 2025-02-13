@@ -39,6 +39,12 @@ const fragmentShader = `
       cos(t2 + 1.0) * 0.35 + 0.7
     );
 
+    // New top-left sphere
+    vec2 c12 = vec2(
+      sin(t3 + 1.5) * 0.3 - 0.5,
+      cos(t3 + 2.0) * 0.25 + 0.65
+    );
+
     // Middle cluster
     vec2 c3 = vec2(
       sin(t3 + 4.0) * 0.35 - 0.3,
@@ -100,9 +106,10 @@ const fragmentShader = `
     float d9 = sdSphere(uv, c9, 0.34);
     float d10 = sdSphere(uv, c10, 0.31);
     float d11 = sdSphere(uv, c11, 0.33);
+    float d12 = sdSphere(uv, c12, 0.25);
     
     // Blend shapes within clusters
-    float topCluster = smin(d1, d2, 0.5);
+    float topCluster = smin(smin(d1, d2, 0.5), d12, 0.5);
     float middleCluster = smin(smin(d3, d4, 0.5), smin(d7, d8, 0.5), 0.5);
     float bottomCluster = smin(d5, d6, 0.5);
     float lowerCluster = smin(smin(d9, d10, 0.5), d11, 0.5);

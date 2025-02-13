@@ -48,7 +48,7 @@ const fragmentShader = `
     float moveRange3 = 0.25;  // Tertiary range
 
     // Repulsion strength
-    float repStrength = 0.15;  // Adjust this to control how strongly shapes avoid the cursor
+    float repStrength = 0.03;  // Reduced from 0.15 to 0.0375 (25% of original)
     
     // Calculate base positions with mouse repulsion
     vec2 c1_base = vec2(sin(t1) * moveRange1 - 0.2, cos(t1) * moveRange1 + 0.4);
