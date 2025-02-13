@@ -3,7 +3,7 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { usePathname } from 'next/navigation';
-import { Container, EffectContainer } from './styles';
+import { ContactEffectContainer, Container } from './styles';
 
 const fragmentShader = `
   uniform float time;
@@ -219,9 +219,9 @@ const ContactLavaLamp = () => {
   if (pathname !== '/contact') return null;
 
   return (
-    <EffectContainer>
+    <ContactEffectContainer>
       <Container ref={mountRef} />
-    </EffectContainer>
+    </ContactEffectContainer>
   );
 };
 
