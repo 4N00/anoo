@@ -37,54 +37,69 @@ const fragmentShader = `
     mouseUV = mouseUV * 2.0 - 1.0;
     mouseUV.x *= resolution.x / resolution.y;
 
-    // Animation speeds
-    float t1 = time * 0.08;
-    float t2 = time * 0.06;
-    float t3 = time * 0.04;
+    // Animation speed for each time variable
+    float t1 = time * 0.08;  // Main time variable
+    float t2 = time * 0.06;  // Secondary time
+    float t3 = time * 0.04;  // Tertiary time
     
-    // Movement ranges
-    float moveRange1 = 0.15;  // Reduced movement range for tighter formation
-    float moveRange2 = 0.12;   // Reduced movement range for tighter formation
-    
-    // Shape sizes
-    float size1 = 0.08;  // Primary size - smaller spheres
-    float size2 = 0.07;   // Secondary size - smaller spheres
-    
-    // Blend amount between shapes in same clump
-    float blendAmount = 0.2;  // Reduced for more distinct spheres
+    // Movement range multipliers
+    float moveRange1 = 0.35;  // Primary movement range
+    float moveRange2 = 0.3;   // Secondary range
+    float moveRange3 = 0.25;  // Tertiary range
 
     // Repulsion strength
     float repStrength = 0.15;  // Adjust this to control how strongly shapes avoid the cursor
     
     // Calculate base positions with mouse repulsion
-    vec2 c1_base = vec2(sin(t1) * moveRange1 - 0.15, cos(t1) * moveRange1 + 0.6);
-    vec2 c1_1 = c1_base + getRepulsion(c1_base, mouseUV, repStrength);
+    vec2 c1_base = vec2(sin(t1) * moveRange1 - 0.2, cos(t1) * moveRange1 + 0.4);
+    vec2 c1 = c1_base + getRepulsion(c1_base, mouseUV, repStrength);
     
-    vec2 c2_base = vec2(sin(t2 + 1.0) * moveRange2 + 0.15, cos(t2 + 1.0) * moveRange2 + 0.6);
-    vec2 c1_2 = c2_base + getRepulsion(c2_base, mouseUV, repStrength);
+    vec2 c2_base = vec2(sin(t2 + 2.0) * moveRange2 + 0.2, cos(t2 + 1.0) * moveRange2 + 0.5);
+    vec2 c2 = c2_base + getRepulsion(c2_base, mouseUV, repStrength);
+
+    vec2 c3_base = vec2(sin(t3 + 4.0) * moveRange2 - 0.3, cos(t3 + 3.0) * moveRange2);
+    vec2 c3 = c3_base + getRepulsion(c3_base, mouseUV, repStrength);
+
+    vec2 c4_base = vec2(sin(t1 + 3.0) * moveRange3 + 0.3, cos(t1 + 2.0) * moveRange3 - 0.1);
+    vec2 c4 = c4_base + getRepulsion(c4_base, mouseUV, repStrength);
+
+    vec2 c5_base = vec2(sin(t2) * moveRange1 - 0.1, cos(t2) * moveRange1 - 0.5);
+    vec2 c5 = c5_base + getRepulsion(c5_base, mouseUV, repStrength);
     
-    vec2 c3_base = vec2(sin(t3 + 2.0) * moveRange1, cos(t3 + 2.0) * moveRange1 + 0.7);
-    vec2 c1_3 = c3_base + getRepulsion(c3_base, mouseUV, repStrength);
+    vec2 c6_base = vec2(sin(t3 + 2.0) * moveRange2 + 0.2, cos(t3 + 1.0) * moveRange2 - 0.4);
+    vec2 c6 = c6_base + getRepulsion(c6_base, mouseUV, repStrength);
+
+    vec2 c7_base = vec2(sin(t1 + 5.0) * moveRange3 - 0.4, cos(t1 + 4.0) * moveRange3 + 0.2);
+    vec2 c7 = c7_base + getRepulsion(c7_base, mouseUV, repStrength);
+
+    vec2 c8_base = vec2(sin(t2 + 6.0) * moveRange2 + 0.4, cos(t2 + 3.0) * moveRange2 - 0.3);
+    vec2 c8 = c8_base + getRepulsion(c8_base, mouseUV, repStrength);
     
-    vec2 c4_base = vec2(sin(t1 + 3.0) * moveRange2 - 0.2, cos(t1 + 3.0) * moveRange2 + 0.5);
-    vec2 c1_4 = c4_base + getRepulsion(c4_base, mouseUV, repStrength);
+    // Shape sizes
+    float size1 = 0.28;  // Primary size
+    float size2 = 0.25;  // Secondary size
+    float size3 = 0.23;  // Tertiary size
     
-    vec2 c5_base = vec2(sin(t2 + 4.0) * moveRange1 + 0.2, cos(t2 + 4.0) * moveRange1 + 0.5);
-    vec2 c1_5 = c5_base + getRepulsion(c5_base, mouseUV, repStrength);
+    // Create smooth blending between shapes
+    float d1 = sdSphere(uv, c1, size1);
+    float d2 = sdSphere(uv, c2, size2);
+    float d3 = sdSphere(uv, c3, size2);
+    float d4 = sdSphere(uv, c4, size3);
+    float d5 = sdSphere(uv, c5, size1);
+    float d6 = sdSphere(uv, c6, size2);
+    float d7 = sdSphere(uv, c7, size3);
+    float d8 = sdSphere(uv, c8, size2);
     
-    vec2 c6_base = vec2(sin(t3 + 5.0) * moveRange2, cos(t3 + 5.0) * moveRange2 + 0.65);
-    vec2 c1_6 = c6_base + getRepulsion(c6_base, mouseUV, repStrength);
+    // Blend amount between shapes
+    float blendAmount = 0.4;  // Blend radius
     
-    // Calculate distances for the clump
-    float d1_1 = sdSphere(uv, c1_1, size1);
-    float d1_2 = sdSphere(uv, c1_2, size2);
-    float d1_3 = sdSphere(uv, c1_3, size1);
-    float d1_4 = sdSphere(uv, c1_4, size2);
-    float d1_5 = sdSphere(uv, c1_5, size1);
-    float d1_6 = sdSphere(uv, c1_6, size2);
+    // Blend shapes within clusters
+    float topCluster = smin(d1, d2, blendAmount);
+    float middleCluster = smin(smin(d3, d4, blendAmount), smin(d7, d8, blendAmount), blendAmount);
+    float bottomCluster = smin(d5, d6, blendAmount);
     
-    // Blend shapes within the clump
-    float d = smin(smin(smin(smin(smin(d1_1, d1_2, blendAmount), d1_3, blendAmount), d1_4, blendAmount), d1_5, blendAmount), d1_6, blendAmount);
+    // Blend clusters with less interaction between them
+    float d = min(min(topCluster, middleCluster), bottomCluster);
     
     // Create gradient colors with more variation
     vec3 color1 = vec3(1.0, 0.4, 0.7); // Pink
@@ -103,7 +118,7 @@ const fragmentShader = `
       sin(length(uv) + time * 0.06) * 0.5 + 0.5
     );
     
-    float shape = smoothstep(0.0, 0.08, -d);  // Much smaller smoothstep range for larger white cores
+    float shape = smoothstep(0.0, 0.25, -d);
     gl_FragColor = vec4(color, shape * 0.8);
   }
 `;
@@ -116,7 +131,7 @@ const vertexShader = `
   }
 `;
 
-const LavaLamp = () => {
+const ContactLavaLamp = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene>();
   const cameraRef = useRef<THREE.Camera>();
@@ -125,8 +140,8 @@ const LavaLamp = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Show on home page (root path)
-    if (pathname !== '/') return;
+    // Show on contact page
+    if (pathname !== '/contact') return;
     if (!mountRef.current) return;
 
     const scene = new THREE.Scene();
@@ -201,7 +216,7 @@ const LavaLamp = () => {
     };
   }, [pathname]);
 
-  if (pathname !== '/') return null;
+  if (pathname !== '/contact') return null;
 
   return (
     <EffectContainer>
@@ -210,4 +225,4 @@ const LavaLamp = () => {
   );
 };
 
-export default LavaLamp; 
+export default ContactLavaLamp; 

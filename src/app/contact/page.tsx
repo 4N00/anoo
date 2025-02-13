@@ -3,6 +3,7 @@
 import { generateWebPageSchema } from '@/lib/schema';
 import { siteConfig } from '@/config/metadata';
 import ContactForm from '@/components/contact/ContactForm';
+import ContactLavaLamp from '@/components/lava-lamp/ContactLavaLamp';
 
 const Contact = () => {
   return (
@@ -19,6 +20,7 @@ const Contact = () => {
           )
         }}
       />
+      <ContactLavaLamp />
       <ContactForm />
     </>
   );

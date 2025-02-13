@@ -96,7 +96,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
       if (isDark) {
         // Dark theme colors
         if (scrollPercentage < 0.3) {
-          newColor = '#121212';
+          newColor = '#000000';
         } else if (scrollPercentage < 0.6) {
           newColor = '#1a1a1a';
         } else if (scrollPercentage < 0.9) {
