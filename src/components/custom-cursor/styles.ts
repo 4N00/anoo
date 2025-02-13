@@ -8,13 +8,16 @@ export const CursorWrapper = styled(motion.div)`
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
-
   z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
   mix-blend-mode: difference;
   transform-origin: center;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 export const ClickText = styled(motion.span)`
