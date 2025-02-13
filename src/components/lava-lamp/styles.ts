@@ -7,9 +7,8 @@ export const EffectContainer = styled.div`
   height: 100%;
   pointer-events: none;
   filter: contrast(170%) brightness(1000%);
-  overflow: visible;
-  z-index: 1;
-
+  overflow: hidden;
+  z-index: 0;
   &:before {
     content: "";
     position: absolute;
@@ -23,7 +22,7 @@ export const EffectContainer = styled.div`
     mix-blend-mode: overlay;
     pointer-events: none;
     z-index: 2;
-    filter: contrast(150%) brightness(800%);
+    filter: contrast(150%) brightness(1000%);
   }
 `;
 
@@ -32,7 +31,7 @@ export const Container = styled.div`
   inset: 0;
   width: 100%;
   height: 100%;
-  transform: scale(2);
+  transform: scale(1.5);
   transform-origin: center center;
   pointer-events: none;
 `; 
