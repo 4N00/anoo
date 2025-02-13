@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const RootLayoutClient = dynamic(() => import('@/components/layout/RootLayoutClient'), {
   ssr: true
@@ -104,6 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <RootLayoutClient>{children}</RootLayoutClient>
         </Suspense>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
