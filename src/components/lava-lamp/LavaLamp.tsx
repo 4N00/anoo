@@ -71,6 +71,22 @@ const fragmentShader = `
       sin(t2 + 6.0) * 0.35 + 0.4,
       cos(t2 + 3.0) * 0.35 - 0.3
     );
+
+    // New lower cluster
+    vec2 c9 = vec2(
+      sin(t1 + 7.0) * 0.4 - 0.2,
+      cos(t1 + 5.0) * 0.3 - 1.4
+    );
+    
+    vec2 c10 = vec2(
+      sin(t2 + 8.0) * 0.35 + 0.3,
+      cos(t2 + 6.0) * 0.35 - 1.3
+    );
+
+    vec2 c11 = vec2(
+      sin(t3 + 9.0) * 0.38 - 0.1,
+      cos(t3 + 7.0) * 0.32 - 1.5
+    );
     
     // Create smooth blending between shapes
     float d1 = sdSphere(uv, c1, 0.35);
@@ -81,14 +97,18 @@ const fragmentShader = `
     float d6 = sdSphere(uv, c6, 0.3);
     float d7 = sdSphere(uv, c7, 0.32);
     float d8 = sdSphere(uv, c8, 0.31);
+    float d9 = sdSphere(uv, c9, 0.34);
+    float d10 = sdSphere(uv, c10, 0.31);
+    float d11 = sdSphere(uv, c11, 0.33);
     
     // Blend shapes within clusters
     float topCluster = smin(d1, d2, 0.5);
     float middleCluster = smin(smin(d3, d4, 0.5), smin(d7, d8, 0.5), 0.5);
     float bottomCluster = smin(d5, d6, 0.5);
+    float lowerCluster = smin(smin(d9, d10, 0.5), d11, 0.5);
     
     // Blend clusters with less interaction between them
-    float d = min(min(topCluster, middleCluster), bottomCluster);
+    float d = min(min(min(topCluster, middleCluster), bottomCluster), lowerCluster);
     
     // Create gradient colors with more variation
     vec3 color1 = vec3(1.0, 0.4, 0.7); // Pink
@@ -144,12 +164,12 @@ const LavaLamp = () => {
     cameraRef.current = camera;
     rendererRef.current = renderer;
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight * 1.3);
     mountRef.current.appendChild(renderer.domElement);
 
     uniformsRef.current = {
       time: { value: 0 },
-      resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
+      resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight * 1.3) }
     };
 
     const material = new THREE.ShaderMaterial({
@@ -178,8 +198,8 @@ const LavaLamp = () => {
       if (!uniformsRef.current || !renderer) return;
       
       uniformsRef.current.resolution.value.x = window.innerWidth;
-      uniformsRef.current.resolution.value.y = window.innerHeight;
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      uniformsRef.current.resolution.value.y = window.innerHeight * 1.3;
+      renderer.setSize(window.innerWidth, window.innerHeight * 1.3);
     };
 
     window.addEventListener('resize', handleResize);
