@@ -30,7 +30,6 @@ export const Copyright = styled.p`
 `;
 
 export const FooterContainer = styled.footer`
-  padding: ${({ theme }) => theme.spacing.xl};
   border-top: 1px solid ${({ theme }) => theme.colors.background.secondary};
 `;
 

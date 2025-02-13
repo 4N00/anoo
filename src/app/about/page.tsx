@@ -24,7 +24,7 @@ const About = () => {
     { name: 'Headless CMS', level: 70 },
     { name: 'Unity', level: 85 },
     { name: 'Three.js', level: 65 },
-    { name: 'Humor', level: 120 },
+    { name: 'Humor', level: 105 },
   ];
 
   return (

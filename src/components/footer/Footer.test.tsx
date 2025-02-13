@@ -5,6 +5,8 @@ import '@testing-library/jest-dom';
 import PageFooter from './Footer';
 import { stripAllProps } from '@/test-utils/mockHelpers';
 
+declare const jest: any;
+
 // Mock styled components
 jest.mock('./styles', () => ({
   FooterContainer: ({ children, ...props }: React.PropsWithChildren<any>) => (

@@ -1,13 +1,21 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "jsx": "react",
+    "jsx": "react-jsx",
+    "jsxFactory": "React.createElement",
+    "jsxFragmentFactory": "React.Fragment",
+    "jsxImportSource": "react",
     "isolatedModules": true,
     "esModuleInterop": true,
     "types": ["jest", "node", "@testing-library/jest-dom"],
     "module": "commonjs",
     "target": "es6",
-    "lib": ["dom", "dom.iterable", "esnext"]
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "moduleResolution": "node",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true
   },
   "include": [
     "src/**/*.ts",

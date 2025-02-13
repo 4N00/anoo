@@ -1,32 +1,31 @@
 /// <reference types="@testing-library/jest-dom" />
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { ThemeProvider } from 'styled-components';
-import { lightTheme } from '@/styles/themeConfig';
 import Container from './Container';
-import { stripAllProps } from '@/test-utils/mockHelpers';
 
 declare const jest: any;
 declare const describe: any;
 declare const it: any;
 declare const expect: any;
 
+type MockProps = {
+  children?: React.ReactNode;
+  className?: string;
+  as?: React.ElementType;
+  [key: string]: any;
+};
+
 // Mock styled components
 jest.mock('./styles', () => ({
-  StyledContainer: React.forwardRef(({ children, className, as: Component = 'div', ...props }, ref) => (
-    <Component data-testid="container" className={className} ref={ref} {...props}>
-      {children}
-    </Component>
-  )),
+  StyledContainer: React.forwardRef<HTMLElement, MockProps>(({ children, className, as: Component = 'div', ...props }, ref) => {
+    const Element = Component;
+    return (
+      <Element ref={ref} data-testid="container" className={className} {...props}>
+        {children}
+      </Element>
+    );
+  }),
 }));
-
-const renderWithTheme = (ui: React.ReactNode) => {
-  return render(
-    <ThemeProvider theme={lightTheme}>
-      {ui}
-    </ThemeProvider>
-  );
-};
 
 /** @jest-environment jsdom */
 describe('Container', () => {
