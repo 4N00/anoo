@@ -15,12 +15,18 @@ const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
 });
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#ffffff',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#000000' },
+  ],
+  colorScheme: 'light dark',
 };
 
 export const metadata: Metadata = {
@@ -28,11 +34,26 @@ export const metadata: Metadata = {
   title: 'Anoo - Creative Developer Portfolio',
   description: 'Portfolio showcasing creative development work and projects by Anoo. Specializing in React, TypeScript, and modern web development.',
   keywords: 'developer, portfolio, react, typescript, web development',
-  robots: 'index, follow',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   manifest: '/manifest.json',
   icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180' },
+    ],
   },
   openGraph: {
     type: 'website',
@@ -40,6 +61,7 @@ export const metadata: Metadata = {
     url: '/',
     title: 'Anoo - Creative Developer Portfolio',
     description: 'Portfolio showcasing creative development work and projects by Anoo.',
+    siteName: 'Anoo Portfolio',
     images: [
       {
         url: '/og-image.jpg',
@@ -53,7 +75,11 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Anoo - Creative Developer Portfolio',
     description: 'Portfolio showcasing creative development work and projects by Anoo.',
+    creator: '@anoo',
     images: ['/og-image.jpg'],
+  },
+  alternates: {
+    canonical: '/',
   },
 };
 
@@ -63,6 +89,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/custom-font.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
         <style>{`* { cursor: none !important; }`}</style>
       </head>
       <body className={inter.className}>

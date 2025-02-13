@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { JSX } from 'react';
 import { StyledContainer } from './styles';
 
-export interface ContainerProps {
+export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   className?: string;
+  as?: keyof JSX.IntrinsicElements | React.ComponentType<any>;
+  role?: string;
 }
 
-const Container: React.FC<ContainerProps> = ({ children, className }) => (
-  <StyledContainer className={className}>{children}</StyledContainer>
+const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
+  ({ children, className, as, role = 'region', ...props }, ref) => (
+    <StyledContainer
+      ref={ref}
+      as={as}
+      className={className}
+      role={role}
+      {...props}
+    >
+      {children}
+    </StyledContainer>
+  )
 );
+
+Container.displayName = 'Container';
 
 export default Container; 

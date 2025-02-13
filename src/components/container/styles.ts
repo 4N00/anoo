@@ -12,6 +12,6 @@ export const StyledContainer = styled.div`
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding: 0 ${({ theme }) => theme.spacing.md};
+    padding: 0 ${({ theme }) => theme.spacing.xs};
   }
 `; 

@@ -1,9 +1,29 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import type { DefaultTheme } from 'styled-components';
 import { lightTheme, darkTheme } from './themeConfig';
+
+const THEME_STORAGE_KEY = 'theme';
+
+function getStoredTheme(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return window.localStorage.getItem(THEME_STORAGE_KEY) === 'dark';
+  } catch {
+    return false;
+  }
+}
+
+function setStoredTheme(isDark: boolean): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(THEME_STORAGE_KEY, isDark ? 'dark' : 'light');
+  } catch {
+    // Ignore storage errors
+  }
+}
 
 type ThemeContextType = {
   theme: DefaultTheme;
@@ -15,32 +35,33 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 interface ThemeProviderProps {
   children: React.ReactNode;
+  initialTheme?: 'light' | 'dark';
 }
 
-export function ThemeProvider({ children }: ThemeProviderProps) {
-  const [isDark, setIsDark] = useState(false);
+export function ThemeProvider({ children, initialTheme = 'light' }: ThemeProviderProps) {
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window === 'undefined') return initialTheme === 'dark';
+    return getStoredTheme();
+  });
   
-  // Load theme preference from localStorage on mount
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'dark') {
-        setIsDark(true);
-      }
-    }
+  const toggleTheme = useCallback(() => {
+    setIsDark(prev => {
+      const newTheme = !prev;
+      setStoredTheme(newTheme);
+      return newTheme;
+    });
   }, []);
 
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('theme', !isDark ? 'dark' : 'light');
-    }
-  };
+  const currentTheme = useMemo(() => isDark ? darkTheme : lightTheme, [isDark]);
 
-  const currentTheme = isDark ? darkTheme : lightTheme;
+  const contextValue = useMemo(() => ({
+    theme: currentTheme,
+    isDark,
+    toggleTheme
+  }), [currentTheme, isDark, toggleTheme]);
 
   return (
-    <ThemeContext.Provider value={{ theme: currentTheme, isDark, toggleTheme }}>
+    <ThemeContext.Provider value={contextValue}>
       <StyledThemeProvider theme={currentTheme}>
         {children}
       </StyledThemeProvider>
