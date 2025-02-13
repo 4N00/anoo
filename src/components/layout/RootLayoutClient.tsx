@@ -12,6 +12,9 @@ import GlobalStyles from '@/styles/GlobalStyles';
 import PageFooter from "@/components/footer/Footer";
 import { MainContent } from './styles';
 import Navbar from '../nav/nav';
+import React from 'react';
+import ErrorBoundary from '@/components/error-boundary/ErrorBoundary';
+import ErrorFallback from '@/components/error-boundary/ErrorFallback';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -35,7 +38,11 @@ const getQueryClient = () => {
   return window._queryClient;
 };
 
-export default function RootLayoutClient({ children }: { children: React.ReactNode }) {
+interface RootLayoutClientProps {
+  children: React.ReactNode;
+}
+
+const RootLayoutClient: React.FC<RootLayoutClientProps> = ({ children }) => {
   return (
     <QueryClientProvider client={getQueryClient()}>
       <ThemeProvider>
@@ -47,7 +54,9 @@ export default function RootLayoutClient({ children }: { children: React.ReactNo
                 <LanguageProvider>
                   <Navbar />
                   <MainContent>
-                    <AnimatePresence mode="wait">{children}</AnimatePresence>
+                    <ErrorBoundary fallback={<ErrorFallback />}>
+                      <AnimatePresence mode="wait">{children}</AnimatePresence>
+                    </ErrorBoundary>
                   </MainContent>
                   <PageFooter />
                 </LanguageProvider>
@@ -58,4 +67,6 @@ export default function RootLayoutClient({ children }: { children: React.ReactNo
       </ThemeProvider>
     </QueryClientProvider>
   );
-}
+};
+
+export default RootLayoutClient;
