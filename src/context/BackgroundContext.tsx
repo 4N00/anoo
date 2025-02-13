@@ -25,8 +25,13 @@ interface BackgroundContextType {
 const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined);
 
 export const BackgroundProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isDark } = useTheme();
-  const [backgroundColor, setBackgroundColor] = useState(isDark ? '#121212' : '#FFFFFF');
+  const { isDark, theme } = useTheme();
+  const [backgroundColor, setBackgroundColor] = useState(theme.colors.background.main);
+
+  // Update backgroundColor when theme changes
+  React.useEffect(() => {
+    setBackgroundColor(theme.colors.background.main);
+  }, [isDark, theme.colors.background.main]);
 
   const handleBackgroundColor = useCallback((color: string) => {
     setBackgroundColor(color);
