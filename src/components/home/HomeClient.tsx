@@ -128,14 +128,16 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
   }, [setBackgroundColor, isDark]);
 
   return (
-    <Container>
-      <MainContainer>
-        <motion.div style={{ opacity }}>
+    <>
+      <Container>
+        <MainContainer>
+          <motion.div style={{ opacity }}>
           <HeroSection />
         </motion.div>
         <ProjectSection ref={projectsRef} projects={projects} />
-      </MainContainer>
-    </Container>
+        </MainContainer>
+      </Container>
+    </>
   );
 };
 

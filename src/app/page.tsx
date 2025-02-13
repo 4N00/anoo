@@ -2,7 +2,6 @@ import { supabase } from '@/lib/supabase';
 import { toProjectUI } from '@/types/project';
 import HomeClient from '@/components/home/HomeClient';
 import { generateWebPageSchema, generatePersonSchema } from '@/lib/schema';
-import LavaLamp from '@/components/lava-lamp/LavaLamp';
 
 // This function runs at build time in production
 export async function generateStaticParams() {
@@ -29,7 +28,6 @@ const Home = async () => {
 
   return (
     <>
-      <LavaLamp />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

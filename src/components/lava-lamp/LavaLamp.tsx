@@ -24,48 +24,66 @@ const fragmentShader = `
     uv = uv * 2.0 - 1.0;
     uv.x *= resolution.x / resolution.y;
     
-    // Create organic moving shapes with constrained movement
+    // Create three sets of organic moving shapes
     float t1 = time * 0.08;
     float t2 = time * 0.06;
     float t3 = time * 0.04;
-    float t4 = time * 0.05;
     
-    // Constrain movement to stay more visible on screen
+    // Left side shapes
     vec2 c1 = vec2(
-      sin(t1) * 0.4 + cos(t2) * 0.2,
+      sin(t1) * 0.4 - 0.8 + cos(t2) * 0.2,
       cos(t1) * 0.4 + sin(t3) * 0.2
     );
     
     vec2 c2 = vec2(
-      sin(t2 + 2.0) * 0.45 + cos(t3) * 0.2,
+      sin(t2 + 2.0) * 0.45 - 0.8 + cos(t3) * 0.2,
       cos(t2 + 1.0) * 0.45 + sin(t1) * 0.2
     );
-    
+
+    // Center shapes
     vec2 c3 = vec2(
       sin(t3 + 4.0) * 0.35 + cos(t1) * 0.2,
       cos(t3 + 3.0) * 0.35 + sin(t2) * 0.2
     );
 
     vec2 c4 = vec2(
-      sin(t4 + 3.0) * 0.42 + cos(t2) * 0.2,
-      cos(t4 + 2.0) * 0.42 + sin(t3) * 0.2
+      sin(t1 + 3.0) * 0.42 + cos(t2) * 0.2,
+      cos(t1 + 2.0) * 0.42 + sin(t3) * 0.2
+    );
+
+    // Right side shapes
+    vec2 c5 = vec2(
+      sin(t2) * 0.4 + 0.8 + cos(t3) * 0.2,
+      cos(t2) * 0.4 + sin(t1) * 0.2
     );
     
-    // Create smooth blending between shapes with larger base size
+    vec2 c6 = vec2(
+      sin(t3 + 2.0) * 0.45 + 0.8 + cos(t1) * 0.2,
+      cos(t3 + 1.0) * 0.45 + sin(t2) * 0.2
+    );
+    
+    // Create smooth blending between shapes
     float d1 = sdSphere(uv, c1, 0.5);
     float d2 = sdSphere(uv, c2, 0.45);
     float d3 = sdSphere(uv, c3, 0.48);
     float d4 = sdSphere(uv, c4, 0.47);
+    float d5 = sdSphere(uv, c5, 0.5);
+    float d6 = sdSphere(uv, c6, 0.45);
     
-    float d = smin(smin(smin(d1, d2, 0.6), d3, 0.6), d4, 0.6);
+    // Blend all shapes together
+    float leftBlob = smin(d1, d2, 0.6);
+    float centerBlob = smin(d3, d4, 0.6);
+    float rightBlob = smin(d5, d6, 0.6);
     
-    // Create gradient colors
+    float d = smin(smin(leftBlob, centerBlob, 0.8), rightBlob, 0.8);
+    
+    // Create gradient colors with more variation
     vec3 color1 = vec3(1.0, 0.4, 0.7); // Pink
     vec3 color2 = vec3(1.0, 0.6, 0.2); // Orange
     vec3 color3 = vec3(1.0, 0.3, 0.5); // Another pink shade
     vec3 color4 = vec3(1.0, 0.5, 0.3); // Coral
     
-    // Mix colors based on position and time with slower color transitions
+    // Mix colors based on position and time
     vec3 color = mix(
       mix(
         mix(color1, color2, sin(uv.x + time * 0.05) * 0.5 + 0.5),
@@ -76,9 +94,7 @@ const fragmentShader = `
       sin(length(uv) + time * 0.06) * 0.5 + 0.5
     );
     
-    // Create smooth falloff with wider edge
     float shape = smoothstep(0.0, 0.25, -d);
-    
     gl_FragColor = vec4(color, shape * 0.8);
   }
 `;
