@@ -44,15 +44,27 @@ interface RootLayoutClientProps {
 
 const RootLayoutClient: React.FC<RootLayoutClientProps> = ({ children }) => {
   useEffect(() => {
-    const handleError = (event: globalThis.ErrorEvent) => {
-      if (event.error?.message?.includes('message port closed')) {
-        // Ignore message port errors from extensions
+    const handleError = (event: globalThis.ErrorEvent | globalThis.PromiseRejectionEvent) => {
+      // For ErrorEvent
+      if ('error' in event && event.error?.message?.includes('message port closed')) {
         event.preventDefault();
+        return;
+      }
+      
+      // For PromiseRejectionEvent
+      if ('reason' in event && event.reason?.message?.includes('message port closed')) {
+        event.preventDefault();
+        return;
       }
     };
 
     window.addEventListener('error', handleError);
-    return () => window.removeEventListener('error', handleError);
+    window.addEventListener('unhandledrejection', handleError);
+    
+    return () => {
+      window.removeEventListener('error', handleError);
+      window.removeEventListener('unhandledrejection', handleError);
+    };
   }, []);
 
   return (
