@@ -151,10 +151,5 @@ export const BlurImage = styled(Image)`
 `;
 
 export const ProjectCardContainer = styled.div`
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: ${({ theme }) => theme.spacing.lg} 2rem;
   position: relative;
 `;
-

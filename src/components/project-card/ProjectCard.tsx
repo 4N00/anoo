@@ -2,15 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useCursor } from '@/context/CursorContext';
 import {
   ProjectCardWrapper,
   ProjectImageWrapper,
   ProjectTitle,
   BlurImage,
-  ProjectInfo,
-  ProjectDescription,
-  ProjectCategory,
   ProjectCardContainer,
 } from './styles';
 import { ProjectUI } from '@/types/project';
@@ -23,7 +19,6 @@ interface ProjectCardProps {
 const ProjectCard = ({ project, priority = false }: ProjectCardProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [titleVisible, setTitleVisible] = useState(false);
-  const { expandCursor, shrinkCursor } = useCursor();
   
   const [ref, inView] = useInView({
     threshold: 0.3,
@@ -41,13 +36,6 @@ const ProjectCard = ({ project, priority = false }: ProjectCardProps) => {
     }
   }, [inView]);
 
-  const handleMouseEnter = () => {
-    expandCursor();
-  };
-
-  const handleMouseLeave = () => {
-    shrinkCursor();
-  };
 
   return (
     <ProjectCardContainer>
@@ -58,8 +46,6 @@ const ProjectCard = ({ project, priority = false }: ProjectCardProps) => {
       ref={ref}
       data-testid="project-item"
       data-cy="project-card"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       style={{
         transform: `perspective(1000px) rotateX(${inView ? '0' : '30deg'}) translateY(${inView ? '0' : '100px'})`,
         opacity: inView ? 1 : 0,
@@ -101,11 +87,11 @@ const ProjectCard = ({ project, priority = false }: ProjectCardProps) => {
             } } />
 
         </ProjectImageWrapper>
-
+{/* 
         <ProjectInfo>
           <ProjectDescription>{project.description}</ProjectDescription>
           <ProjectCategory>{project.tags.join(' / ')}</ProjectCategory>
-        </ProjectInfo>
+        </ProjectInfo> */}
       </ProjectCardWrapper>
       </ProjectCardContainer>
   );

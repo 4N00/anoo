@@ -3,8 +3,8 @@
 import React, { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import ProjectCard from '../project-card/ProjectCard';
-import { ProjectContainer, ProjectGrid } from '../project-card/styles';
 import { ProjectUI } from '@/types/project';
+import { ProjectContainer, ProjectGrid } from './styles';
 
 interface ProjectSectionProps {
   projects: ProjectUI[];
@@ -22,7 +22,7 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(({ projects 
       data-testid="motion-section"
       data-cy="project-section"
     >
-      <ProjectContainer>
+      <ProjectContainer id="projects">
         <ProjectGrid>
           {projects.map((project, index) => (
             <ProjectCard 
