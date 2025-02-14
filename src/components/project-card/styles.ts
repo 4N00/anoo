@@ -2,27 +2,10 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
-export const ProjectContainer = styled.div`
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: ${({ theme }) => theme.spacing.lg} 2rem;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    padding: ${({ theme }) => theme.spacing.lg} 1rem;
-  }
-`;
-
-export const ProjectGrid = styled.div`
-  display: grid;
-  gap: 12rem;
-  grid-template-columns: 1fr;
-  margin-top: ${({ theme }) => theme.spacing.xl};
-`;
-
 export const ProjectCardWrapper = styled(motion.div)`
   position: relative;
   width: 70%;
+  max-width: 40rem;
   margin: 0 auto;
   cursor: pointer;
   overflow: hidden;
@@ -111,4 +94,8 @@ export const BlurImage = styled(Image)`
   transition: opacity 0.5s ease-in-out;
   transform: translateZ(0);
   will-change: opacity;
+`;
+
+export const ProjectCardContainer = styled.div`
+  position: relative;
 `;

@@ -12,30 +12,21 @@ export const SectionTitle = styled.h2`
   margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
 
-export const ProjectContainer = styled.section`
+export const ProjectContainer = styled.div`
   width: 100%;
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 12rem 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 12rem;
+  max-width: 1400px;
+  margin: 20rem auto;
+  padding: ${({ theme }) => theme.spacing.lg} 2rem;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    padding: 8rem 1rem;
-    margin-bottom: 8rem;
+    padding: ${({ theme }) => theme.spacing.lg} 1rem;
+    margin: 3rem auto 5rem;
+
   }
 `;
 
 export const ProjectGrid = styled.div`
-  width: 100%;
   display: grid;
-  grid-template-columns: 1fr;
   gap: 12rem;
-  margin: 0 auto;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    gap: 8rem;
-  }
+  grid-template-columns: 1fr;
 `;
