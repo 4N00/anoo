@@ -171,7 +171,7 @@ const LavaLamp = () => {
     cameraRef.current = camera;
     rendererRef.current = renderer;
 
-    renderer.setSize(window.innerWidth, window.innerHeight * 1.3);
+    renderer.setSize(window.innerWidth, window.innerHeight * 1.35);
     mountRef.current.appendChild(renderer.domElement);
 
     uniformsRef.current = {
@@ -194,7 +194,7 @@ const LavaLamp = () => {
     const animate = () => {
       if (!uniformsRef.current) return;
       
-      uniformsRef.current.time.value += 0.01;
+      uniformsRef.current.time.value += 0.025;
       renderer.render(scene, camera);
       window.requestAnimationFrame(animate);
     };
@@ -205,8 +205,8 @@ const LavaLamp = () => {
       if (!uniformsRef.current || !renderer) return;
       
       uniformsRef.current.resolution.value.x = window.innerWidth;
-      uniformsRef.current.resolution.value.y = window.innerHeight * 1.3;
-      renderer.setSize(window.innerWidth, window.innerHeight * 1.3);
+      uniformsRef.current.resolution.value.y = window.innerHeight * 1.5;
+      renderer.setSize(window.innerWidth, window.innerHeight * 1.5);
     };
 
     window.addEventListener('resize', handleResize);
