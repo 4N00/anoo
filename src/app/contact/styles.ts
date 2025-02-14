@@ -10,6 +10,14 @@ export const Container = styled.div`
   padding: 0;
   padding-top: 64px;
 `;
+export const ContactContainer = styled.section`
+  width: 100%;
+  padding: 8rem 0;
+  color: ${({ theme }) => theme.colors.text.primary};
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+`;
 
 export const BackgroundText = styled.div`
   position: absolute;

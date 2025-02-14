@@ -85,5 +85,19 @@
   "theme": {
     "light": "Light Mode",
     "dark": "Dark Mode"
+  },
+  "experience": {
+    "title": "Profile",
+    "description": "I'm a creative front-end developer with a passion for technology and design, and I'm looking for a new challenge as a Front-End Developer. In my previous role, I focused on developing web and app solutions, with a special emphasis on sleek UI/UX designs.",
+    "workExperience": "Work Experience",
+    "education": "Education",
+    "expertise": "Expertise",
+    "autodidact": {
+      "title": "Autodidact",
+      "subtitle": "Front-End Development, Media Design",
+      "period": "2016 - Present",
+      "description": "Learn online. Learn on the job. Learn by doing."
+    },
+    "scrollingText": "Expertise — Expertise — Expertise — Expertise — Expertise — Expertise — "
   }
 } 

@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import HeroSection from '@/components/hero/Hero';
 import ProjectSection from '@/components/project-section/ProjectSection';
+import ExperienceSection from '@/components/experience-section/ExperienceSection';
 import { useProjects } from '@/hooks/useProjects';
 import { ProjectUI } from '@/types/project';
 import { debounce } from '@/utils/helpers';
@@ -11,6 +12,8 @@ import { useBackground } from '@/context/BackgroundContext';
 import { MainContainer } from '@/app/styles';
 import { useTheme } from '@/styles/theme';
 import Container from '../container/Container';
+import Contact from '@/app/contact/page';
+import PhilosophySection from '../philosophy-section/PhilosophySection';
 
 interface HomeClientProps {
   initialProjects: ProjectUI[];
@@ -18,6 +21,8 @@ interface HomeClientProps {
 
 const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
   const projectsRef = useRef<HTMLElement>(null);
+  const experienceRef = useRef<HTMLElement>(null);
+  const contactRef = useRef<HTMLElement>(null);
   const [projects, setProjects] = useState<ProjectUI[]>(initialProjects);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -31,6 +36,16 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
   });
 
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+
+  useEffect(() => {
+    if (experienceRef.current) {
+      experienceRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+    if (contactRef.current) {
+      contactRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
 
   useEffect(() => {
     const handleScroll = debounce(async () => {
@@ -127,16 +142,22 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
     };
   }, [setBackgroundColor, isDark]);
 
+  
+
+
   return (
     <>
       <HeroSection />
-      <Container>
+        <Container>
         <MainContainer>
           <motion.div style={{ opacity }}>
           </motion.div>
           <ProjectSection ref={projectsRef} projects={projects} />
         </MainContainer>
       </Container>
+      <ExperienceSection />
+      <PhilosophySection />
+      <Contact />
     </>
   );
 };

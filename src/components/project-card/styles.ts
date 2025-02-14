@@ -2,11 +2,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
-interface ProjectContainerProps {
-  $featured?: boolean;
-}
-
-export const ProjectContainer = styled.div<ProjectContainerProps>`
+export const ProjectContainer = styled.div`
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
@@ -17,33 +13,28 @@ export const ProjectContainer = styled.div<ProjectContainerProps>`
   }
 `;
 
-export const ProjectGrid = styled.div<ProjectContainerProps>`
+export const ProjectGrid = styled.div`
   display: grid;
-  gap: ${({ theme }) => theme.spacing.lg};
-  grid-template-columns: ${({ $featured }) => ($featured ? '1fr' : 'repeat(2, 1fr)')};
+  gap: 12rem;
+  grid-template-columns: 1fr;
   margin-top: ${({ theme }) => theme.spacing.xl};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-template-columns: 1fr;
-  }
 `;
 
-export const ProjectCardWrapper = styled(motion.div)<ProjectContainerProps>`
+export const ProjectCardWrapper = styled(motion.div)`
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 70%;
+  margin: 0 auto;
   cursor: pointer;
-  overflow: hidden;
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  overflow: visible;
   transition: transform 0.3s ease;
-  grid-column: ${({ $featured }) => $featured ? 'span 2' : 'span 1'};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-column: span 1;
-  }
 
   &:hover {
     transform: scale(1.02);
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    width: 100%;
+    margin-bottom: 2rem;
   }
 `;
 
@@ -88,10 +79,31 @@ export const ProjectHeader = styled.div`
 `;
 
 export const ProjectTitle = styled.h3`
-  font-size: ${({ theme }) => theme.typography.fontSize.lg};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  margin: 0;
-  color: white;
+  font-family: "Neue Machina", sans-serif;
+  font-size: clamp(2rem, 8vw, 8rem);
+  font-weight: 700;
+  line-height: 1;
+  color: ${({ theme }) => theme.colors.text.primary};
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  padding: 0;
+  mix-blend-mode: difference;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: clamp(1.5rem, 6vw, 4rem);
+  }
 `;
 
 export const ProjectCategory = styled.span`

@@ -2,7 +2,6 @@
 
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
-import { usePathname } from 'next/navigation';
 import { ContactEffectContainer, Container } from './styles';
 
 const fragmentShader = `
@@ -137,11 +136,8 @@ const ContactLavaLamp = () => {
   const cameraRef = useRef<THREE.Camera>();
   const rendererRef = useRef<THREE.WebGLRenderer>();
   const uniformsRef = useRef<any>();
-  const pathname = usePathname();
 
   useEffect(() => {
-    // Show on contact page
-    if (pathname !== '/contact') return;
     if (!mountRef.current) return;
 
     const scene = new THREE.Scene();
@@ -214,9 +210,7 @@ const ContactLavaLamp = () => {
       }
       renderer.dispose();
     };
-  }, [pathname]);
-
-  if (pathname !== '/contact') return null;
+  }, []);
 
   return (
     <ContactEffectContainer>

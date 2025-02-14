@@ -59,7 +59,7 @@ const ContactForm = () => {
   };
 
   return (
-    <Container>
+    <Container id="contact">
       <BackgroundText>{t('contact.title').toUpperCase()}.</BackgroundText>
       <Content>
         <Form onSubmit={handleSubmit(onSubmit)}>

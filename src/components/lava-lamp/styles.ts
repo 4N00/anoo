@@ -54,9 +54,15 @@ export const AboutEffectContainer = styled.div`
   inset: 0;
   width: 100%;
   pointer-events: none;
-  filter: contrast(180%) brightness(2000%);
+  filter: contrast(130%) brightness(100%);
   overflow: hidden;
   z-index: 0;
+  //blur
+  backdrop-filter: blur(120px);
+  //gradient
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+
+
   &:before {
     content: "";
     position: absolute;

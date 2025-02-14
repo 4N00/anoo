@@ -1,59 +1,46 @@
 import React, { forwardRef } from 'react';
-import { ContactInfo, ContentWrapper, FooterContainer, FooterInfo, FooterLink, LargeText, LargeTextSection, LinkColumn, NavigationGroup, SmallText, TopNavigation } from './styles';
+import { 
+  ContactInfo, 
+  ContentWrapper, 
+  FooterContainer, 
+  FooterInfo, 
+  FooterLink, 
+  LargeTextSection,
+  LinkColumn, 
+  NavigationGroup, 
+  SmallText, 
+  TopNavigation 
+} from './styles';
 import { useLanguage } from '@/context/LanguageContext';
-import { motion } from 'framer-motion';
-
-const textVariants = {
-  initial: { y: 100, opacity: 0 },
-  animate: { 
-    y: 0, 
-    opacity: 1,
-    transition: {
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1],
-    }
-  }
-};
 
 const PageFooter = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useLanguage();
 
   return (
-    <FooterContainer ref={ref}>
-      <ContentWrapper>
-        <TopNavigation>
-          <SmallText>{t('footer.collaborate')}</SmallText>
+    <FooterContainer ref={ref} data-testid="footer">
+      <ContentWrapper data-testid="content">
+        <TopNavigation data-testid="nav">
+          <SmallText data-testid="small-text">{t('footer.collaborate')}</SmallText>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5rem' }}>
-            <ContactInfo>
-              <FooterLink href="mailto:info@anoo.nl">{t('contact.info.email')}</FooterLink>
-              <FooterLink href="tel:+31625135338">{t('contact.info.phone')}</FooterLink>
+            <ContactInfo data-testid="contact-info">
+              <FooterLink href="mailto:info@anoo.nl" data-testid="link">info@anoo.nl</FooterLink>
+              <FooterLink href="tel:+31625135338" data-testid="link">+31 6 12 34 56 78</FooterLink>
             </ContactInfo>
-
-            <NavigationGroup>
-              <LinkColumn>
-                <FooterLink href="/">{t('navigation.home')}</FooterLink>
-                <FooterLink href="/about">{t('navigation.about')}</FooterLink>
-                <FooterLink href="/contact">{t('navigation.contact')}</FooterLink>
+            <NavigationGroup data-testid="nav-group">
+              <LinkColumn data-testid="link-column">
+                <FooterLink href="/" data-testid="link">Home</FooterLink>
+                <FooterLink href="/about" data-testid="link">About</FooterLink>
+                <FooterLink href="/contact" data-testid="link">Contact</FooterLink>
               </LinkColumn>
             </NavigationGroup>
           </div>
         </TopNavigation>
-
-        <LargeTextSection>
-          <motion.div
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            <LargeText as={motion.h2} variants={textVariants}>
-              {t('about.closing')}
-            </LargeText>
-          </motion.div>
+        <LargeTextSection data-testid="large-text-section">
+          {t('footer.beam_up')}
         </LargeTextSection>
-
-        <FooterInfo>
-          <SmallText>{t('footer.copyright')}</SmallText>
-          <FooterLink href="#">{t('footer.beam_up')}</FooterLink>
+        <FooterInfo data-testid="footer-info">
+          <SmallText data-testid="small-text">{t('footer.copyright')}</SmallText>
+          <FooterLink href="#" data-testid="link">{t('footer.beam_up')}</FooterLink>
         </FooterInfo>
       </ContentWrapper>
     </FooterContainer>

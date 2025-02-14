@@ -4,12 +4,11 @@ import React, { useState } from 'react';
 import {
   ProjectCardWrapper,
   ProjectImageWrapper,
-  ProjectInfo,
-  ProjectHeader,
   ProjectTitle,
-  ProjectCategory,
-  ProjectDescription,
   BlurImage,
+  ProjectInfo,
+  ProjectDescription,
+  ProjectCategory,
 } from './styles';
 import { ProjectUI } from '@/types/project';
 import AnimateOnScroll from '../animate-on-scroll/AnimateOnScroll';
@@ -18,10 +17,9 @@ interface ProjectCardProps {
   project: ProjectUI;
   index?: number;
   priority?: boolean;
-  featured?: boolean;
 }
 
-const ProjectCard = ({ project, index = 0, priority = false, featured = false }: ProjectCardProps) => {
+const ProjectCard = ({ project, index = 0, priority = false }: ProjectCardProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
@@ -29,8 +27,8 @@ const ProjectCard = ({ project, index = 0, priority = false, featured = false }:
       <ProjectCardWrapper 
         data-testid="project-item"
         data-cy="project-card"
-        $featured={project.featured}
       >
+        <ProjectTitle>{project.title}</ProjectTitle>
         <ProjectImageWrapper>
           <div style={{ 
             position: 'absolute',
@@ -53,10 +51,7 @@ const ProjectCard = ({ project, index = 0, priority = false, featured = false }:
             quality={priority ? 90 : 75}
             priority={priority}
             loading={priority ? 'eager' : 'lazy'}
-            sizes={featured 
-              ? "(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
-              : "(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
-            }
+            sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 800px"
             style={{
               objectFit: 'cover',
               objectPosition: 'center',
@@ -69,11 +64,8 @@ const ProjectCard = ({ project, index = 0, priority = false, featured = false }:
           />
         </ProjectImageWrapper>
         <ProjectInfo>
-          <ProjectHeader>
-            <ProjectTitle>{project.title}</ProjectTitle>
-            <ProjectCategory>{project.tags.slice(0, 2).join(' / ')}</ProjectCategory>
-          </ProjectHeader>
           <ProjectDescription>{project.description}</ProjectDescription>
+          <ProjectCategory>{project.tags.join(' / ')}</ProjectCategory>
         </ProjectInfo>
       </ProjectCardWrapper>
     </AnimateOnScroll>

@@ -85,5 +85,19 @@
   "theme": {
     "light": "Lichte Modus",
     "dark": "Donkere Modus"
+  },
+  "experience": {
+    "title": "Profiel",
+    "description": "Ik ben een creatieve front-end developer met een passie voor technologie en design, en ik ben op zoek naar een nieuwe uitdaging als Front-End Developer. In mijn vorige rol lag de focus op het ontwikkelen van web- en app-oplossingen, met speciale aandacht voor strakke UI/UX designs.",
+    "workExperience": "Werkervaring",
+    "education": "Opleiding",
+    "expertise": "Expertise",
+    "autodidact": {
+      "title": "Autodidact",
+      "subtitle": "Front-End Development, Media Design",
+      "period": "2016 - Heden",
+      "description": "Leren online. Leren op het werk. Leren door te doen."
+    },
+    "scrollingText": "Expertise — Expertise — Expertise — Expertise — Expertise — Expertise — "
   }
 } 

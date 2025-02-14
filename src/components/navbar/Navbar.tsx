@@ -77,8 +77,8 @@ const Navbar: React.FC = () => {
 
   const renderNavLinks = () => (
     <NavLinks>
-      <NavLink href="/about">{t('nav.about')}</NavLink>
-      <NavLink href="/contact">{t('nav.contact')}</NavLink>
+      <NavLink href="#experience">{t('nav.about')}</NavLink>
+      <NavLink href="#contact">{t('nav.contact')}</NavLink>
       {user ? (
         <>
           <NavLink href="/admin">{t('nav.admin')}</NavLink>
@@ -110,8 +110,8 @@ const Navbar: React.FC = () => {
         </LogoSection>
 
         <ServicesSection>
-          <span>{t('nav.service1')}</span>
           <span>{t('nav.service2')}</span>
+          <span>{t('nav.service1')}</span>
           <span>{t('nav.service3')}</span>
         </ServicesSection>
 

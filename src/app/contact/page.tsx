@@ -4,10 +4,11 @@ import { generateWebPageSchema } from '@/lib/schema';
 import { siteConfig } from '@/config/metadata';
 import ContactForm from '@/components/contact/ContactForm';
 import ContactLavaLamp from '@/components/lava-lamp/ContactLavaLamp';
+import { ContactContainer } from './styles';
 
 const Contact = () => {
   return (
-    <>
+    <ContactContainer>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -22,7 +23,7 @@ const Contact = () => {
       />
       <ContactLavaLamp />
       <ContactForm />
-    </>
+    </ContactContainer>
   );
 };
 

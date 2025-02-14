@@ -1,5 +1,4 @@
-import styled, { css } from 'styled-components';
-import { motion } from 'framer-motion';
+import styled from 'styled-components';
 
 export const SectionContainer = styled.section`
   padding: ${({ theme }) => theme.spacing.xl};
@@ -13,36 +12,30 @@ export const SectionTitle = styled.h2`
   margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
 
-export const ProjectContainer = styled(motion.section)<{ className?: string }>`
-  ${({ className }) => className && css`
-    ${className}
-  `}
+export const ProjectContainer = styled.section`
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 12rem 2rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-  position: relative;
-  
-  @media (max-width: 768px) {
-    padding: 1rem;
+  align-items: center;
+  margin-bottom: 12rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 8rem 1rem;
+    margin-bottom: 8rem;
   }
 `;
 
-export const ProjectGrid = styled.div<{ $featured?: boolean }>`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
+export const ProjectGrid = styled.div`
   width: 100%;
-  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12rem;
+  margin: 0 auto;
 
-  ${({ $featured }) => $featured && css`
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  `}
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    gap: 8rem;
   }
 `;
