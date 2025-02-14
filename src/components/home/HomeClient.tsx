@@ -129,10 +129,10 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
 
   return (
     <>
+      <HeroSection />
       <Container>
         <MainContainer>
           <motion.div style={{ opacity }}>
-            <HeroSection />
           </motion.div>
           <ProjectSection ref={projectsRef} projects={projects} />
         </MainContainer>

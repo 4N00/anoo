@@ -4,9 +4,9 @@ import React from 'react';
 import { PageContainer, ContentWrapper } from './styles';
 import ProfileSection from '@/components/about/profile-section/ProfileSection';
 import SkillsSection from '@/components/about/skills-section/SkillsSection';
-import TrefoilKnot from '@/components/trefoil-knot/TrefoilKnot';
 import { generateWebPageSchema, generatePersonSchema } from '@/lib/schema';
 import { siteConfig } from '@/config/metadata';
+import AboutLavaLamp from '@/components/lava-lamp/AboutLavaLamp';
 
 const About = () => {
   const skills = [
@@ -43,7 +43,7 @@ const About = () => {
           ])
         }}
       />
-      <TrefoilKnot />
+      <AboutLavaLamp />
       <PageContainer>
         <ContentWrapper>
           <ProfileSection />

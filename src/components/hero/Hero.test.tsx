@@ -13,8 +13,20 @@ declare const expect: any;
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: React.PropsWithChildren<any>) => <div {...props}>{children}</div>,
+    div: ({ children, _animate, _initial, _transition, ...props }) => (
+      <div data-testid="motion-div" {...props}>{children}</div>
+    ),
+    h1: ({ children, _animate, _initial, _transition, ...props }) => (
+      <h1 data-testid="motion-h1" {...props}>{children}</h1>
+    ),
+    p: ({ children, _animate, _initial, _transition, ...props }) => (
+      <p data-testid="motion-p" {...props}>{children}</p>
+    ),
+    a: ({ children, _animate, _initial, _transition, ...props }) => (
+      <a data-testid="motion-a" {...props}>{children}</a>
+    ),
   },
+  AnimatePresence: ({ children }) => children,
 }));
 
 // Mock styled components
@@ -29,15 +41,20 @@ jest.mock('./styles', () => ({
       {children}
     </div>
   ),
-  LetterContainer: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <div data-testid="letter-container" {...props}>
+  HeadingWrapper: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <div data-testid="heading-wrapper" {...props}>
       {children}
     </div>
   ),
-  Letter: ({ children, ...props }: React.PropsWithChildren<any>) => (
-    <span data-testid="letter" {...props}>
+  ScrollingText: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <div data-testid="scrolling-text" {...props}>
       {children}
-    </span>
+    </div>
+  ),
+  Heading: ({ children, ...props }: React.PropsWithChildren<any>) => (
+    <h1 data-testid="heading" {...props}>
+      {children}
+    </h1>
   ),
   Subtitle: ({ children, ...props }: React.PropsWithChildren<any>) => (
     <p data-testid="subtitle" {...props}>
@@ -51,65 +68,49 @@ jest.mock('./styles', () => ({
   ),
 }));
 
+// Mock useLanguage hook
+jest.mock('@/context/LanguageContext', () => ({
+  useLanguage: () => ({
+    t: (key: string) => ({
+      'hero.subtitle': 'Creative Developer',
+      'hero.cta': 'Learn more',
+      'hero.heading': "HI, I'M ANOO - I CREATE VISION"
+    }[key])
+  })
+}));
+
 describe('HeroSection', () => {
-  it('renders the title correctly', () => {
-    render(<HeroSection />);
-
-    // Test single occurrence letters
-    expect(screen.getByText('H')).toBeInTheDocument();
-    expect(screen.getByText(',')).toBeInTheDocument();
-    expect(screen.getByText("'")).toBeInTheDocument();
-    expect(screen.getByText('M')).toBeInTheDocument();
-    expect(screen.getByText('A')).toBeInTheDocument();
-    expect(screen.getByText('N')).toBeInTheDocument();
-    expect(screen.getByText('.')).toBeInTheDocument();
-
-    // Test multiple occurrence letters
-    expect(screen.getAllByText('I')).toHaveLength(2);
-    expect(screen.getAllByText('O')).toHaveLength(2);
-  });
-
   it('renders the subtitle', () => {
     render(<HeroSection />);
     const subtitle = screen.getByTestId('subtitle');
-    expect(subtitle).toHaveTextContent(
-      'Scroll to see some of my work - contact me if you like what i do.'
-    );
+    expect(subtitle).toHaveTextContent('Creative Developer');
   });
 
   it('renders the "Learn More" link', () => {
     render(<HeroSection />);
     const learnMoreLink = screen.getByTestId('styled-link');
     expect(learnMoreLink).toHaveAttribute('href', '/about');
-    expect(learnMoreLink).toHaveTextContent('LEARN MORE ABOUT ME');
+    expect(learnMoreLink).toHaveTextContent('Learn more');
   });
 
-  it('renders all letter containers', () => {
+  it('renders the heading with scrolling text', () => {
     render(<HeroSection />);
-    const letterContainers = screen.getAllByTestId('letter-container');
-    expect(letterContainers).toHaveLength(3); // "HI," "I'M" "ANOO."
-  });
-
-  it('renders letters with correct data-extra-space attribute', () => {
-    render(<HeroSection />);
-    const letters = screen.getAllByTestId('letter');
-
-    // Check some letters for extra space attribute
-    const lastLetterOfFirstWord = letters[1]; // 'I' in "HI,"
-    const lastLetterOfSecondWord = letters[5]; // 'M' in "I'M"
-    const lastLetterOfThirdWord = letters[9]; // 'O' in "ANOO."
-
-    expect(lastLetterOfFirstWord).not.toHaveAttribute('data-extra-space', 'true'); // Comma follows
-    expect(lastLetterOfSecondWord).toHaveAttribute('data-extra-space', 'true');
-    expect(lastLetterOfThirdWord).not.toHaveAttribute('data-extra-space', 'true'); // Period follows
+    const headingWrapper = screen.getByTestId('heading-wrapper');
+    const scrollingText = screen.getByTestId('scrolling-text');
+    const headings = screen.getAllByTestId('heading');
+    
+    expect(headingWrapper).toBeInTheDocument();
+    expect(scrollingText).toBeInTheDocument();
+    expect(headings).toHaveLength(2);
   });
 
   it('renders the section with proper structure', () => {
     render(<HeroSection />);
 
     expect(screen.getByTestId('hero-section')).toBeInTheDocument();
-    expect(screen.getByTestId('content-wrapper')).toBeInTheDocument();
-    expect(screen.getAllByTestId('letter-container')).toHaveLength(3);
+    expect(screen.getByTestId('heading-wrapper')).toBeInTheDocument();
+    expect(screen.getByTestId('scrolling-text')).toBeInTheDocument();
+    expect(screen.getAllByTestId('heading')).toHaveLength(2);
     expect(screen.getByTestId('subtitle')).toBeInTheDocument();
     expect(screen.getByTestId('styled-link')).toBeInTheDocument();
   });

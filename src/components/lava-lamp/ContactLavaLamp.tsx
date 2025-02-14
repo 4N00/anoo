@@ -90,10 +90,6 @@ const fragmentShader = `
     float d7 = sdSphere(uv, c7, size3);
     float d8 = sdSphere(uv, c8, size2);
     
-    // Add large static sphere on the left
-    vec2 leftSpherePos = vec2(-0.8, 0.0);
-    float leftSphere = sdSphere(uv, leftSpherePos, 0.5);
-    
     // Blend amount between shapes
     float blendAmount = 0.4;  // Blend radius
     
@@ -103,7 +99,7 @@ const fragmentShader = `
     float bottomCluster = smin(d5, d6, blendAmount);
     
     // Blend clusters with less interaction between them
-    float d = min(min(min(topCluster, middleCluster), bottomCluster), leftSphere);
+    float d = min(min(topCluster, middleCluster), bottomCluster);
     
     // Create gradient colors with more variation
     vec3 color1 = vec3(1.0, 0.4, 0.7); // Pink

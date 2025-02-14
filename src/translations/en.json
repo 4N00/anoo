@@ -8,10 +8,22 @@
     "login": "Login",
     "logout": "Logout"
   },
+  "nav": {
+    "role1": "Creative Developer",
+    "role2": "UI/UX Designer",
+    "service1": "UX/UI Design",
+    "service2": "Web Development",
+    "service3": "Creative Direction",
+    "about": "About",
+    "services": "Services",
+    "work": "Work",
+    "contact": "Contact",
+    "admin": "Admin",
+    "login": "Login",
+    "logout": "Logout"
+  },
   "hero": {
-    "greeting": "HI,",
-    "introduction": "I'M",
-    "name": "ANOO.",
+    "heading": "Hi, I'm Anoo - I create digital experiences",
     "subtitle": "Scroll to see some of my work - contact me if you like what i do.",
     "cta": "LEARN MORE ABOUT ME"
   },

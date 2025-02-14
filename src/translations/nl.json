@@ -1,17 +1,29 @@
 {
   "navigation": {
     "home": "Home",
-    "about": "Over mij",
+    "about": "Over",
     "contact": "Contact",
     "admin": "Admin",
     "services": "Diensten",
     "login": "Inloggen",
     "logout": "Uitloggen"
   },
+  "nav": {
+    "role1": "Creatief Ontwikkelaar",
+    "role2": "UI/UX Designer",
+    "service1": "UX/UI Design",
+    "service2": "Web Development",
+    "service3": "Creative Direction",
+    "about": "Over",
+    "services": "Diensten",
+    "work": "Werk",
+    "contact": "Contact",
+    "admin": "Admin",
+    "login": "Inloggen",
+    "logout": "Uitloggen"
+  },
   "hero": {
-    "greeting": "HEY,",
-    "introduction": "IK BEN",
-    "name": "ANOO.",
+    "heading": "Hi, I'm Anoo - I create digital experiences",
     "subtitle": "Scroll om mijn werk te bekijken - neem contact op als je mijn werk waardeert.",
     "cta": "LEER MIJ KENNEN"
   },

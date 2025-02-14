@@ -11,10 +11,10 @@ import { AnimatePresence } from 'framer-motion';
 import GlobalStyles from '@/styles/GlobalStyles';
 import PageFooter from "@/components/footer/Footer";
 import { MainContent } from './styles';
-import Navbar from '../nav/nav';
 import React, { useEffect } from 'react';
 import ErrorBoundary from '@/components/error-boundary/ErrorBoundary';
 import ErrorFallback from '@/components/error-boundary/ErrorFallback';
+import Navbar from '../navbar/Navbar';
 // Create a client
 const isDev = process.env.NODE_ENV === 'development';
 

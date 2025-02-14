@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Container from '@/components/container/Container';
 import { motion } from 'framer-motion';
 
@@ -18,6 +18,7 @@ export const SVGFilters = styled.div`
 
 export const Section = styled.section`
   display: flex;
+  flex-direction: column;
   align-items: center;
   padding-top: ${({ theme }) => theme.spacing['3xl']};
   padding-bottom: ${({ theme }) => theme.spacing['3xl']};
@@ -25,6 +26,47 @@ export const Section = styled.section`
   perspective: 1000px;
   will-change: transform;
   width: 100%;
+  overflow: hidden;
+  margin-top: 15rem;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    margin-top: 10rem;
+  }
+`;
+
+const scrollText = keyframes`
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+`;
+
+export const HeadingWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
+  display: flex;
+`;
+
+export const ScrollingText = styled.div`  
+  display: flex;
+  animation: ${scrollText} 180s linear infinite;
+  white-space: nowrap;
+`;
+
+export const Heading = styled(motion.h1)`
+  font-family: "Neue Machina", sans-serif;
+  font-size: clamp(4rem, 20vw, 16rem);
+  font-weight: 700;
+  line-height: 1;
+  color: ${({ theme }) => theme.colors.text.primary};
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  padding: 0 1rem;
 `;
 
 export const ContentWrapper = styled(Container)`
@@ -76,6 +118,7 @@ export const Letter = styled(motion.span)`
 `;
 
 export const Subtitle = styled(motion.p)`
+  font-family: "Ppmori", sans-serif;
   font-size: ${({ theme }) => theme.typography.fontSize.heroSubtitle};
   max-width: 600px;
   margin-bottom: ${({ theme }) => theme.spacing['2xl']};
@@ -87,18 +130,20 @@ export const Subtitle = styled(motion.p)`
 
 export const StyledLink = styled(motion.a)`
   display: inline-block;
+  font-family: "Ppmori", sans-serif;
   font-size: ${({ theme }) => theme.typography.fontSize.xs};
   text-transform: uppercase;
   letter-spacing: ${({ theme }) => theme.typography.letterSpacing.wider};
   font-weight: ${({ theme }) => theme.typography.fontWeight.normal};
   border-bottom: 1px solid currentColor;
   padding-bottom: ${({ theme }) => theme.spacing.xs};
-  transition: color ${({ theme }) => theme.transitions.normal};
+  transition: all 0.3s ease;
   will-change: transform, opacity;
   color: ${({ theme }) => theme.colors.text.primary};
   text-decoration: none;
 
   &:hover {
     color: ${({ theme }) => theme.colors.text.secondary};
+    transform: translateY(-2px);
   }
 `;
