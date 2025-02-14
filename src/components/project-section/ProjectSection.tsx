@@ -28,7 +28,6 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(({ projects 
             <ProjectCard 
               key={project.id} 
               project={project}
-              index={index}
               priority={index === 0}
             />
           ))}

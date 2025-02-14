@@ -20,7 +20,6 @@ export const ProjectContainer = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 12rem;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     padding: 8rem 1rem;
