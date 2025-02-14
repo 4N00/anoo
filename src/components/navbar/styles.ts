@@ -2,6 +2,91 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
+export const BlurLayers = styled.div`
+  position: fixed;
+  top: -120px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+
+  &:before {
+    content: '';
+    position: absolute;
+    -webkit-backdrop-filter: blur(7px);
+    backdrop-filter: blur(7px);
+    inset: 0% 0% auto;
+    -webkit-mask: linear-gradient(to top, #fff0 50%, #fff 62.5% 75%, #fff0 87.5%);
+    mask: linear-gradient(to top, #fff0 50%, #fff 62.5% 75%, #fff0 87.5%);
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    inset: 0% 0% auto;
+    -webkit-mask: linear-gradient(to top, #fff0 37.5%, #fff 50% 62.5%, #fff0 75%);
+    mask: linear-gradient(to top, #fff0 37.5%, #fff 50% 62.5%, #fff0 75%);
+  }
+`;
+export const BlurLayer1 = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backdrop-filter: blur(1px);
+  backdrop-filter: blur(3px);
+  inset: 0% 0% auto;
+  -webkit-mask: linear-gradient(to top, #fff0 25%, #fff 37.5% 50%, #fff0 62.5%);
+  mask: linear-gradient(to top, #fff0 25%, #fff 37.5% 50%, #fff0 62.5%);
+`;
+export const BlurLayer2 = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  inset: 0% 0% auto;
+  -webkit-mask: linear-gradient(to top, #fff0 25%, #fff 37.5% 50%, #fff0 62.5%);
+  mask: linear-gradient(to top, #fff0 25%, #fff 37.5% 50%, #fff0 62.5%);
+`;
+
+
+
+export const BlurLayer3 = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(3px);
+  inset: 0% 0% auto;
+  -webkit-mask: linear-gradient(to top, #fff0 25%, #fff 37.5% 50%, #fff0 62.5%);
+  mask: linear-gradient(to top, #fff0 25%, #fff 37.5% 50%, #fff0 62.5%);
+`;
+
+export const BlurLayer4 = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(2px);
+  inset: 0% 0% auto;
+  -webkit-mask: linear-gradient(to top, #fff0 12.5%, #fff 25% 37.5%, #fff0 50%);
+  mask: linear-gradient(to top, #fff0 12.5%, #fff 25% 37.5%, #fff0 50%);
+`;
+
+export const BlurLayer5 = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backdrop-filter: blur(13px);
+  backdrop-filter: blur(1px);
+  inset: 0% 0% auto;
+  -webkit-mask: linear-gradient(to top, #fff0 0%, #fff 12.5% 37.5%, #fff0 50%);
+  mask: linear-gradient(to top, #fff0 0%, #fff 12.5% 37.5%, #fff0 50%);
+`;
+
 export const Nav = styled.nav`
   position: fixed;
   top: 0;

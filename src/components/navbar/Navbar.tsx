@@ -19,7 +19,13 @@ import {
   LanguageOption,
   MobileMenuButton,
   MobileMenu,
-  ControlsSection
+  ControlsSection,
+  BlurLayers,
+  BlurLayer3,
+  BlurLayer4,
+  BlurLayer5,
+  BlurLayer1,
+  BlurLayer2
 } from './styles';
 
 const Navbar: React.FC = () => {
@@ -72,8 +78,6 @@ const Navbar: React.FC = () => {
   const renderNavLinks = () => (
     <NavLinks>
       <NavLink href="/about">{t('nav.about')}</NavLink>
-      <NavLink href="/services">{t('nav.services')}</NavLink>
-      <NavLink href="/work">{t('nav.work')}</NavLink>
       <NavLink href="/contact">{t('nav.contact')}</NavLink>
       {user ? (
         <>
@@ -87,65 +91,74 @@ const Navbar: React.FC = () => {
   );
 
   return (
+    <>
     <Nav className={!isVisible ? 'hidden' : ''}>
-      <LogoSection>
-        <Logo href="/">anoo.nl</Logo>
-        <SubLogo>
-          <span>{t('nav.role1')}</span>
-          <span>{t('nav.role2')}</span>
-        </SubLogo>
-        <Divider />
-      </LogoSection>
+      <BlurLayers>
+        <BlurLayer5 />
+        <BlurLayer4 />
+        <BlurLayer3 />
+        <BlurLayer2 />
+        <BlurLayer1 />
+      </BlurLayers>
+        <LogoSection>
+          <Logo href="/">anoo.nl</Logo>
+          <SubLogo>
+            <span>{t('nav.role1')}</span>
+            <span>{t('nav.role2')}</span>
+          </SubLogo>
+          <Divider />
+        </LogoSection>
 
-      <ServicesSection>
-        <span>{t('nav.service1')}</span>
-        <span>{t('nav.service2')}</span>
-        <span>{t('nav.service3')}</span>
-      </ServicesSection>
+        <ServicesSection>
+          <span>{t('nav.service1')}</span>
+          <span>{t('nav.service2')}</span>
+          <span>{t('nav.service3')}</span>
+        </ServicesSection>
 
-      {renderNavLinks()}
+        {renderNavLinks()}
 
-      <ControlsSection>
-        <LanguageToggle>
-          <LanguageOption
-            $isActive={language === 'NL'}
-            onClick={() => handleLanguageChange('NL')}
+        <ControlsSection>
+          <LanguageToggle>
+            <LanguageOption
+              $isActive={language === 'NL'}
+              onClick={() => handleLanguageChange('NL')}
+            >
+              NL
+            </LanguageOption>
+            <span>|</span>
+            <LanguageOption
+              $isActive={language === 'EN'}
+              onClick={() => handleLanguageChange('EN')}
+            >
+              EN
+            </LanguageOption>
+          </LanguageToggle>
+          <ThemeToggle 
+            onClick={toggleTheme}
+            data-theme={isDark ? 'dark' : 'light'}
+          />
+          <MobileMenuButton 
+            onClick={toggleMobileMenu}
+            className={isMobileMenuOpen ? 'open' : ''}
           >
-            NL
-          </LanguageOption>
-          <span>|</span>
-          <LanguageOption
-            $isActive={language === 'EN'}
-            onClick={() => handleLanguageChange('EN')}
-          >
-            EN
-          </LanguageOption>
-        </LanguageToggle>
-        <ThemeToggle 
-          onClick={toggleTheme}
-          data-theme={isDark ? 'dark' : 'light'}
-        />
-        <MobileMenuButton 
-          onClick={toggleMobileMenu}
-          className={isMobileMenuOpen ? 'open' : ''}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </MobileMenuButton>
-      </ControlsSection>
+            <span></span>
+            <span></span>
+            <span></span>
+          </MobileMenuButton>
+        </ControlsSection>
 
-      {isMobileMenuOpen && (
-        <MobileMenu
-          initial={{ x: '100%' }}
-          animate={{ x: 0 }}
-          exit={{ x: '100%' }}
-          transition={{ type: 'tween', duration: 0.3 }}
-        >
-          {renderNavLinks()}
-        </MobileMenu>
-      )}
-    </Nav>
+        {isMobileMenuOpen && (
+          <MobileMenu
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'tween', duration: 0.3 }}
+          >
+            {renderNavLinks()}
+          </MobileMenu>
+        )}
+      </Nav>
+    </>
   );
 };
 
