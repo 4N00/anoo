@@ -23,6 +23,9 @@ const CustomCursor: React.FC = () => {
       if (
         target.tagName === 'BUTTON' ||
         target.tagName === 'A' ||
+        target.tagName === 'IMG' ||
+        target.tagName === 'SVG' ||
+        target.tagName === 'PROJECTCARDWRAPPER' ||
         target.getAttribute('role') === 'button' ||
         window.getComputedStyle(target).cursor === 'pointer' ||
         projectCard
@@ -63,7 +66,9 @@ const CustomCursor: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-          />
+          >
+            <span>+</span>
+          </ClickText>
         )}
       </AnimatePresence>
     </CursorWrapper>
