@@ -147,3 +147,28 @@ export const StyledLink = styled(motion.a)`
     transform: translateY(-2px);
   }
 `;
+
+export const HeroImageContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  mix-blend-mode: difference;
+  filter: blur(10px);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    filter: blur(0px);
+  } 
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    display: none;
+  }
+`;

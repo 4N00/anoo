@@ -25,11 +25,15 @@ export const ProjectCardWrapper = styled(motion.div)`
   width: 70%;
   margin: 0 auto;
   cursor: pointer;
-  overflow: visible;
-  transition: transform 0.3s ease;
+  overflow: hidden;
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  background: ${({ theme }) => theme.colors.background.secondary};
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.2);
 
   &:hover {
-    transform: scale(1.02);
+    transform: scale(1.02) translateY(-5px) !important;
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
@@ -43,22 +47,7 @@ export const ProjectImageWrapper = styled.div`
   width: 100%;
   padding-top: 56.25%; /* 16:9 Aspect Ratio */
   overflow: hidden;
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
   background: ${({ theme }) => theme.colors.background.secondary};
-`;
-
-export const ProjectImage = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-
-  ${ProjectCardWrapper}:hover & {
-    transform: scale(1.05);
-  }
 `;
 
 export const ProjectInfo = styled.div`
@@ -68,14 +57,8 @@ export const ProjectInfo = styled.div`
   width: 100%;
   padding: ${({ theme }) => theme.spacing.lg};
   background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-  z-index: 1;
-`;
-
-export const ProjectHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  z-index: 2;
+  transform: translateZ(50px);
 `;
 
 export const ProjectTitle = styled.h3`
@@ -93,7 +76,7 @@ export const ProjectTitle = styled.h3`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 2;
+  z-index: 3;
   width: 100%;
   text-align: center;
   pointer-events: none;

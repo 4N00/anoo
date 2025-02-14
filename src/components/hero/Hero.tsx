@@ -9,8 +9,10 @@ import {
   ScrollingText,
   Heading, 
   Subtitle, 
-  StyledLink 
+  StyledLink, 
+  HeroImageContainer
 } from './styles';
+import Image from 'next/image'
 
 const HeroSection: React.FC = () => {
   const { t } = useLanguage();
@@ -43,6 +45,9 @@ const HeroSection: React.FC = () => {
           {t('hero.cta')}
         </StyledLink>
       </ContentWrapper>
+      <HeroImageContainer>
+          <Image src="/images/Anoo.png" alt="Anoo" width={500} height={500}/>
+      </HeroImageContainer>
     </Section>
   );
 };
