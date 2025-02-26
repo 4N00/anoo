@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import HeroSection from '@/components/hero/Hero';
-import ProjectSection from '@/components/project-section/ProjectSection';
-import ExperienceSection from '@/components/experience-section/ExperienceSection';
 import { useProjects } from '@/hooks/useProjects';
 import { ProjectUI } from '@/types/project';
 import { debounce } from '@/utils/helpers';
@@ -12,8 +11,29 @@ import { useBackground } from '@/context/BackgroundContext';
 import { MainContainer } from '@/app/styles';
 import { useTheme } from '@/styles/theme';
 import Container from '../container/Container';
-import Contact from '@/app/contact/page';
-import PhilosophySection from '../philosophy-section/PhilosophySection';
+import Loading from '../loading/Loading';
+import SectionWrapper from '../section-wrapper/SectionWrapper';
+
+// Dynamically import non-critical components
+const ProjectSection = dynamic(() => import('@/components/project-section/ProjectSection'), {
+  loading: () => <Loading />,
+  ssr: true
+});
+
+const ExperienceSection = dynamic(() => import('@/components/experience-section/ExperienceSection'), {
+  loading: () => <Loading />,
+  ssr: true
+});
+
+const PhilosophySection = dynamic(() => import('@/components/philosophy-section/PhilosophySection'), {
+  loading: () => <Loading />,
+  ssr: true
+});
+
+const Contact = dynamic(() => import('@/app/contact/page'), {
+  loading: () => <Loading />,
+  ssr: true
+});
 
 interface HomeClientProps {
   initialProjects: ProjectUI[];
@@ -21,8 +41,8 @@ interface HomeClientProps {
 
 const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
   const projectsRef = useRef<HTMLElement>(null);
-  const experienceRef = useRef<HTMLElement>(null);
-  const contactRef = useRef<HTMLElement>(null);
+  const experienceRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
   const [projects, setProjects] = useState<ProjectUI[]>(initialProjects);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -37,18 +57,9 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
 
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
-
-  useEffect(() => {
-    if (experienceRef.current) {
-      experienceRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-    if (contactRef.current) {
-      contactRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = debounce(async () => {
+  // Optimize scroll handlers with useCallback
+  const handleScroll = React.useCallback(
+    debounce(async () => {
       if (!hasMore || isLoading) return;
 
       const element = document.documentElement;
@@ -70,94 +81,99 @@ const HomeClient: React.FC<HomeClientProps> = ({ initialProjects }) => {
           setIsLoading(false);
         }
       }
-    }, 500);
+    }, 500),
+    [hasMore, isLoading, projects.length, fetchMoreProjects]
+  );
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [projects.length, hasMore, isLoading, fetchMoreProjects]);
+  const handleColorChange = React.useCallback(
+    debounce(() => {
+      const scrollPosition = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const totalHeight = document.documentElement.scrollHeight;
+      const scrollPercentage = (scrollPosition + viewportHeight) / totalHeight;
+
+      const newColor = isDark
+        ? scrollPercentage < 0.3
+          ? '#000000'
+          : scrollPercentage < 0.6
+          ? '#1a1a1a'
+          : scrollPercentage < 0.9
+          ? '#242424'
+          : '#2d2d2d'
+        : scrollPercentage < 0.3
+        ? '#FFFFFF'
+        : scrollPercentage < 0.6
+        ? '#F2FCE2'
+        : scrollPercentage < 0.9
+        ? '#FEF7CD'
+        : '#E5DEFF';
+
+      setBackgroundColor(newColor);
+    }, 100),
+    [isDark, setBackgroundColor]
+  );
 
   useEffect(() => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleColorChange);
+    handleColorChange();
+    return () => window.removeEventListener('scroll', handleColorChange);
+  }, [handleColorChange]);
+
+  useEffect(() => {
+    if (timeoutId) clearTimeout(timeoutId);
 
     const id = setTimeout(() => {
       const hash = window.location.hash;
       if (hash === '#projects' && projectsRef.current) {
         projectsRef.current.scrollIntoView({ behavior: 'smooth' });
+      } else if (hash === '#experience' && experienceRef.current) {
+        experienceRef.current.scrollIntoView({ behavior: 'smooth' });
+      } else if (hash === '#contact' && contactRef.current) {
+        contactRef.current.scrollIntoView({ behavior: 'smooth' });
       }
     }, 100);
 
     setTimeoutId(id);
-
     return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
+      if (timeoutId) clearTimeout(timeoutId);
     };
   }, []);
 
-  useEffect(() => {
-    const handleScroll = debounce(() => {
-      const scrollPosition = window.scrollY;
-      const viewportHeight = window.innerHeight;
-      const totalHeight = document.documentElement.scrollHeight;
-
-      // Calculate scroll percentage
-      const scrollPercentage = (scrollPosition + viewportHeight) / totalHeight;
-
-      // Change background color based on scroll position and theme
-      let newColor;
-      if (isDark) {
-        // Dark theme colors
-        if (scrollPercentage < 0.3) {
-          newColor = '#000000';
-        } else if (scrollPercentage < 0.6) {
-          newColor = '#1a1a1a';
-        } else if (scrollPercentage < 0.9) {
-          newColor = '#242424';
-        } else {
-          newColor = '#2d2d2d';
-        }
-      } else {
-        // Light theme colors
-        if (scrollPercentage < 0.3) {
-          newColor = '#FFFFFF';
-        } else if (scrollPercentage < 0.6) {
-          newColor = '#F2FCE2';
-        } else if (scrollPercentage < 0.9) {
-          newColor = '#FEF7CD';
-        } else {
-          newColor = '#E5DEFF';
-        }
-      }
-      setBackgroundColor(newColor);
-    }, 100);
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial call
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [setBackgroundColor, isDark]);
-
-  
-
-
   return (
     <>
-      <HeroSection />
-        <Container>
+      <SectionWrapper>
+        <HeroSection />
+      </SectionWrapper>
+      <Container>
         <MainContainer>
-          <motion.div style={{ opacity }}>
-          </motion.div>
-          <ProjectSection ref={projectsRef} projects={projects} />
+          <motion.div style={{ opacity }} />
+          <SectionWrapper ref={projectsRef} id="projects" data-cy="project-section">
+            <Suspense fallback={<Loading />}>
+              <ProjectSection projects={projects} />
+            </Suspense>
+          </SectionWrapper>
         </MainContainer>
       </Container>
-      <ExperienceSection />
-      <PhilosophySection />
-      <Contact />
+      <SectionWrapper ref={experienceRef} id="experience" data-cy="experience-section">
+        <Suspense fallback={<Loading />}>
+          <ExperienceSection />
+        </Suspense>
+      </SectionWrapper>
+      <SectionWrapper data-cy="philosophy-section">
+        <Suspense fallback={<Loading />}>
+          <PhilosophySection />
+        </Suspense>
+      </SectionWrapper>
+      <SectionWrapper ref={contactRef} id="contact" data-cy="contact-section">
+        <Suspense fallback={<Loading />}>
+          <Contact />
+        </Suspense>
+      </SectionWrapper>
     </>
   );
 };
